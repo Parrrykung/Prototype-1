@@ -15,7 +15,7 @@ namespace Test
         private float totalElapsed;
         private float timePerFrame;
         private int framePerSec;
-        private Vector2 SetPO1 = new Vector2(280, 90);
+        private Vector2 SetPO1 = new Vector2(280, 120);
         private Vector2 SetPO2 = new Vector2(480, 90);
         private int frame;
         private bool timeLoad;
@@ -23,17 +23,18 @@ namespace Test
         private int waitingtime = 0;
 
         private Texture2D first_floor_Background;
-        private Texture2D Farmer;
+        private Texture2D Beetle_Text;
+        private Texture2D Rocky_Text;
         private Texture2D Golem_Texture;
         private Texture2D Lurker_Texture;
         private Texture2D Inventor_Texture;
         private Texture2D Blood_Maiden_Texture;
         public UnitClass Lurker = new UnitClass(true, 6, 50, 5);
-        public UnitClass Golem = new UnitClass(false,4, 10, 5);
+        public UnitClass Golem = new UnitClass(false,4, 30, 5);
         public UnitClass inventor = new UnitClass(true, 5, 50, 5);
-        public UnitClass Farmer4 = new UnitClass(false,4, 10, 5);
+        public UnitClass Beetle = new UnitClass(false,5, 10, 5);
+        public UnitClass Rocky = new UnitClass(false, 3, 10, 5);
         public UnitClass Blood_Maiden = new UnitClass(true, 3, 50, 5);
-        public UnitClass Farmer6 = new UnitClass(false,4, 10, 5);
         private UnitClass Nul = new UnitClass();
         private int target = 0;
         private int turn;
@@ -59,9 +60,10 @@ namespace Test
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            Farmer = Content.Load<Texture2D>("Char01");
+            Beetle_Text = Content.Load<Texture2D>("Flying Rock_Sheet");
+            Rocky_Text = Content.Load<Texture2D>("Hermit Rock-Sheet");
             Blood_Maiden_Texture = Content.Load<Texture2D>("Blood_maiden_sprite_sheet");
-            Golem_Texture = Content.Load<Texture2D>("Golem_Sprite_sheet");
+            Golem_Texture = Content.Load<Texture2D>("Golem-Sheet");
             Inventor_Texture = Content.Load<Texture2D>("Inventor_Sprite_Sheet");
             Lurker_Texture = Content.Load<Texture2D>("Lurker_Sprite_Sheet");
             first_floor_Background = Content.Load<Texture2D>("1st_floor");
@@ -75,17 +77,18 @@ namespace Test
 
             Lurker.spriteLocation = SetPO1;
 
+            
             Golem.spriteLocation = SetPO2;
 
             inventor.spriteLocation = new Vector2(SetPO1.X - 100, SetPO1.Y);
 
-            Farmer4.direction = 1;
-            Farmer4.spriteLocation = new Vector2(SetPO2.X + 50, SetPO2.Y);
+            
+            Beetle.spriteLocation = new Vector2(SetPO2.X + 125, SetPO2.Y);
 
             Blood_Maiden.spriteLocation = new Vector2(SetPO1.X - 200, SetPO1.Y);
 
-            Farmer6.direction = 1;
-            Farmer6.spriteLocation = new Vector2(SetPO2.X + 100, SetPO2.Y);
+            
+            Rocky.spriteLocation = new Vector2(SetPO2.X-50 , SetPO2.Y +100);
 
         }
 
@@ -94,7 +97,7 @@ namespace Test
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             UnitClass[] Party = { Lurker, inventor, Blood_Maiden };
-            UnitClass[] EnemyGroup1 = { Golem, Farmer4, Farmer6};
+            UnitClass[] EnemyGroup1 = { Golem, Beetle, Rocky};
 
             UnitClass[] speedDecider = new UnitClass[Party.Length + EnemyGroup1.Length];
             for (int i = 0; i < speedDecider.Length; i++)
@@ -294,16 +297,16 @@ namespace Test
             _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
             _spriteBatch.Draw(Lurker_Texture, Lurker.spriteLocation, new Rectangle(0,
                 0, 135, 125), Lurker.State);
-            _spriteBatch.Draw(Golem_Texture, Golem.spriteLocation, new Rectangle(0,
-                0, 183, 155), Golem.State);
+            _spriteBatch.Draw(Golem_Texture, Golem.spriteLocation, new Rectangle(frame*162,
+                0, 162, 155), Golem.State);
             _spriteBatch.Draw(Inventor_Texture, inventor.spriteLocation, new Rectangle(0,
                 0, 135, 125), inventor.State);
-            _spriteBatch.Draw(Farmer, Farmer4.spriteLocation, new Rectangle(frame * 32,
-                Golem.direction * 48, 32, 48), Farmer4.State);
+            _spriteBatch.Draw(Beetle_Text, Beetle.spriteLocation, new Rectangle(frame * 75,
+                0, 75, 75), Beetle.State);
             _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.spriteLocation, new Rectangle(0,
                 0, 135, 125), Blood_Maiden.State);
-            _spriteBatch.Draw(Farmer, Farmer6.spriteLocation, new Rectangle(frame * 32,
-                Golem.direction * 48, 32, 48), Farmer6.State);
+            _spriteBatch.Draw(Rocky_Text, Rocky.spriteLocation, new Rectangle(frame * 50,
+                0, 50, 50), Rocky.State);
 
             _spriteBatch.End();
             base.Draw(gameTime);
