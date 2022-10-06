@@ -23,6 +23,7 @@ namespace Test
         public bool attacked = false;
         public bool Alive = true;
         public Texture2D Unit_Sprite;
+        public bool mouseHover = false;
 
         public UnitClass()
         {

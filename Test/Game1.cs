@@ -51,6 +51,7 @@ namespace Test
         private int turn;
         bool isMenu;
         bool isGameplay;
+        private bool isHit = false;
 
         private List<UnitClass> Party = new List<UnitClass>();
         private List<UnitClass> EnemyGroup = new List<UnitClass>();
@@ -168,6 +169,8 @@ namespace Test
 
         private void UpdateGameplay()
         {
+            var mouseState = Mouse.GetState();
+            var mousePosition = new Point(mouseState.X, mouseState.Y);
             UnitClass[] speedDecider = new UnitClass[Party.Count + EnemyGroup.Count];
             for (int i = 0; i < speedDecider.Length; i++)
             {
@@ -195,6 +198,14 @@ namespace Test
             for (int i = 0; i < speedDecider.Length; i++)
             {
                 Rectangle unitRectangle = new Rectangle((int)speedDecider[i].spriteLocation.X, (int)speedDecider[i].spriteLocation.Y, 70, 110);
+                if (unitRectangle.Contains(mousePosition))
+                {
+                    speedDecider[i].mouseHover = true;
+                }
+                else
+                {
+                    speedDecider[i].mouseHover = false;
+                }
                 if (i == turn)
                 {
                     speedDecider[i].myTurn = true;
@@ -331,7 +342,7 @@ namespace Test
                 {
                     speedDecider[i].State = Color.CornflowerBlue;
                 }
-                if (speedDecider[i].isAttacking == false && speedDecider[i].targeted == false && speedDecider[i].myTurn == false)
+                if (speedDecider[i].isAttacking == false && speedDecider[i].targeted == false && speedDecider[i].myTurn == false && speedDecider[i].mouseHover == false)
                 {
                     speedDecider[i].State = Color.White;
                 }
@@ -365,6 +376,10 @@ namespace Test
                 if (speedDecider[i].attacked == false && speedDecider[i].myTurn == true)
                 {
                     speedDecider[i].State = Color.White;
+                }
+                if (speedDecider[i].mouseHover == true)
+                {
+                    speedDecider[i].State = Color.Black;
                 }
                 // HP เหลือ 0//
                 if (speedDecider[i].HP <= 0)
@@ -416,7 +431,11 @@ namespace Test
             _spriteBatch.Draw(Rocky_Text, Rocky.spriteLocation, new Rectangle(frame * 50, 0, 50, 50), Rocky.State);
             _spriteBatch.Draw(Attack_Texture, Attack_Position, Color.White);
             _spriteBatch.Draw(Turn_Order_Texture, Turn_Order_Position, Color.White);
-            
+
+            if (isHit == true)
+            {
+                _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
+            }
         }
 
         private void DrawMenu()
