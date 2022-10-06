@@ -13,6 +13,7 @@ namespace Test
         public int Atk;
         public int direction;
         public Vector2 spriteLocation;
+        public Vector2 spriteLocation2;
         public Color State = Color.White;
         public int speed;
         public bool myTurn = false;

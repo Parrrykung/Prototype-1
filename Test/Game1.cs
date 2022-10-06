@@ -12,6 +12,7 @@ namespace Test
         private SpriteBatch _spriteBatch;
         private KeyboardState _keyboardState;
         private KeyboardState Old_keyboardState;
+        private MouseState _mouseState;
 
         private float totalElapsed;
         private float timePerFrame;
@@ -96,17 +97,17 @@ namespace Test
             isGameplay = true;
             isMenu = false;
 
-            Lurker.spriteLocation = SetPO1;
+            Lurker.spriteLocation = SetPO1; Lurker.spriteLocation2 = Lurker.spriteLocation;
      
-            Golem.spriteLocation = SetPO2;
+            Golem.spriteLocation = SetPO2; Golem.spriteLocation2 = Golem.spriteLocation;
 
-            inventor.spriteLocation = new Vector2(SetPO1.X - 100, SetPO1.Y);
+            inventor.spriteLocation = new Vector2(SetPO1.X - 100, SetPO1.Y); inventor.spriteLocation2 = inventor.spriteLocation;
 
-            Beetle.spriteLocation = new Vector2(SetPO2.X + 125, SetPO2.Y);
+            Beetle.spriteLocation = new Vector2(SetPO2.X + 125, SetPO2.Y); Beetle.spriteLocation2 = Beetle.spriteLocation;
 
-            Blood_Maiden.spriteLocation = new Vector2(SetPO1.X - 200, SetPO1.Y);
+            Blood_Maiden.spriteLocation = new Vector2(SetPO1.X - 200, SetPO1.Y); Blood_Maiden.spriteLocation2 = Blood_Maiden.spriteLocation;
 
-            Rocky.spriteLocation = new Vector2(SetPO2.X-50 , SetPO2.Y +100);
+            Rocky.spriteLocation = new Vector2(SetPO2.X-50 , SetPO2.Y +100); Rocky.spriteLocation2 = Rocky.spriteLocation;
 
             EnemyGroup.Add(Golem);
             EnemyGroup.Add(Beetle);
@@ -193,7 +194,7 @@ namespace Test
 
             for (int i = 0; i < speedDecider.Length; i++)
             {
-
+                Rectangle unitRectangle = new Rectangle((int)speedDecider[i].spriteLocation.X, (int)speedDecider[i].spriteLocation.Y, 70, 110);
                 if (i == turn)
                 {
                     speedDecider[i].myTurn = true;
@@ -211,12 +212,14 @@ namespace Test
 
                     if (speedDecider[i].playable == true)
                     {
-                        if (_keyboardState.IsKeyUp(Keys.Space) && Old_keyboardState.IsKeyDown(Keys.Space))
+                        if (_keyboardState.IsKeyUp(Keys.Space) && Old_keyboardState.IsKeyDown(Keys.Space) && EnemyGroup[target].Alive == true)
                         {
                             speedDecider[i].isAttacking = true;
                             timeLoad = true;
                             EnemyGroup[target].attacked = true;
                             EnemyGroup[target].HP -= speedDecider[i].Atk;
+                            EnemyGroup[target].spriteLocation2 = EnemyGroup[target].spriteLocation;
+                            EnemyGroup[target].spriteLocation.X += 10;
                         }
                         if (EnemyGroup[target].Alive == true)
                         {
@@ -282,7 +285,23 @@ namespace Test
                         {
                             Random r = new Random();
                             target = r.Next(0, Party.Count);
-                            Party[target].targeted = true;
+                            if (Party[target].Alive == false)
+                            {
+                                if (target == Party.Count - 1)
+                                {
+                                    target = 0;
+                                    Party[target].targeted = true;
+                                }
+                                if (target < Party.Count - 1)
+                                {
+                                    target += 1;
+                                    Party[target].targeted = true;
+                                }
+                            }
+                            if (Party[target].Alive == true)
+                            {
+                                Party[target].targeted = true;
+                            }
                         }
                         waitingtime += 1;
                         if (waitingtime == 50)
@@ -291,6 +310,8 @@ namespace Test
                             timeLoad = true;
                             Party[target].attacked = true;
                             Party[target].HP -= speedDecider[i].Atk;
+                            Party[target].spriteLocation2 = Party[target].spriteLocation;
+                            Party[target].spriteLocation.X -= 10; 
                         }
                     }
 
@@ -321,12 +342,15 @@ namespace Test
                     turn++;
                     speedDecider[i].myTurn = false;
                     speedDecider[i].isAttacking = false;
-                    EnemyGroup[target].attacked = false;
                     waitingtime = 0;
                     for (int m = 0; m < speedDecider.Length; m++)
                     {
                         speedDecider[m].targeted = false;
                         speedDecider[m].attacked = false;
+                        if (speedDecider[m].Alive == true)
+                        {
+                            speedDecider[m].spriteLocation = speedDecider[m].spriteLocation2;
+                        }
                     }
 
                 }
