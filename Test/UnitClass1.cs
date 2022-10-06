@@ -21,14 +21,16 @@ namespace Test
         public bool targeted = false;
         public bool attacked = false;
         public bool Alive = true;
+        public Texture2D Unit_Sprite;
 
         public UnitClass()
         {
 
         }
 
-        public UnitClass(bool playable, int speed, int HP, int Atk)
+        public UnitClass( bool playable, int speed, int HP, int Atk)
         {
+            
             this.speed = speed;
             this.playable = playable;
             this.HP = HP;

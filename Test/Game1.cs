@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace Test
 {
@@ -29,17 +30,29 @@ namespace Test
         private Texture2D Lurker_Texture;
         private Texture2D Inventor_Texture;
         private Texture2D Blood_Maiden_Texture;
-        public UnitClass Lurker = new UnitClass(true, 6, 50, 5);
-        public UnitClass Golem = new UnitClass(false,4, 30, 5);
-        public UnitClass inventor = new UnitClass(true, 5, 50, 5);
+        private Texture2D Arrow_Texture;
+        private Texture2D Attack_Texture;
+        private Texture2D Item_Texture;
+        private Texture2D Skill_Texture;
+        private Texture2D Turn_Order_Texture;
+        private Texture2D Turn_Selector_Texture;
+        public UnitClass Lurker = new UnitClass(true, 6, 10, 5);
+        public UnitClass Golem = new UnitClass(false,4, 20, 5);
+        public UnitClass inventor = new UnitClass(true, 5, 10, 5);
         public UnitClass Beetle = new UnitClass(false,5, 10, 5);
         public UnitClass Rocky = new UnitClass(false, 3, 10, 5);
-        public UnitClass Blood_Maiden = new UnitClass(true, 3, 50, 5);
+        public UnitClass Blood_Maiden = new UnitClass(true, 3, 10, 5);
         private UnitClass Nul = new UnitClass();
+        private Vector2 Turn_Selector_Position;
+        private Vector2 Turn_Order_Position = new Vector2(0, 180);
+        private Vector2 Attack_Position = new Vector2(50, 180);
         private int target = 0;
         private int turn;
+        bool isMenu;
+        bool isGameplay;
 
-
+        private List<UnitClass> Party = new List<UnitClass>();
+        private List<UnitClass> EnemyGroup = new List<UnitClass>();
 
         public Game1()
         {
@@ -67,6 +80,12 @@ namespace Test
             Inventor_Texture = Content.Load<Texture2D>("Inventor_Sprite_Sheet");
             Lurker_Texture = Content.Load<Texture2D>("Lurker_Sprite_Sheet");
             first_floor_Background = Content.Load<Texture2D>("1st_floor");
+            Arrow_Texture = Content.Load<Texture2D>("Arrow");
+            Attack_Texture = Content.Load<Texture2D>("Attack");
+            Item_Texture = Content.Load<Texture2D>("Item");
+            Skill_Texture = Content.Load<Texture2D>("Skill");
+            Turn_Order_Texture  = Content.Load<Texture2D>("Turn Order Hub");
+            Turn_Selector_Texture = Content.Load<Texture2D>("Turn Selector");
             framePerSec = 2;
             timePerFrame = (float)1 / framePerSec;
             frame = 0;
@@ -74,21 +93,29 @@ namespace Test
             timeLoad = false;
             frameInCombat = 0;
             turn = 0;
+            isGameplay = true;
+            isMenu = false;
 
             Lurker.spriteLocation = SetPO1;
-
-            
+     
             Golem.spriteLocation = SetPO2;
 
             inventor.spriteLocation = new Vector2(SetPO1.X - 100, SetPO1.Y);
 
-            
             Beetle.spriteLocation = new Vector2(SetPO2.X + 125, SetPO2.Y);
 
             Blood_Maiden.spriteLocation = new Vector2(SetPO1.X - 200, SetPO1.Y);
 
-            
             Rocky.spriteLocation = new Vector2(SetPO2.X-50 , SetPO2.Y +100);
+
+            EnemyGroup.Add(Golem);
+            EnemyGroup.Add(Beetle);
+            EnemyGroup.Add(Rocky);
+
+            Party.Add(Lurker);
+            Party.Add(inventor);
+            Party.Add(Blood_Maiden);
+
 
         }
 
@@ -96,16 +123,57 @@ namespace Test
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            UnitClass[] Party = { Lurker, inventor, Blood_Maiden };
-            UnitClass[] EnemyGroup1 = { Golem, Beetle, Rocky};
 
-            UnitClass[] speedDecider = new UnitClass[Party.Length + EnemyGroup1.Length];
+            if (isGameplay == true)
+            {
+                UpdateGameplay();
+            }
+            if (isMenu == true)
+            {
+                UpdateTitle();
+            }
+
+            UpdateFrame((float)gameTime.ElapsedGameTime.TotalSeconds);
+            base.Update(gameTime);
+        }
+
+        protected override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+            _spriteBatch.Begin();
+
+            if (isGameplay == true)
+            {
+                DrawGameplay();
+            }
+            if (isMenu == true)
+            {
+                DrawMenu();
+            }
+
+            _spriteBatch.End();
+            base.Draw(gameTime);
+        }
+
+        void UpdateFrame(float elapsed)
+        {
+            totalElapsed += elapsed;
+            if (totalElapsed > timePerFrame)
+            {
+                frame = (frame + 1) % 4;
+                totalElapsed -= timePerFrame;
+            }
+        }
+
+        private void UpdateGameplay()
+        {
+            UnitClass[] speedDecider = new UnitClass[Party.Count + EnemyGroup.Count];
             for (int i = 0; i < speedDecider.Length; i++)
             {
-                if (i <= Party.Length - 1)
+                if (i <= Party.Count - 1)
                     speedDecider[i] = Party[i];
                 else
-                    speedDecider[i] = EnemyGroup1[i - Party.Length];
+                    speedDecider[i] = EnemyGroup[i - Party.Count];
             }
 
             for (int c = 0; c < (speedDecider.Length - 1); c++)
@@ -125,36 +193,42 @@ namespace Test
 
             for (int i = 0; i < speedDecider.Length; i++)
             {
+
                 if (i == turn)
                 {
                     speedDecider[i].myTurn = true;
                 }
-                
-                if (speedDecider[i].myTurn == true)
+                if (speedDecider[i].myTurn == true && speedDecider[i].Alive == false)
                 {
-                    speedDecider[i].State = Color.Gray;
-                    
-                    
+                    turn += 1;
+                    speedDecider[i].myTurn = false;
+                }
+
+                if (speedDecider[i].myTurn == true && speedDecider[i].Alive == true)
+                {
+                    Turn_Selector_Position = new Vector2(speedDecider[i].spriteLocation.X, speedDecider[i].spriteLocation.Y + 10);
+
+
                     if (speedDecider[i].playable == true)
-                     {
+                    {
                         if (_keyboardState.IsKeyUp(Keys.Space) && Old_keyboardState.IsKeyDown(Keys.Space))
                         {
                             speedDecider[i].isAttacking = true;
                             timeLoad = true;
-                            EnemyGroup1[target].attacked = true;
-                            EnemyGroup1[target].HP -= speedDecider[i].Atk;
+                            EnemyGroup[target].attacked = true;
+                            EnemyGroup[target].HP -= speedDecider[i].Atk;
                         }
-                        if(EnemyGroup1[target].Alive == true)
+                        if (EnemyGroup[target].Alive == true)
                         {
-                            EnemyGroup1[target].targeted = true;
+                            EnemyGroup[target].targeted = true;
                         }
-                        if (EnemyGroup1[target].Alive == false)
+                        if (EnemyGroup[target].Alive == false)
                         {
-                            if (target == EnemyGroup1.Length - 1)
+                            if (target == EnemyGroup.Count - 1)
                             {
                                 target = 0;
                             }
-                            if (target < EnemyGroup1.Length - 1)
+                            if (target < EnemyGroup.Count - 1)
                             {
                                 target += 1;
                             }
@@ -162,19 +236,19 @@ namespace Test
 
                         if (_keyboardState.IsKeyUp(Keys.D) && Old_keyboardState.IsKeyDown(Keys.D))
                         {
-                            EnemyGroup1[target].targeted = false;
-                            if (target == EnemyGroup1.Length - 1)
+                            EnemyGroup[target].targeted = false;
+                            if (target == EnemyGroup.Count - 1)
                             {
                                 target = 0;
                             }
                             else
                             {
                                 target += 1;
-                                if (EnemyGroup1[target].Alive == false && target < EnemyGroup1.Length - 1)
+                                if (EnemyGroup[target].Alive == false && target < EnemyGroup.Count - 1)
                                 {
                                     target += 1;
                                 }
-                                if (EnemyGroup1[target].Alive == false && target == EnemyGroup1.Length - 1)
+                                if (EnemyGroup[target].Alive == false && target == EnemyGroup.Count - 1)
                                 {
                                     target = 0;
                                 }
@@ -182,21 +256,21 @@ namespace Test
                         }
                         if (_keyboardState.IsKeyUp(Keys.A) && Old_keyboardState.IsKeyDown(Keys.A))
                         {
-                            EnemyGroup1[target].targeted = false;
+                            EnemyGroup[target].targeted = false;
                             if (target == 0)
                             {
-                                target = EnemyGroup1.Length - 1;
+                                target = EnemyGroup.Count - 1;
                             }
                             else
                             {
                                 target -= 1;
-                                if (EnemyGroup1[target].Alive == false && target >0)
+                                if (EnemyGroup[target].Alive == false && target > 0)
                                 {
                                     target -= 1;
                                 }
-                                if (EnemyGroup1[target].Alive == false && target == 0)
+                                if (EnemyGroup[target].Alive == false && target == 0)
                                 {
-                                    target = EnemyGroup1.Length - 1;
+                                    target = EnemyGroup.Count - 1;
                                 }
                             }
                         }
@@ -207,7 +281,7 @@ namespace Test
                         if (waitingtime == 0)
                         {
                             Random r = new Random();
-                            target = r.Next(0, Party.Length);
+                            target = r.Next(0, Party.Count);
                             Party[target].targeted = true;
                         }
                         waitingtime += 1;
@@ -227,7 +301,7 @@ namespace Test
                         turn++;
                         speedDecider[i].myTurn = false;
                         speedDecider[i].isAttacking = false;
-                        EnemyGroup1[target].attacked = false;
+                        EnemyGroup[target].attacked = false;
                         waitingtime = 0;
                     }
                 }
@@ -247,7 +321,7 @@ namespace Test
                     turn++;
                     speedDecider[i].myTurn = false;
                     speedDecider[i].isAttacking = false;
-                    EnemyGroup1[target].attacked = false;
+                    EnemyGroup[target].attacked = false;
                     waitingtime = 0;
                     for (int m = 0; m < speedDecider.Length; m++)
                     {
@@ -264,11 +338,16 @@ namespace Test
                 {
                     speedDecider[i].State = Color.Red;
                 }
+                if (speedDecider[i].attacked == false && speedDecider[i].myTurn == true)
+                {
+                    speedDecider[i].State = Color.White;
+                }
                 // HP เหลือ 0//
                 if (speedDecider[i].HP <= 0)
                 {
                     speedDecider[i].spriteLocation = new Vector2(1000, 1000);
                     speedDecider[i].Alive = false;
+
                 }
 
             }
@@ -279,47 +358,46 @@ namespace Test
             }
             if (turn > speedDecider.Length - 1)
             {
-                turn = 0;   
+                turn = 0;
             }
-            
 
-            UpdateFrame((float)gameTime.ElapsedGameTime.TotalSeconds);
+            if (EnemyGroup[0].Alive == false && EnemyGroup[1].Alive == false && EnemyGroup[2].Alive == false)
+            {
+                isMenu = true;
+                isGameplay = false;
+            }
+
             Old_keyboardState = _keyboardState;
 
-            base.Update(gameTime);
         }
 
-        protected override void Draw(GameTime gameTime)
+        private void UpdateTitle()
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            _spriteBatch.Begin();
-            _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
-            _spriteBatch.Draw(Lurker_Texture, Lurker.spriteLocation, new Rectangle(0,
-                0, 135, 125), Lurker.State);
-            _spriteBatch.Draw(Golem_Texture, Golem.spriteLocation, new Rectangle(frame*162,
-                0, 162, 155), Golem.State);
-            _spriteBatch.Draw(Inventor_Texture, inventor.spriteLocation, new Rectangle(0,
-                0, 135, 125), inventor.State);
-            _spriteBatch.Draw(Beetle_Text, Beetle.spriteLocation, new Rectangle(frame * 75,
-                0, 75, 75), Beetle.State);
-            _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.spriteLocation, new Rectangle(0,
-                0, 135, 125), Blood_Maiden.State);
-            _spriteBatch.Draw(Rocky_Text, Rocky.spriteLocation, new Rectangle(frame * 50,
-                0, 50, 50), Rocky.State);
-
-            _spriteBatch.End();
-            base.Draw(gameTime);
-        }
-
-        void UpdateFrame(float elapsed)
-        {
-            totalElapsed += elapsed;
-            if (totalElapsed > timePerFrame)
+            if (Keyboard.GetState().IsKeyDown(Keys.Space) == true)
             {
-                frame = (frame + 1) % 4;
-                totalElapsed -= timePerFrame;
+                isMenu = false;
+                isGameplay = true;
             }
+        }
+
+        private void DrawGameplay()
+        {
+            _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
+            _spriteBatch.Draw(Turn_Selector_Texture, Turn_Selector_Position, Color.White);
+            _spriteBatch.Draw(Lurker_Texture, Lurker.spriteLocation, new Rectangle(0, 0, 135, 125), Lurker.State);
+            _spriteBatch.Draw(Golem_Texture, Golem.spriteLocation, new Rectangle(frame * 162, 0, 162, 155), Golem.State);
+            _spriteBatch.Draw(Inventor_Texture, inventor.spriteLocation, new Rectangle(0, 0, 135, 125), inventor.State);
+            _spriteBatch.Draw(Beetle_Text, Beetle.spriteLocation, new Rectangle(frame * 75, 0, 75, 75), Beetle.State);
+            _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.spriteLocation, new Rectangle(0, 0, 135, 125), Blood_Maiden.State);
+            _spriteBatch.Draw(Rocky_Text, Rocky.spriteLocation, new Rectangle(frame * 50, 0, 50, 50), Rocky.State);
+            _spriteBatch.Draw(Attack_Texture, Attack_Position, Color.White);
+            _spriteBatch.Draw(Turn_Order_Texture, Turn_Order_Position, Color.White);
+            
+        }
+
+        private void DrawMenu()
+        {
+            _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
         }
     }
 }
