@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Test
+namespace Burrow_Rune
 {
     public static class Program
     {

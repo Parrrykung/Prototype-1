@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 
-namespace Test
+namespace Burrow_Rune
 {
     public class Game1 : Game
     {
