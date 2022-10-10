@@ -24,6 +24,9 @@ namespace Burrow_Rune
         public bool Alive = true;
         public Texture2D Unit_Sprite;
         public bool mouseHover = false;
+        public int iconOrder;
+        public Vector2 Big_iconLocation = new Vector2(1000, 1000);
+        public Vector2 Small_iconLocation = new Vector2(1000, 1000);
 
         public UnitClass()
         {

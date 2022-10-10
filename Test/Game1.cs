@@ -13,6 +13,7 @@ namespace Burrow_Rune
         private KeyboardState _keyboardState;
         private KeyboardState Old_keyboardState;
         private MouseState Old_mouseState;
+        private SpriteFont font;
 
         private float totalElapsed;
         private float timePerFrame;
@@ -56,7 +57,8 @@ namespace Burrow_Rune
 
         private int target = 0;
         private int turn;
-        bool isMenu;
+        private int iconOrder;
+        bool isMap;
         bool isGameplay;
         private bool isHit = false;
         private bool Attacking = false;
@@ -64,6 +66,7 @@ namespace Burrow_Rune
         private List<UnitClass> Party = new List<UnitClass>();
         private List<UnitClass> EnemyGroup = new List<UnitClass>();
         private List<Button> ButtoninBattle = new List<Button>();
+
 
         public Game1()
         {
@@ -105,11 +108,19 @@ namespace Burrow_Rune
             frameInCombat = 0;
             turn = 0;
             isGameplay = false;
-            isMenu = true;
+            isMap = true;
 
             ButtoninBattle.Add(Attack_B);
             ButtoninBattle.Add(Skill_B);
             ButtoninBattle.Add(Item_B);
+
+            Party.Add(Lurker);
+            Party.Add(inventor);
+            Party.Add(Blood_Maiden);
+
+            EnemyGroup.Add(Golem);
+            EnemyGroup.Add(Beetle);
+            EnemyGroup.Add(Rocky);
         }
 
         protected override void Update(GameTime gameTime)
@@ -121,9 +132,9 @@ namespace Burrow_Rune
             {
                 UpdateGameplay();
             }
-            if (isMenu == true)
+            if (isMap == true)
             {
-                UpdateTitle();
+                UpdateEventMap();
             }
 
             UpdateFrame((float)gameTime.ElapsedGameTime.TotalSeconds);
@@ -139,7 +150,7 @@ namespace Burrow_Rune
             {
                 DrawGameplay();
             }
-            if (isMenu == true)
+            if (isMap == true)
             {
                 DrawMenu();
             }
@@ -163,61 +174,57 @@ namespace Burrow_Rune
             var mouseState = Mouse.GetState();
             var mousePosition = new Point(mouseState.X, mouseState.Y);
 
-            UnitClass[] speedDecider = new UnitClass[Party.Count + EnemyGroup.Count];
-            for (int i = 0; i < speedDecider.Length; i++)
-            {
-                if (i <= Party.Count - 1)
-                    speedDecider[i] = Party[i];
-                else
-                    speedDecider[i] = EnemyGroup[i - Party.Count];
-            }
+            var TurnOrder = new List<UnitClass>(Party.Count + EnemyGroup.Count);
+            TurnOrder.AddRange(Party);
+            TurnOrder.AddRange(EnemyGroup);
 
-            for (int c = 0; c < (speedDecider.Length - 1); c++)
+            for (int c = 0; c < (TurnOrder.Count - 1); c++)
             {
-                for (int d = 0; d < speedDecider.Length - c - 1; d++)
+                for (int d = 0; d < TurnOrder.Count - c - 1; d++)
                 {
-                    if (speedDecider[d].speed < speedDecider[d + 1].speed)
+                    if (TurnOrder[d].speed < TurnOrder[d + 1].speed)
                     {
-                        Nul = speedDecider[d];
-                        speedDecider[d] = speedDecider[d + 1];
-                        speedDecider[d + 1] = Nul;
+                        Nul = TurnOrder[d];
+                        TurnOrder[d] = TurnOrder[d + 1];
+                        TurnOrder[d + 1] = Nul;
                     }
                 }
             }
 
             _keyboardState = Keyboard.GetState();
 
-            for (int i = 0; i < speedDecider.Length; i++)
+            for (int i = 0; i < TurnOrder.Count; i++)
             {
-                Rectangle unitRectangle = new Rectangle((int)speedDecider[i].spriteLocation.X, (int)speedDecider[i].spriteLocation.Y, 70, 110);
+                Rectangle unitRectangle = new Rectangle((int)TurnOrder[i].spriteLocation.X, (int)TurnOrder[i].spriteLocation.Y, 70, 110);
                 if (unitRectangle.Contains(mousePosition))
                 {
-                    speedDecider[i].mouseHover = true;
+                    TurnOrder[i].mouseHover = true;
                 }
                 else
                 {
-                    speedDecider[i].mouseHover = false;
+                    TurnOrder[i].mouseHover = false;
                 }
                 if (i == turn)
                 {
-                    speedDecider[i].myTurn = true;
+                    TurnOrder[i].myTurn = true;
                 }
-                if (speedDecider[i].myTurn == true && speedDecider[i].Alive == false)
+                if (TurnOrder[i].myTurn == true && TurnOrder[i].Alive == false)
                 {
                     turn += 1;
-                    speedDecider[i].myTurn = false;
+                    TurnOrder[i].myTurn = false;
                 }
 
-                if (speedDecider[i].myTurn == true && speedDecider[i].Alive == true)
+                if (TurnOrder[i].myTurn == true && TurnOrder[i].Alive == true)
                 {
-                    Turn_Selector_Position = new Vector2(speedDecider[i].spriteLocation.X, speedDecider[i].spriteLocation.Y + 10);
+                    Turn_Selector_Position = new Vector2(TurnOrder[i].spriteLocation.X, TurnOrder[i].spriteLocation.Y + 10);
+                    TurnOrder[i].Big_iconLocation = new Vector2(0, 190);
+                    TurnOrder[i].Small_iconLocation = new Vector2(1000, 1090);
 
-
-                    if (speedDecider[i].playable == true)
+                    if (TurnOrder[i].playable == true)
                     {
                         for (int n = 0; n < ButtoninBattle.Count; n++)
                         {
-                            if(speedDecider[i].isAttacking == true)
+                            if(TurnOrder[i].isAttacking == true)
                             {
                                 ButtoninBattle[n].Pressed = false;
                             }
@@ -267,10 +274,10 @@ namespace Burrow_Rune
                                 }
                                 if (mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed && EnemyGroup[m].mouseHover == true && EnemyGroup[m].Alive == true)
                                 {
-                                    speedDecider[i].isAttacking = true;
+                                    TurnOrder[i].isAttacking = true;
                                     timeLoad = true;
                                     EnemyGroup[m].attacked = true;
-                                    EnemyGroup[m].HP -= speedDecider[i].Atk;
+                                    EnemyGroup[m].HP -= TurnOrder[i].Atk;
                                     EnemyGroup[m].spriteLocation2 = EnemyGroup[m].spriteLocation;
                                     EnemyGroup[m].spriteLocation.X += 10;
                                 }
@@ -278,7 +285,7 @@ namespace Burrow_Rune
                         }
                     }
 
-                    if (speedDecider[i].playable == false && speedDecider[i].Alive == true)
+                    if (TurnOrder[i].playable == false && TurnOrder[i].Alive == true)
                     {
                         if (waitingtime == 0)
                         {
@@ -305,50 +312,51 @@ namespace Burrow_Rune
                         waitingtime += 1;
                         if (waitingtime == 50)
                         {
-                            speedDecider[i].isAttacking = true;
+                            TurnOrder[i].isAttacking = true;
                             timeLoad = true;
                             Party[target].attacked = true;
-                            Party[target].HP -= speedDecider[i].Atk;
+                            Party[target].HP -= TurnOrder[i].Atk;
                             Party[target].spriteLocation2 = Party[target].spriteLocation;
                             Party[target].spriteLocation.X -= 10; 
                         }
                     }
 
-                    if (speedDecider[i].Alive == false)
+                    if (TurnOrder[i].Alive == false)
                     {
                         timeLoad = false;
                         frameInCombat = 0;
                         turn++;
-                        speedDecider[i].myTurn = false;
-                        speedDecider[i].isAttacking = false;
+                        TurnOrder[i].myTurn = false;
+                        TurnOrder[i].isAttacking = false;
                         waitingtime = 0;
                     }
                 }
 
-                if (speedDecider[i].isAttacking == true)
+                if (TurnOrder[i].isAttacking == true)
                 {
-                    speedDecider[i].State = Color.CornflowerBlue;
+                    TurnOrder[i].State = Color.CornflowerBlue;
                 }
-                if (speedDecider[i].isAttacking == false && speedDecider[i].targeted == false && speedDecider[i].myTurn == false && speedDecider[i].mouseHover == false)
+                if (TurnOrder[i].isAttacking == false && TurnOrder[i].targeted == false && TurnOrder[i].myTurn == false && TurnOrder[i].mouseHover == false)
                 {
-                    speedDecider[i].State = Color.White;
+                    TurnOrder[i].State = Color.White;
                 }
-                if (frameInCombat > 20 && speedDecider[i].myTurn == true)
+                if (frameInCombat > 20 && TurnOrder[i].myTurn == true)
                 {
                     timeLoad = false;
                     frameInCombat = 0;
                     turn++;
                     Attacking = false;
-                    speedDecider[i].myTurn = false;
-                    speedDecider[i].isAttacking = false;
+                    TurnOrder[i].myTurn = false;
+                    TurnOrder[i].isAttacking = false;
                     waitingtime = 0;
-                    for (int m = 0; m < speedDecider.Length; m++)
+                    iconOrder = TurnOrder.Count - 1;
+                    for (int m = 0; m < TurnOrder.Count; m++)
                     {
-                        speedDecider[m].targeted = false;
-                        speedDecider[m].attacked = false;
-                        if (speedDecider[m].Alive == true)
+                        TurnOrder[m].targeted = false;
+                        TurnOrder[m].attacked = false;
+                        if (TurnOrder[m].Alive == true)
                         {
-                            speedDecider[m].spriteLocation = speedDecider[m].spriteLocation2;
+                            TurnOrder[m].spriteLocation = TurnOrder[m].spriteLocation2;
                         }
                     }
                     for (int m = 0; m < ButtoninBattle.Count; m++)
@@ -357,33 +365,52 @@ namespace Burrow_Rune
                     }
 
                 }
-                if (speedDecider[i].targeted == true && speedDecider[i].myTurn == false)
+                if (TurnOrder[i].targeted == true && TurnOrder[i].myTurn == false)
                 {
-                    speedDecider[i].State = Color.HotPink;
+                    TurnOrder[i].State = Color.HotPink;
                 }
-                if (speedDecider[i].attacked == true && speedDecider[i].myTurn == false)
+                if (TurnOrder[i].attacked == true && TurnOrder[i].myTurn == false)
                 {
-                    speedDecider[i].State = Color.Red;
+                    TurnOrder[i].State = Color.Red;
                 }
-                if (speedDecider[i].attacked == false && speedDecider[i].myTurn == true)
+                if (TurnOrder[i].attacked == false && TurnOrder[i].myTurn == true)
                 {
-                    speedDecider[i].State = Color.White;
+                    TurnOrder[i].State = Color.White;
                 }
                 // HP เหลือ 0//
-                if (speedDecider[i].HP <= 0)
+                if (TurnOrder[i].HP <= 0)
                 {
-                    speedDecider[i].spriteLocation = new Vector2(1000, 1000);
-                    speedDecider[i].Alive = false;
+                    TurnOrder[i].spriteLocation = new Vector2(1000, 1000);
+                    TurnOrder[i].Alive = false;
 
                 }
-
+                if (iconOrder == 1)
+                {
+                    TurnOrder[i].Small_iconLocation = new Vector2(0, 160);
+                }
+                if (i == 2)
+                {
+                    TurnOrder[i].Small_iconLocation = new Vector2(40, 120);
+                }
+                if (i == 3)
+                {
+                    TurnOrder[i].Small_iconLocation = new Vector2(0, 160);
+                }
+                if (i == 4)
+                {
+                    TurnOrder[i].Small_iconLocation = new Vector2(40, 120);
+                }
+                if (i == 5)
+                {
+                    TurnOrder[i].Small_iconLocation = new Vector2(0, 160);
+                }
             }
 
             if (timeLoad == true)
             {
                 frameInCombat += 1;
             }
-            if (turn > speedDecider.Length - 1)
+            if (turn > TurnOrder.Count - 1)
             {
                 turn = 0;
             }
@@ -392,20 +419,28 @@ namespace Burrow_Rune
 
             if (EnemyGroup[0].Alive == false && EnemyGroup[1].Alive == false && EnemyGroup[2].Alive == false)
             {
-                isMenu = true;
+                isMap = true;
                 isGameplay = false;
+                for (int i = 0; i < TurnOrder.Count; i++)
+                {
+                    if (TurnOrder[i].playable == false)
+                    {
+                        TurnOrder.RemoveAt(i);
+                    }
+                }
             }
 
             Old_keyboardState = _keyboardState;
             Old_mouseState = mouseState;
 
+            
         }
 
-        private void UpdateTitle()
+        private void UpdateEventMap()
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Enter) == true)
             {
-                isMenu = false;
+                isMap = false;
                 isGameplay = true;
 
                 Lurker.spriteLocation = SetPO1; Lurker.spriteLocation2 = Lurker.spriteLocation;
@@ -416,13 +451,7 @@ namespace Burrow_Rune
                 Beetle.spriteLocation = new Vector2(SetPO2.X + 125, SetPO2.Y); Beetle.spriteLocation2 = Beetle.spriteLocation;             
                 Rocky.spriteLocation = new Vector2(SetPO2.X - 50, SetPO2.Y + 100); Rocky.spriteLocation2 = Rocky.spriteLocation;
 
-                EnemyGroup.Add(Golem);
-                EnemyGroup.Add(Beetle);
-                EnemyGroup.Add(Rocky);
-
-                Party.Add(Lurker);
-                Party.Add(inventor);
-                Party.Add(Blood_Maiden);
+                
 
             }
         }
@@ -440,8 +469,13 @@ namespace Burrow_Rune
             _spriteBatch.Draw(Attack_Texture, Attack_B.Position, Attack_B.State);
             _spriteBatch.Draw(Skill_Texture, Skill_B.Position, Skill_B.State);
             _spriteBatch.Draw(Item_Texture, Item_B.Position, Item_B.State);
-            _spriteBatch.Draw(Turn_Order_Texture, Turn_Order_Position, Color.White);
             _spriteBatch.Draw(Arrow_Texture, Arrow_Position, Color.White);
+            _spriteBatch.Draw(Turn_Order_Texture, Turn_Order_Position, Color.White);
+            _spriteBatch.Draw(Lurker_Texture, new Vector2(Lurker.spriteLocation2.X - 40, Lurker.spriteLocation2.Y - 120), new Rectangle(0, 420, 135, 40), Color.White);
+            _spriteBatch.Draw(Lurker_Texture, Lurker.Small_iconLocation, new Rectangle(25, 160, 45, 45), Color.White);
+            _spriteBatch.Draw(Lurker_Texture, Lurker.Big_iconLocation, new Rectangle(0, 235, 78, 65), Color.White);
+            _spriteBatch.Draw(Inventor_Texture, inventor.Big_iconLocation, new Rectangle(25, 160, 45, 45), Color.White);
+            _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.Small_iconLocation, new Rectangle(25, 160, 45, 45), Color.White);
 
             if (isHit == true)
             {
