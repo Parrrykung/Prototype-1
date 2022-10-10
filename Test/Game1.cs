@@ -90,7 +90,7 @@ namespace Burrow_Rune
             Golem_Texture = Content.Load<Texture2D>("Golem-Sheet");
             Inventor_Texture = Content.Load<Texture2D>("Inventor_Sprite_Sheet");
             Lurker_Texture = Content.Load<Texture2D>("Lurker_Sprite_Sheet");
-            first_floor_Background = Content.Load<Texture2D>("1st_floor");
+            first_floor_Background = Content.Load<Texture2D>("1st_floor_2");
             Arrow_Texture = Content.Load<Texture2D>("Arrow");
             Attack_Texture = Content.Load<Texture2D>("Attack");
             Item_Texture = Content.Load<Texture2D>("Item");
