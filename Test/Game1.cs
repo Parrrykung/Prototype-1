@@ -11,13 +11,14 @@ namespace Burrow_Rune
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private KeyboardState _keyboardState;
+        private KeyboardState Old_keyboardState;
         private MouseState Old_mouseState;
 
         private float totalElapsed;
         private float timePerFrame;
         private int framePerSec;
         private Vector2 SetPO1 = new Vector2(280, 120);
-        private Vector2 SetPO2 = new Vector2(480, 90);
+        private Vector2 SetPO2 = new Vector2(430, 90);
         private int frame;
         private bool timeLoad;
         private int frameInCombat;
@@ -57,8 +58,7 @@ namespace Burrow_Rune
         private int turn;
         private int iconOrder = 0;
         bool isMap;
-        bool isGameplay;
-        private bool isHit = false;
+        bool isBattle;
         private bool Attacking = false;
 
         private List<UnitClass> Party = new List<UnitClass>();
@@ -105,7 +105,7 @@ namespace Burrow_Rune
             timeLoad = false;
             frameInCombat = 0;
             turn = 0;
-            isGameplay = false;
+            isBattle = false;
             isMap = true;
 
             ButtoninBattle.Add(Attack_B);
@@ -116,9 +116,6 @@ namespace Burrow_Rune
             Party.Add(inventor);
             Party.Add(Blood_Maiden);
 
-            EnemyGroup.Add(Golem);
-            EnemyGroup.Add(Beetle);
-            EnemyGroup.Add(Rocky);
         }
 
         protected override void Update(GameTime gameTime)
@@ -126,7 +123,8 @@ namespace Burrow_Rune
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            if (isGameplay == true)
+            _keyboardState = Keyboard.GetState();
+            if (isBattle == true)
             {
                 UpdateGameplay();
             }
@@ -135,6 +133,7 @@ namespace Burrow_Rune
                 UpdateEventMap();
             }
 
+            Old_keyboardState = _keyboardState;
             UpdateFrame((float)gameTime.ElapsedGameTime.TotalSeconds);
             base.Update(gameTime);
         }
@@ -144,13 +143,13 @@ namespace Burrow_Rune
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin();
 
-            if (isGameplay == true)
+            if (isBattle == true)
             {
-                DrawGameplay();
+                DrawBattale1();
             }
             if (isMap == true)
             {
-                DrawMenu();
+                DrawEventMap();
             }
 
             _spriteBatch.End();
@@ -189,7 +188,7 @@ namespace Burrow_Rune
                 }
             }
 
-            _keyboardState = Keyboard.GetState();
+
 
             for (int i = 0; i < TurnOrder.Count; i++)
             {
@@ -364,11 +363,11 @@ namespace Burrow_Rune
                     }
 
                 }
-                if (TurnOrder[i].targeted == true && TurnOrder[i].myTurn == false)
+                if (TurnOrder[i].targeted == true)
                 {
                     TurnOrder[i].State = Color.HotPink;
                 }
-                if (TurnOrder[i].attacked == true && TurnOrder[i].myTurn == false)
+                if (TurnOrder[i].attacked == true)
                 {
                     TurnOrder[i].State = Color.Red;
                 }
@@ -376,32 +375,87 @@ namespace Burrow_Rune
                 {
                     TurnOrder[i].State = Color.White;
                 }
-                // HP เหลือ 0//
+
                 if (TurnOrder[i].HP <= 0)
                 {
                     TurnOrder[i].spriteLocation = new Vector2(1000, 1000);
                     TurnOrder[i].Alive = false;
 
                 }
-                if (i - iconOrder == 1 || i - iconOrder == -5)
+                if (TurnOrder.Count == 6)
                 {
-                    TurnOrder[i].Small_iconLocation = new Vector2(0, 150);
+                    if (i - iconOrder == 1 || i - iconOrder == -5)
+                    {
+                        TurnOrder[i].Small_iconLocation = new Vector2(0, 150);
+                    }
+                    if (i - iconOrder == 2 || i - iconOrder == -4)
+                    {
+                        TurnOrder[i].Small_iconLocation = new Vector2(30, 120);
+                    }
+                    if (i - iconOrder == 3 || i - iconOrder == -3)
+                    {
+                        TurnOrder[i].Small_iconLocation = new Vector2(0, 90);
+                    }
+                    if (i - iconOrder == 4 || i - iconOrder == -2)
+                    {
+                        TurnOrder[i].Small_iconLocation = new Vector2(30, 60);
+                    }
+                    if (i - iconOrder == 5 || i - iconOrder == -1)
+                    {
+                        TurnOrder[i].Small_iconLocation = new Vector2(0, 30);
+                    }
                 }
-                if (i - iconOrder == 2 || i - iconOrder == -4)
+                if (TurnOrder.Count == 5)
                 {
-                    TurnOrder[i].Small_iconLocation = new Vector2(30, 120);
+                    if (i - iconOrder == 1 || i - iconOrder == -4)
+                    {
+                        TurnOrder[i].Small_iconLocation = new Vector2(0, 150);
+                    }
+                    if (i - iconOrder == 2 || i - iconOrder == -3)
+                    {
+                        TurnOrder[i].Small_iconLocation = new Vector2(30, 120);
+                    }
+                    if (i - iconOrder == 3 || i - iconOrder == -2)
+                    {
+                        TurnOrder[i].Small_iconLocation = new Vector2(0, 90);
+                    }
+                    if (i - iconOrder == 4 || i - iconOrder == -1)
+                    {
+                        TurnOrder[i].Small_iconLocation = new Vector2(30, 60);
+                    }
                 }
-                if (i - iconOrder == 3 || i - iconOrder == -3)
+                if (TurnOrder.Count == 4)
                 {
-                    TurnOrder[i].Small_iconLocation = new Vector2(0, 90);
+                    if (i - iconOrder == 1 || i - iconOrder == -3)
+                    {
+                        TurnOrder[i].Small_iconLocation = new Vector2(0, 150);
+                    }
+                    if (i - iconOrder == 2 || i - iconOrder == -2)
+                    {
+                        TurnOrder[i].Small_iconLocation = new Vector2(30, 120);
+                    }
+                    if (i - iconOrder == 3 || i - iconOrder == -1)
+                    {
+                        TurnOrder[i].Small_iconLocation = new Vector2(0, 90);
+                    }
                 }
-                if (i - iconOrder == 4 || i - iconOrder == -2)
+                if (TurnOrder.Count == 3)
                 {
-                    TurnOrder[i].Small_iconLocation = new Vector2(30, 60);
+                    if (i - iconOrder == 1 || i - iconOrder == -2)
+                    {
+                        TurnOrder[i].Small_iconLocation = new Vector2(0, 150);
+                    }
+                    if (i - iconOrder == 2 || i - iconOrder == -1)
+                    {
+                        TurnOrder[i].Small_iconLocation = new Vector2(30, 120);
+                    }
                 }
-                if (i - iconOrder == 5 || i - iconOrder == -1)
+                if (TurnOrder.Count == 2)
                 {
-                    TurnOrder[i].Small_iconLocation = new Vector2(0, 30);
+                    if (i - iconOrder == 1 || i - iconOrder == -1)
+                    {
+                        TurnOrder[i].Small_iconLocation = new Vector2(0, 150);
+                    }
                 }
             }
 
@@ -417,17 +471,91 @@ namespace Burrow_Rune
             {
                 iconOrder = 0;
             }
-            
 
-            if (EnemyGroup[0].Alive == false && EnemyGroup[1].Alive == false && EnemyGroup[2].Alive == false)
+            if (EnemyGroup.Count == 3)
             {
-                isMap = true;
-                isGameplay = false;
-                for (int i = 0; i < TurnOrder.Count; i++)
+                if (EnemyGroup[0].Alive == false && EnemyGroup[1].Alive == false && EnemyGroup[2].Alive == false)
                 {
-                    if (TurnOrder[i].playable == false)
+                    isMap = true;
+                    isBattle = false;
+                    turn = 0;
+                    timeLoad = false;
+                    frameInCombat = 0;
+                    waitingtime = 0;
+                    iconOrder = 0;
+                    Attacking = false;
+                    for (int i = 0; i < EnemyGroup.Count; i++)
                     {
-                        TurnOrder.RemoveAt(i);
+                        EnemyGroup[i].attacked = false;
+                        EnemyGroup[i].HP = EnemyGroup[i].MaxHP;
+                        EnemyGroup[i].Alive = true;
+                        EnemyGroup.RemoveAt(i);
+                    }
+                    for (int i = 0; i < TurnOrder.Count; i++)
+                    {
+                        TurnOrder[i].myTurn = false;
+                    }
+                    for (int i = 0; i < ButtoninBattle.Count; i++)
+                    {
+                        ButtoninBattle[i].Pressed = false;
+                    }
+                }
+            }
+            if (EnemyGroup.Count == 2)
+            {
+                if (EnemyGroup[0].Alive == false && EnemyGroup[1].Alive == false)
+                {
+                    isMap = true;
+                    isBattle = false;
+                    turn = 0;
+                    timeLoad = false;
+                    frameInCombat = 0;
+                    waitingtime = 0;
+                    iconOrder = 0;
+                    Attacking = false;
+                    for (int i = 0; i < EnemyGroup.Count; i++)
+                    {
+                        EnemyGroup[i].attacked = false;
+                        EnemyGroup[i].HP = EnemyGroup[i].MaxHP;
+                        EnemyGroup[i].Alive = true;
+                        EnemyGroup.RemoveAt(i);
+                    }
+                    for (int i = 0; i < TurnOrder.Count; i++)
+                    {
+                        TurnOrder[i].myTurn = false;
+                    }
+                    for (int i = 0; i < ButtoninBattle.Count; i++)
+                    {
+                        ButtoninBattle[i].Pressed = false;
+                    }
+                }
+            }
+            if (EnemyGroup.Count == 1)
+            {
+                if (EnemyGroup[0].Alive == false)
+                {
+                    isMap = true;
+                    isBattle = false;
+                    turn = 0;
+                    timeLoad = false;
+                    frameInCombat = 0;
+                    waitingtime = 0;
+                    iconOrder = 0;
+                    Attacking = false;
+                    for (int i = 0; i < EnemyGroup.Count; i++)
+                    {
+                        EnemyGroup[i].attacked = false;
+                        EnemyGroup[i].HP = EnemyGroup[i].MaxHP;
+                        EnemyGroup[i].Alive = true;
+                        EnemyGroup.RemoveAt(i);
+                    }
+                    for (int i = 0; i < TurnOrder.Count; i++)
+                    {
+                        TurnOrder[i].myTurn = false;
+                    }
+                    for (int i = 0; i < ButtoninBattle.Count; i++)
+                    {
+                        ButtoninBattle[i].Pressed = false;
                     }
                 }
             }
@@ -439,60 +567,179 @@ namespace Burrow_Rune
 
         private void UpdateEventMap()
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Enter) == true)
+            if (Keyboard.GetState().IsKeyUp(Keys.D1) == true && Old_keyboardState.IsKeyDown(Keys.D1))
             {
+                EnemyGroup.Add(Rocky);
+                EnemyGroup.Add(Golem);
+                EnemyGroup.Add(Beetle);
+
                 isMap = false;
-                isGameplay = true;
+                isBattle = true;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.D2) == true && Old_keyboardState.IsKeyDown(Keys.D2))
+            {
+                EnemyGroup.Add(Rocky);
+                EnemyGroup.Add(Beetle);
 
-                Lurker.spriteLocation = SetPO1; Lurker.spriteLocation2 = Lurker.spriteLocation;
-                inventor.spriteLocation = new Vector2(SetPO1.X - 100, SetPO1.Y); inventor.spriteLocation2 = inventor.spriteLocation;
-                Blood_Maiden.spriteLocation = new Vector2(SetPO1.X - 200, SetPO1.Y); Blood_Maiden.spriteLocation2 = Blood_Maiden.spriteLocation;
+                isMap = false;
+                isBattle = true;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.D3) == true && Old_keyboardState.IsKeyDown(Keys.D3))
+            {
+                EnemyGroup.Add(Golem);
                 
-                Golem.spriteLocation = SetPO2; Golem.spriteLocation2 = Golem.spriteLocation;
-                Beetle.spriteLocation = new Vector2(SetPO2.X + 125, SetPO2.Y); Beetle.spriteLocation2 = Beetle.spriteLocation;             
-                Rocky.spriteLocation = new Vector2(SetPO2.X - 50, SetPO2.Y + 100); Rocky.spriteLocation2 = Rocky.spriteLocation;
-
-                
+                isMap = false;
+                isBattle = true;
 
             }
         }
 
-        private void DrawGameplay()
+        private void DrawBattale1()
         {
             _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
             _spriteBatch.Draw(Turn_Selector_Texture, Turn_Selector_Position, Color.White);
-            _spriteBatch.Draw(Lurker_Texture, Lurker.spriteLocation, new Rectangle(0, 0, 135, 125), Lurker.State);
-            _spriteBatch.Draw(Golem_Texture, Golem.spriteLocation, new Rectangle(frame * 162, 0, 162, 155), Golem.State);
-            _spriteBatch.Draw(Inventor_Texture, inventor.spriteLocation, new Rectangle(0, 0, 135, 125), inventor.State);
-            _spriteBatch.Draw(Beetle_Text, Beetle.spriteLocation, new Rectangle(frame * 75, 0, 75, 75), Beetle.State);
-            _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.spriteLocation, new Rectangle(0, 0, 135, 125), Blood_Maiden.State);
-            _spriteBatch.Draw(Rocky_Text, Rocky.spriteLocation, new Rectangle(frame * 50, 0, 50, 50), Rocky.State);
+            
+            for (int i = 0; i < Party.Count; i++)
+            {
+                if (Party[i] == Lurker)
+                {
+                    _spriteBatch.Draw(Lurker_Texture, Lurker.spriteLocation, new Rectangle(0, 0, 135, 125), Lurker.State);
+                }
+                if (Party[i] == inventor)
+                {
+                    _spriteBatch.Draw(Inventor_Texture, inventor.spriteLocation, new Rectangle(0, 0, 135, 125), inventor.State);
+                }
+                if (Party[i] == Blood_Maiden)
+                {
+                    _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.spriteLocation, new Rectangle(0, 0, 135, 125), Blood_Maiden.State);
+                }
+                if (i == 0)
+                {
+                    Party[i].spriteLocation = SetPO1; 
+                    Party[i].spriteLocation2 = Party[i].spriteLocation;
+                }
+                if (i == 1)
+                {
+                    Party[i].spriteLocation = new Vector2(SetPO1.X - 100, SetPO1.Y);
+                    Party[i].spriteLocation2 = Party[i].spriteLocation;
+                }
+                if (i == 2)
+                {
+                    Party[i].spriteLocation = new Vector2(SetPO1.X - 200, SetPO1.Y);
+                    Party[i].spriteLocation2 = Party[i].spriteLocation;
+                }
+            }
+            
+            for (int i = 0; i < EnemyGroup.Count; i++)
+            {
+                if (EnemyGroup[i] == Golem)
+                {
+                    _spriteBatch.Draw(Golem_Texture, Golem.spriteLocation, new Rectangle(frame * 162, 0, 162, 155), Golem.State);
+                    if (i == 0)
+                    {
+                        EnemyGroup[i].spriteLocation = SetPO2;
+                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                    }
+                    if (i == 1)
+                    {
+                        EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 120, SetPO2.Y);
+                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                    }
+                    if (i == 2)
+                    {
+                        EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 240, SetPO2.Y);
+                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                    }
+                }
+                if (EnemyGroup[i] == Rocky)
+                {
+                    _spriteBatch.Draw(Rocky_Text, Rocky.spriteLocation, new Rectangle(frame * 50, 0, 50, 50), Rocky.State);
+                    if (i == 0)
+                    {
+                        EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X, SetPO2.Y + 80);
+                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                    }
+                    if (i == 1)
+                    {
+                        EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 120, SetPO2.Y + 80);
+                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                    }
+                    if (i == 2)
+                    {
+                        EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 240, SetPO2.Y + 80);
+                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                    }
+                }
+                if ( EnemyGroup[i] == Beetle)
+                {
+                    _spriteBatch.Draw(Beetle_Text, Beetle.spriteLocation, new Rectangle(frame * 75, 0, 75, 75), Beetle.State);
+                    if (i == 0)
+                    {
+                        EnemyGroup[i].spriteLocation = SetPO2;
+                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                    }
+                    if (i == 1)
+                    {
+                        EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 120, SetPO2.Y + 50);
+                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                    }
+                    if (i == 2)
+                    {
+                        EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 240, SetPO2.Y + 50);
+                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                    }
+                }
+                
+            }
+
             _spriteBatch.Draw(Attack_Texture, Attack_B.Position, Attack_B.State);
             _spriteBatch.Draw(Skill_Texture, Skill_B.Position, Skill_B.State);
             _spriteBatch.Draw(Item_Texture, Item_B.Position, Item_B.State);
             _spriteBatch.Draw(Arrow_Texture, Arrow_Position, Color.White);
             _spriteBatch.Draw(Turn_Order_Texture, Turn_Order_Position, Color.White);
-            _spriteBatch.Draw(Lurker_Texture, new Vector2(Lurker.spriteLocation2.X - 40, Lurker.spriteLocation2.Y - 120), new Rectangle(0, 420, 135, 40), Color.White);
-            _spriteBatch.Draw(Lurker_Texture, Lurker.Small_iconLocation, new Rectangle(25, 160, 45, 45), Lurker.State);
-            _spriteBatch.Draw(Lurker_Texture, Lurker.Big_iconLocation, new Rectangle(0, 230, 100, 70), Color.White);
-            _spriteBatch.Draw(Inventor_Texture, inventor.Small_iconLocation, new Rectangle(10, 420, 45, 45), inventor.State);
-            _spriteBatch.Draw(Inventor_Texture, inventor.Big_iconLocation, new Rectangle(0, 150, 100, 70), Color.White);
-            _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.Small_iconLocation, new Rectangle(25, 170, 45, 45), Blood_Maiden.State);
-            _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.Big_iconLocation, new Rectangle(0, 240, 100, 70), Color.White);
-            _spriteBatch.Draw(Golem_Texture, Golem.Small_iconLocation, new Rectangle(35, 46, 45, 45), Golem.State);
-            _spriteBatch.Draw(Golem_Texture, Golem.Big_iconLocation, new Rectangle(25, 35, 60, 70), Color.White);
-            _spriteBatch.Draw(Rocky_Text, Rocky.Small_iconLocation, new Rectangle(10, 10, 45, 45), Rocky.State);
-            _spriteBatch.Draw(Rocky_Text, Rocky.Big_iconLocation, new Rectangle(0, 0, 45, 45), Color.White);
-            _spriteBatch.Draw(Beetle_Text, Beetle.Small_iconLocation, new Rectangle(20, 30, 45, 45), Beetle.State);
-            _spriteBatch.Draw(Beetle_Text, Beetle.Big_iconLocation, new Rectangle(0, 10, 60, 460), Color.White);
 
-            if (isHit == true)
+            for (int i = 0; i < Party.Count; i++)
             {
-                _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
+                if (Party[i] == Lurker)
+                {
+                    _spriteBatch.Draw(Lurker_Texture, new Vector2(Lurker.spriteLocation2.X - 40, Lurker.spriteLocation2.Y - 120), new Rectangle(0, 420, 135, 40), Color.White);
+                    _spriteBatch.Draw(Lurker_Texture, Lurker.Small_iconLocation, new Rectangle(25, 160, 45, 45), Lurker.State);
+                    _spriteBatch.Draw(Lurker_Texture, Lurker.Big_iconLocation, new Rectangle(0, 230, 100, 70), Color.White);
+                }
+                if (Party[i] == inventor)
+                {
+                    _spriteBatch.Draw(Inventor_Texture, inventor.Small_iconLocation, new Rectangle(10, 420, 45, 45), inventor.State);
+                    _spriteBatch.Draw(Inventor_Texture, inventor.Big_iconLocation, new Rectangle(0, 150, 100, 70), Color.White);
+                }
+                if (Party[i] == Blood_Maiden)
+                {
+                    _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.Small_iconLocation, new Rectangle(25, 170, 45, 45), Blood_Maiden.State);
+                    _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.Big_iconLocation, new Rectangle(0, 240, 100, 70), Color.White);
+                }
             }
+            for (int i = 0; i < EnemyGroup.Count; i++)
+            {
+                if (EnemyGroup[i] == Golem)
+                {
+                    _spriteBatch.Draw(Golem_Texture, Golem.Small_iconLocation, new Rectangle(35, 46, 45, 45), Golem.State);
+                    _spriteBatch.Draw(Golem_Texture, Golem.Big_iconLocation, new Rectangle(25, 35, 60, 70), Color.White);
+                }
+                if (EnemyGroup[i] == Rocky)
+                {
+                    _spriteBatch.Draw(Rocky_Text, Rocky.Small_iconLocation, new Rectangle(10, 10, 45, 45), Rocky.State);
+                    _spriteBatch.Draw(Rocky_Text, Rocky.Big_iconLocation, new Rectangle(0, 0, 45, 45), Color.White);
+                }
+                if (EnemyGroup[i] == Beetle)
+                {
+                    _spriteBatch.Draw(Beetle_Text, Beetle.Small_iconLocation, new Rectangle(20, 30, 45, 45), Beetle.State);
+                    _spriteBatch.Draw(Beetle_Text, Beetle.Big_iconLocation, new Rectangle(0, 10, 60, 460), Color.White);
+                }
+
+            }
+
         }
 
-        private void DrawMenu()
+        private void DrawEventMap()
         {
             _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
         }
