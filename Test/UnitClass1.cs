@@ -10,6 +10,7 @@ namespace Burrow_Rune
     public class UnitClass
     {
         public int HP;
+        public int MaxHP;
         public int Atk;
         public int direction;
         public Vector2 spriteLocation;
@@ -39,6 +40,7 @@ namespace Burrow_Rune
             this.speed = speed;
             this.playable = playable;
             this.HP = HP;
+            MaxHP = HP;
             this.Atk = Atk;
         }
 
