@@ -65,7 +65,7 @@ namespace Burrow_Rune
         private List<UnitClass> EnemyGroup = new List<UnitClass>();
         private List<Button> ButtoninBattle = new List<Button>();
 
-
+        //ok
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
