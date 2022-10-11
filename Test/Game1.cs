@@ -11,9 +11,7 @@ namespace Burrow_Rune
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private KeyboardState _keyboardState;
-        private KeyboardState Old_keyboardState;
         private MouseState Old_mouseState;
-        private SpriteFont font;
 
         private float totalElapsed;
         private float timePerFrame;
@@ -39,12 +37,12 @@ namespace Burrow_Rune
         private Texture2D Turn_Order_Texture;
         private Texture2D Turn_Selector_Texture;
         
-        public UnitClass Lurker = new UnitClass(true, 6, 10, 5);
+        public UnitClass Lurker = new UnitClass(true, 6, 20, 5);
         public UnitClass Golem = new UnitClass(false,4, 20, 5);
-        public UnitClass inventor = new UnitClass(true, 5, 10, 5);
+        public UnitClass inventor = new UnitClass(true, 5, 20, 5);
         public UnitClass Beetle = new UnitClass(false,5, 10, 5);
         public UnitClass Rocky = new UnitClass(false, 3, 10, 5);
-        public UnitClass Blood_Maiden = new UnitClass(true, 3, 10, 5);
+        public UnitClass Blood_Maiden = new UnitClass(true, 3, 20, 5);
         private UnitClass Nul = new UnitClass();
 
         private Button Attack_B = new Button(new Vector2(50, 180));
@@ -57,7 +55,7 @@ namespace Burrow_Rune
 
         private int target = 0;
         private int turn;
-        private int iconOrder;
+        private int iconOrder = 0;
         bool isMap;
         bool isGameplay;
         private bool isHit = false;
@@ -208,9 +206,14 @@ namespace Burrow_Rune
                 {
                     TurnOrder[i].myTurn = true;
                 }
+                if (TurnOrder[i].Alive == false)
+                {
+                    TurnOrder[i].State = Color.Black;
+                }
                 if (TurnOrder[i].myTurn == true && TurnOrder[i].Alive == false)
                 {
                     turn += 1;
+                    iconOrder += 1;
                     TurnOrder[i].myTurn = false;
                 }
 
@@ -331,12 +334,7 @@ namespace Burrow_Rune
                         waitingtime = 0;
                     }
                 }
-
-                if (TurnOrder[i].isAttacking == true)
-                {
-                    TurnOrder[i].State = Color.CornflowerBlue;
-                }
-                if (TurnOrder[i].isAttacking == false && TurnOrder[i].targeted == false && TurnOrder[i].myTurn == false && TurnOrder[i].mouseHover == false)
+                if (TurnOrder[i].isAttacking == false && TurnOrder[i].targeted == false && TurnOrder[i].myTurn == false && TurnOrder[i].mouseHover == false && TurnOrder[i].Alive == true)
                 {
                     TurnOrder[i].State = Color.White;
                 }
@@ -349,7 +347,8 @@ namespace Burrow_Rune
                     TurnOrder[i].myTurn = false;
                     TurnOrder[i].isAttacking = false;
                     waitingtime = 0;
-                    iconOrder = TurnOrder.Count - 1;
+                    iconOrder += 1;
+                    TurnOrder[i].Big_iconLocation = new Vector2(1000, 1000);
                     for (int m = 0; m < TurnOrder.Count; m++)
                     {
                         TurnOrder[m].targeted = false;
@@ -384,25 +383,25 @@ namespace Burrow_Rune
                     TurnOrder[i].Alive = false;
 
                 }
-                if (iconOrder == 1)
+                if (i - iconOrder == 1 || i - iconOrder == -5)
                 {
-                    TurnOrder[i].Small_iconLocation = new Vector2(0, 160);
+                    TurnOrder[i].Small_iconLocation = new Vector2(0, 150);
                 }
-                if (i == 2)
+                if (i - iconOrder == 2 || i - iconOrder == -4)
                 {
-                    TurnOrder[i].Small_iconLocation = new Vector2(40, 120);
+                    TurnOrder[i].Small_iconLocation = new Vector2(30, 120);
                 }
-                if (i == 3)
+                if (i - iconOrder == 3 || i - iconOrder == -3)
                 {
-                    TurnOrder[i].Small_iconLocation = new Vector2(0, 160);
+                    TurnOrder[i].Small_iconLocation = new Vector2(0, 90);
                 }
-                if (i == 4)
+                if (i - iconOrder == 4 || i - iconOrder == -2)
                 {
-                    TurnOrder[i].Small_iconLocation = new Vector2(40, 120);
+                    TurnOrder[i].Small_iconLocation = new Vector2(30, 60);
                 }
-                if (i == 5)
+                if (i - iconOrder == 5 || i - iconOrder == -1)
                 {
-                    TurnOrder[i].Small_iconLocation = new Vector2(0, 160);
+                    TurnOrder[i].Small_iconLocation = new Vector2(0, 30);
                 }
             }
 
@@ -414,7 +413,10 @@ namespace Burrow_Rune
             {
                 turn = 0;
             }
-
+            if (iconOrder == TurnOrder.Count)
+            {
+                iconOrder = 0;
+            }
             
 
             if (EnemyGroup[0].Alive == false && EnemyGroup[1].Alive == false && EnemyGroup[2].Alive == false)
@@ -430,7 +432,6 @@ namespace Burrow_Rune
                 }
             }
 
-            Old_keyboardState = _keyboardState;
             Old_mouseState = mouseState;
 
             
@@ -472,10 +473,18 @@ namespace Burrow_Rune
             _spriteBatch.Draw(Arrow_Texture, Arrow_Position, Color.White);
             _spriteBatch.Draw(Turn_Order_Texture, Turn_Order_Position, Color.White);
             _spriteBatch.Draw(Lurker_Texture, new Vector2(Lurker.spriteLocation2.X - 40, Lurker.spriteLocation2.Y - 120), new Rectangle(0, 420, 135, 40), Color.White);
-            _spriteBatch.Draw(Lurker_Texture, Lurker.Small_iconLocation, new Rectangle(25, 160, 45, 45), Color.White);
-            _spriteBatch.Draw(Lurker_Texture, Lurker.Big_iconLocation, new Rectangle(0, 235, 78, 65), Color.White);
-            _spriteBatch.Draw(Inventor_Texture, inventor.Big_iconLocation, new Rectangle(25, 160, 45, 45), Color.White);
-            _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.Small_iconLocation, new Rectangle(25, 160, 45, 45), Color.White);
+            _spriteBatch.Draw(Lurker_Texture, Lurker.Small_iconLocation, new Rectangle(25, 160, 45, 45), Lurker.State);
+            _spriteBatch.Draw(Lurker_Texture, Lurker.Big_iconLocation, new Rectangle(0, 230, 100, 70), Color.White);
+            _spriteBatch.Draw(Inventor_Texture, inventor.Small_iconLocation, new Rectangle(10, 420, 45, 45), inventor.State);
+            _spriteBatch.Draw(Inventor_Texture, inventor.Big_iconLocation, new Rectangle(0, 150, 100, 70), Color.White);
+            _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.Small_iconLocation, new Rectangle(25, 170, 45, 45), Blood_Maiden.State);
+            _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.Big_iconLocation, new Rectangle(0, 240, 100, 70), Color.White);
+            _spriteBatch.Draw(Golem_Texture, Golem.Small_iconLocation, new Rectangle(35, 46, 45, 45), Golem.State);
+            _spriteBatch.Draw(Golem_Texture, Golem.Big_iconLocation, new Rectangle(25, 35, 60, 70), Color.White);
+            _spriteBatch.Draw(Rocky_Text, Rocky.Small_iconLocation, new Rectangle(10, 10, 45, 45), Rocky.State);
+            _spriteBatch.Draw(Rocky_Text, Rocky.Big_iconLocation, new Rectangle(0, 0, 45, 45), Color.White);
+            _spriteBatch.Draw(Beetle_Text, Beetle.Small_iconLocation, new Rectangle(20, 30, 45, 45), Beetle.State);
+            _spriteBatch.Draw(Beetle_Text, Beetle.Big_iconLocation, new Rectangle(0, 10, 60, 460), Color.White);
 
             if (isHit == true)
             {
