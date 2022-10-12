@@ -85,8 +85,8 @@ namespace Burrow_Rune
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            Beetle_Text = Content.Load<Texture2D>("Flying Rock_Sheet");
-            Rocky_Text = Content.Load<Texture2D>("Hermit Rock-Sheet");
+            Beetle_Text = Content.Load<Texture2D>("Flying-Rock_Sheet");
+            Rocky_Text = Content.Load<Texture2D>("Hermit-Rock-Sheet");
             Blood_Maiden_Texture = Content.Load<Texture2D>("Blood_maiden_sprite_sheet");
             Golem_Texture = Content.Load<Texture2D>("Golem-Sheet");
             Inventor_Texture = Content.Load<Texture2D>("Inventor_Sprite_Sheet");
@@ -96,8 +96,8 @@ namespace Burrow_Rune
             Attack_Texture = Content.Load<Texture2D>("Attack");
             Item_Texture = Content.Load<Texture2D>("Item");
             Skill_Texture = Content.Load<Texture2D>("Skill");
-            Turn_Order_Texture  = Content.Load<Texture2D>("Turn Order Hub");
-            Turn_Selector_Texture = Content.Load<Texture2D>("Turn Selector");
+            Turn_Order_Texture  = Content.Load<Texture2D>("Turn-Order-Hub");
+            Turn_Selector_Texture = Content.Load<Texture2D>("Turn-Selector");
             framePerSec = 2;
             timePerFrame = (float)1 / framePerSec;
             frame = 0;
