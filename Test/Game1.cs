@@ -603,7 +603,7 @@ namespace Burrow_Rune
             {
                 if (Party[i] == Lurker)
                 {
-                    _spriteBatch.Draw(Lurker_Texture, Lurker.spriteLocation, new Rectangle(0, 0, 135, 125), Lurker.State);
+                    _spriteBatch.Draw(Lurker_Texture, Lurker.spriteLocation, new Rectangle(0, 0, 270, 250), Lurker.State);
                 }
                 if (Party[i] == inventor)
                 {
