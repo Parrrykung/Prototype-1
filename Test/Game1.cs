@@ -651,6 +651,8 @@ namespace Burrow_Rune
                     {
                         EnemyGroup[i].spriteLocation = SetPO2;
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X, SetPO2.Y + 300);
+                        EnemyGroup[i].HPbar_Location = new Vector2(SetPO2.X + 80, SetPO2.Y + 338);
                     }
                     if (i == 1)
                     {
@@ -738,6 +740,8 @@ namespace Burrow_Rune
             {
                 if (EnemyGroup[i] == Golem)
                 {
+                    _spriteBatch.Draw(Golem_Icon, Golem.HPMPbar_iconLocation, new Rectangle(35, 445, 330, 90), Color.White);
+                    _spriteBatch.Draw(Golem_Icon, Golem.HPbar_Location, new Rectangle(115, 480, Golem.HP * (250 / Golem.MaxHP), 15), Color.Gray);
                     _spriteBatch.Draw(Golem_Icon, Golem.Small_iconLocation, new Rectangle(35, 315, 90, 90), Golem.State);
                     _spriteBatch.Draw(Golem_Texture, Golem.Big_iconLocation, new Rectangle(50, 70, 120, 140), Color.White);
                 }
