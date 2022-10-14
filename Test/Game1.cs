@@ -42,7 +42,7 @@ namespace Burrow_Rune
         private Texture2D Turn_Selector_Texture;
         
         public UnitClass Lurker = new UnitClass(true, 6, 20, 5);
-        public UnitClass Golem = new UnitClass(false,4, 20, 5);
+        public UnitClass Golem = new UnitClass(false,4, 40, 5);
         public UnitClass inventor = new UnitClass(true, 5, 20, 5);
         public UnitClass Beetle = new UnitClass(false,5, 10, 5);
         public UnitClass Rocky = new UnitClass(false, 3, 10, 5);
@@ -623,19 +623,22 @@ namespace Burrow_Rune
                 {
                     Party[i].spriteLocation = SetPO1; 
                     Party[i].spriteLocation2 = Party[i].spriteLocation;
-                    Party[i].HPbar_iconLocation = new Vector2(SetPO1.X, SetPO1.Y - 220);
+                    Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X, SetPO1.Y - 220);
+                    Party[i].HPbar_Location = new Vector2(SetPO1.X + 100, SetPO1.Y - 200);
                 }
                 if (i == 1)
                 {
                     Party[i].spriteLocation = new Vector2(SetPO1.X - 200, SetPO1.Y);
                     Party[i].spriteLocation2 = Party[i].spriteLocation;
-                    Party[i].HPbar_iconLocation = new Vector2(SetPO1.X - 270, SetPO1.Y - 220);
+                    Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X - 270, SetPO1.Y - 220);
+                    Party[i].HPbar_Location = new Vector2(SetPO1.X - 170, SetPO1.Y - 200);
                 }
                 if (i == 2)
                 {
                     Party[i].spriteLocation = new Vector2(SetPO1.X - 400, SetPO1.Y);
                     Party[i].spriteLocation2 = Party[i].spriteLocation;
-                    Party[i].HPbar_iconLocation = new Vector2(SetPO1.X - 540, SetPO1.Y - 220);
+                    Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X - 540, SetPO1.Y - 220);
+                    Party[i].HPbar_Location = new Vector2(SetPO1.X - 445, SetPO1.Y - 210);
                 }
             }
             
@@ -711,19 +714,22 @@ namespace Burrow_Rune
             {
                 if (Party[i] == Lurker)
                 {
-                    _spriteBatch.Draw(Lurker_Texture, Lurker.HPbar_iconLocation, new Rectangle(0, 840, 270, 90), Color.White);
+                    _spriteBatch.Draw(Lurker_Texture, Lurker.HPMPbar_iconLocation, new Rectangle(0, 840, 270, 90), Color.White);
+                    _spriteBatch.Draw(Lurker_Texture, Lurker.HPbar_Location, new Rectangle(100, 860, Lurker.HP * (180 / Lurker.MaxHP), 15), Color.Gray);
                     _spriteBatch.Draw(Lurker_Texture, Lurker.Small_iconLocation, new Rectangle(50, 320, 90, 90), Lurker.State);
                     _spriteBatch.Draw(Lurker_Texture, Lurker.Big_iconLocation, new Rectangle(0, 460, 200, 140), Color.White);
                 }
                 if (Party[i] == inventor)
                 {
-                    _spriteBatch.Draw(Inventor_Texture, inventor.HPbar_iconLocation, new Rectangle(0, 850, 270, 90), Color.White);
+                    _spriteBatch.Draw(Inventor_Texture, inventor.HPMPbar_iconLocation, new Rectangle(0, 850, 270, 90), Color.White);
+                    _spriteBatch.Draw(Inventor_Texture, inventor.HPbar_Location, new Rectangle(100, 870, inventor.HP * (180 / inventor.MaxHP), 15), Color.Gray);
                     _spriteBatch.Draw(Inventor_Texture, inventor.Small_iconLocation, new Rectangle(20, 840, 90, 90), inventor.State);
                     _spriteBatch.Draw(Inventor_Texture, inventor.Big_iconLocation, new Rectangle(0, 300, 200, 140), Color.White);
                 }
                 if (Party[i] == Blood_Maiden)
                 {
-                    _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.HPbar_iconLocation, new Rectangle(0, 870, 270, 90), Color.White);
+                    _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.HPMPbar_iconLocation, new Rectangle(0, 870, 270, 90), Color.White);
+                    _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.HPbar_Location, new Rectangle(90, 882, Blood_Maiden.HP * (180 / Blood_Maiden.MaxHP), 20), Color.Gray);
                     _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.Small_iconLocation, new Rectangle(50, 340, 90, 90), Blood_Maiden.State);
                     _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.Big_iconLocation, new Rectangle(0, 480, 200, 140), Color.White);
                 }
