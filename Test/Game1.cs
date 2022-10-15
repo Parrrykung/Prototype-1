@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 
@@ -68,6 +69,8 @@ namespace Burrow_Rune
         private List<UnitClass> EnemyGroup = new List<UnitClass>();
         private List<Button> ButtoninBattle = new List<Button>();
 
+        private Song EventMapBGM;
+
         //ok
         public Game1()
         {
@@ -104,6 +107,11 @@ namespace Burrow_Rune
             Skill_Texture = Content.Load<Texture2D>("Skill");
             Turn_Order_Texture  = Content.Load<Texture2D>("Turn-Order-Hub");
             Turn_Selector_Texture = Content.Load<Texture2D>("Turn-Selector");
+
+            EventMapBGM = Content.Load<Song>("a-beautiful-step-99284");
+            
+            MediaPlayer.Play(EventMapBGM);
+
             framePerSec = 2;
             timePerFrame = (float)1 / framePerSec;
             frame = 0;
