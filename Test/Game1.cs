@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 using System;
 using System.Collections.Generic;
 
@@ -42,12 +43,12 @@ namespace Burrow_Rune
         private Texture2D Turn_Order_Texture;
         private Texture2D Turn_Selector_Texture;
         
-        public UnitClass Lurker = new UnitClass(true, 6, 20, 5);
-        public UnitClass Golem = new UnitClass(false,4, 40, 5);
-        public UnitClass inventor = new UnitClass(true, 5, 20, 5);
-        public UnitClass Beetle = new UnitClass(false,5, 10, 5);
-        public UnitClass Rocky = new UnitClass(false, 3, 10, 5);
-        public UnitClass Blood_Maiden = new UnitClass(true, 3, 20, 5);
+        public UnitClass Lurker = new UnitClass(true, 6, 20, 5, 0);
+        public UnitClass Golem = new UnitClass(false,4, 40, 5, 3);
+        public UnitClass inventor = new UnitClass(true, 5, 20, 5, 1);
+        public UnitClass Beetle = new UnitClass(false,5, 10, 5, 3);
+        public UnitClass Rocky = new UnitClass(false, 3, 10, 5, 3);
+        public UnitClass Blood_Maiden = new UnitClass(true, 3, 20, 5, 2);
         private UnitClass Nul = new UnitClass();
 
         private Button Attack_B = new Button(new Vector2(100, 360));
@@ -68,8 +69,16 @@ namespace Burrow_Rune
         private List<UnitClass> Party = new List<UnitClass>();
         private List<UnitClass> EnemyGroup = new List<UnitClass>();
         private List<Button> ButtoninBattle = new List<Button>();
+        private List<SoundEffect> BattleSFX = new List<SoundEffect>();
 
+        private Song TitleBGM;
         private Song EventMapBGM;
+        private Song BattleBGM_1;
+        private Song BattleBGM_2;
+        private Song BossBGM;
+        private Song ShopBGM;
+        private SoundEffect ClickSFX;
+
 
         //ok
         public Game1()
@@ -91,25 +100,31 @@ namespace Burrow_Rune
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            Beetle_Text = Content.Load<Texture2D>("Flying-Rock_Sheet");
-            Rocky_Text = Content.Load<Texture2D>("Hermit-Rock-Sheet");
-            Beetle_Icon = Content.Load<Texture2D>("Flying-Rock-Icon");
-            Rocky_Icon = Content.Load<Texture2D>("Hermit-Rock-Icon");
-            Golem_Icon = Content.Load<Texture2D>("Golem_Sprite_sheet");
-            Blood_Maiden_Texture = Content.Load<Texture2D>("Blood_maiden_sprite_sheet");
-            Golem_Texture = Content.Load<Texture2D>("Golem-Sheet");
-            Inventor_Texture = Content.Load<Texture2D>("Inventor_Sprite_Sheet");
-            Lurker_Texture = Content.Load<Texture2D>("Lurker_Sprite_Sheet");
-            first_floor_Background = Content.Load<Texture2D>("1st_floor_2");
-            Arrow_Texture = Content.Load<Texture2D>("Arrow");
-            Attack_Texture = Content.Load<Texture2D>("Attack");
-            Item_Texture = Content.Load<Texture2D>("Item");
-            Skill_Texture = Content.Load<Texture2D>("Skill");
-            Turn_Order_Texture  = Content.Load<Texture2D>("Turn-Order-Hub");
-            Turn_Selector_Texture = Content.Load<Texture2D>("Turn-Selector");
+            Beetle_Text = Content.Load<Texture2D>("Asset 2D/Flying-Rock_Sheet");
+            Rocky_Text = Content.Load<Texture2D>("Asset 2D/Hermit-Rock-Sheet");
+            Beetle_Icon = Content.Load<Texture2D>("Asset 2D/Flying-Rock-Icon");
+            Rocky_Icon = Content.Load<Texture2D>("Asset 2D/Hermit-Rock-Icon");
+            Golem_Icon = Content.Load<Texture2D>("Asset 2D/Golem_Sprite_sheet");
+            Blood_Maiden_Texture = Content.Load<Texture2D>("Asset 2D/Blood_maiden_sprite_sheet");
+            Golem_Texture = Content.Load<Texture2D>("Asset 2D/Golem-Sheet");
+            Inventor_Texture = Content.Load<Texture2D>("Asset 2D/Inventor_Sprite_Sheet");
+            Lurker_Texture = Content.Load<Texture2D>("Asset 2D/Lurker_Sprite_Sheet");
+            first_floor_Background = Content.Load<Texture2D>("Asset 2D/1st_floor_2");
+            Arrow_Texture = Content.Load<Texture2D>("Asset 2D/Arrow");
+            Attack_Texture = Content.Load<Texture2D>("Asset 2D/Attack");
+            Item_Texture = Content.Load<Texture2D>("Asset 2D/Item");
+            Skill_Texture = Content.Load<Texture2D>("Asset 2D/Skill");
+            Turn_Order_Texture  = Content.Load<Texture2D>("Asset 2D/Turn-Order-Hub");
+            Turn_Selector_Texture = Content.Load<Texture2D>("Asset 2D/Turn-Selector");
 
-            EventMapBGM = Content.Load<Song>("a-beautiful-step-99284");
-            
+            TitleBGM = Content.Load<Song>("BGM/at-the-bottom-of-the-sea-where-the-sun-never-reaches-112916");
+            EventMapBGM = Content.Load<Song>("BGM/a-beautiful-step-99284");
+            BattleBGM_1 = Content.Load<Song>("BGM/light-15800");
+            BattleBGM_2 = Content.Load<Song>("BGM/epic-recovery-9797");
+            BossBGM = Content.Load<Song>("BGM/go-back-to-the-heavens-49981");
+            ShopBGM = Content.Load<Song>("BGM/fruit-9530");
+            ClickSFX = Content.Load<SoundEffect>("SFX/Ui_Click");
+
             MediaPlayer.Play(EventMapBGM);
 
             framePerSec = 2;
@@ -125,6 +140,11 @@ namespace Burrow_Rune
             ButtoninBattle.Add(Attack_B);
             ButtoninBattle.Add(Skill_B);
             ButtoninBattle.Add(Item_B);
+
+            BattleSFX.Add(Content.Load<SoundEffect>("SFX/Sword_Hori"));
+            BattleSFX.Add(Content.Load<SoundEffect>("SFX/Blow_Hori"));
+            BattleSFX.Add(Content.Load<SoundEffect>("SFX/Philip_Hit"));
+            BattleSFX.Add(Content.Load<SoundEffect>("SFX/Greed_Stab"));
 
             Party.Add(Lurker);
             Party.Add(inventor);
@@ -202,8 +222,6 @@ namespace Burrow_Rune
                 }
             }
 
-
-
             for (int i = 0; i < TurnOrder.Count; i++)
             {
                 Rectangle unitRectangle = new Rectangle((int)TurnOrder[i].spriteLocation.X, (int)TurnOrder[i].spriteLocation.Y, 270, 250);
@@ -268,6 +286,7 @@ namespace Burrow_Rune
                                     ButtoninBattle[n].State = Color.Gray;
                                     Attacking = true;
                                     ButtoninBattle[n].Pressed = true;
+                                    ClickSFX.CreateInstance().Play();
                                 }
                             }
                             if (ButtoninBattle[n].Pressed == false && Attacking == true)
@@ -296,6 +315,7 @@ namespace Burrow_Rune
                                     EnemyGroup[m].HP -= TurnOrder[i].Atk;
                                     EnemyGroup[m].spriteLocation2 = EnemyGroup[m].spriteLocation;
                                     EnemyGroup[m].spriteLocation.X += 20;
+                                    BattleSFX[TurnOrder[i].AttackSFX].CreateInstance().Play();
                                 }
                             }
                         }
@@ -333,7 +353,8 @@ namespace Burrow_Rune
                             Party[target].attacked = true;
                             Party[target].HP -= TurnOrder[i].Atk;
                             Party[target].spriteLocation2 = Party[target].spriteLocation;
-                            Party[target].spriteLocation.X -= 20; 
+                            Party[target].spriteLocation.X -= 20;
+                            BattleSFX[TurnOrder[i].AttackSFX].CreateInstance().Play();
                         }
                     }
 
@@ -366,10 +387,6 @@ namespace Burrow_Rune
                     {
                         TurnOrder[m].targeted = false;
                         TurnOrder[m].attacked = false;
-                        if (TurnOrder[m].Alive == true)
-                        {
-                            TurnOrder[m].spriteLocation = TurnOrder[m].spriteLocation2;
-                        }
                     }
                     for (int m = 0; m < ButtoninBattle.Count; m++)
                     {
@@ -498,6 +515,7 @@ namespace Burrow_Rune
                     waitingtime = 0;
                     iconOrder = 0;
                     Attacking = false;
+                    MediaPlayer.Play(EventMapBGM);
                     for (int i = 0; i < EnemyGroup.Count; i++)
                     {
                         EnemyGroup[i].attacked = false;
@@ -527,6 +545,7 @@ namespace Burrow_Rune
                     waitingtime = 0;
                     iconOrder = 0;
                     Attacking = false;
+                    MediaPlayer.Play(EventMapBGM);
                     for (int i = 0; i < EnemyGroup.Count; i++)
                     {
                         EnemyGroup[i].attacked = false;
@@ -556,6 +575,7 @@ namespace Burrow_Rune
                     waitingtime = 0;
                     iconOrder = 0;
                     Attacking = false;
+                    MediaPlayer.Play(EventMapBGM);
                     for (int i = 0; i < EnemyGroup.Count; i++)
                     {
                         EnemyGroup[i].attacked = false;
@@ -581,11 +601,15 @@ namespace Burrow_Rune
 
         private void UpdateEventMap()
         {
+            
+
             if (Keyboard.GetState().IsKeyUp(Keys.D1) == true && Old_keyboardState.IsKeyDown(Keys.D1))
             {
                 EnemyGroup.Add(Rocky);
                 EnemyGroup.Add(Golem);
                 EnemyGroup.Add(Beetle);
+
+                MediaPlayer.Play(BossBGM);
 
                 isMap = false;
                 isBattle = true;
@@ -595,13 +619,17 @@ namespace Burrow_Rune
                 EnemyGroup.Add(Rocky);
                 EnemyGroup.Add(Beetle);
 
+                MediaPlayer.Play(BattleBGM_1);
+
                 isMap = false;
                 isBattle = true;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.D3) == true && Old_keyboardState.IsKeyDown(Keys.D3))
             {
                 EnemyGroup.Add(Golem);
-                
+
+                MediaPlayer.Play(BattleBGM_2);
+
                 isMap = false;
                 isBattle = true;
 

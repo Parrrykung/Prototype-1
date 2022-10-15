@@ -30,6 +30,7 @@ namespace Burrow_Rune
         public Vector2 Small_iconLocation = new Vector2(1000, 1000);
         public Vector2 HPMPbar_iconLocation = new Vector2(1000, 1000);
         public Vector2 HPbar_Location = new Vector2(1000, 1000);
+        public int AttackSFX;
 
 
         public UnitClass()
@@ -37,7 +38,7 @@ namespace Burrow_Rune
 
         }
 
-        public UnitClass( bool playable, int speed, int HP, int Atk)
+        public UnitClass( bool playable, int speed, int HP, int Atk, int AttackSFX)
         {
             
             this.speed = speed;
@@ -45,6 +46,7 @@ namespace Burrow_Rune
             this.HP = HP;
             MaxHP = HP;
             this.Atk = Atk;
+            this.AttackSFX = AttackSFX;
         }
 
     }
