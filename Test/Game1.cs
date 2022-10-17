@@ -15,6 +15,7 @@ namespace Burrow_Rune
         private KeyboardState _keyboardState;
         private KeyboardState Old_keyboardState;
         private MouseState Old_mouseState;
+        private SpriteFont font;
 
         private float totalElapsed;
         private float timePerFrame;
@@ -100,22 +101,24 @@ namespace Burrow_Rune
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            Beetle_Text = Content.Load<Texture2D>("Asset 2D/Flying-Rock_Sheet");
-            Rocky_Text = Content.Load<Texture2D>("Asset 2D/Hermit-Rock-Sheet");
-            Beetle_Icon = Content.Load<Texture2D>("Asset 2D/Flying-Rock-Icon");
-            Rocky_Icon = Content.Load<Texture2D>("Asset 2D/Hermit-Rock-Icon");
-            Golem_Icon = Content.Load<Texture2D>("Asset 2D/Golem_Sprite_sheet");
-            Blood_Maiden_Texture = Content.Load<Texture2D>("Asset 2D/Blood_maiden_sprite_sheet");
-            Golem_Texture = Content.Load<Texture2D>("Asset 2D/Golem-Sheet");
-            Inventor_Texture = Content.Load<Texture2D>("Asset 2D/Inventor_Sprite_Sheet");
-            Lurker_Texture = Content.Load<Texture2D>("Asset 2D/Lurker_Sprite_Sheet");
-            first_floor_Background = Content.Load<Texture2D>("Asset 2D/1st_floor_2");
-            Arrow_Texture = Content.Load<Texture2D>("Asset 2D/Arrow");
-            Attack_Texture = Content.Load<Texture2D>("Asset 2D/Attack");
-            Item_Texture = Content.Load<Texture2D>("Asset 2D/Item");
-            Skill_Texture = Content.Load<Texture2D>("Asset 2D/Skill");
-            Turn_Order_Texture  = Content.Load<Texture2D>("Asset 2D/Turn-Order-Hub");
-            Turn_Selector_Texture = Content.Load<Texture2D>("Asset 2D/Turn-Selector");
+            Beetle_Text = Content.Load<Texture2D>("Asset 2D/Sprite/Enemy/Beetle/Flying-Rock_Sheet");
+            Rocky_Text = Content.Load<Texture2D>("Asset 2D/Sprite/Enemy/Rocky/Hermit-Rock-Sheet");
+            Beetle_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Enemy/Beetle/Flying-Rock-Icon");
+            Rocky_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Enemy/Rocky/Hermit-Rock-Icon");
+            Golem_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Enemy/Golem/Golem_Sprite_sheet");
+            Blood_Maiden_Texture = Content.Load<Texture2D>("Asset 2D/Sprite/Blood_maiden/Blood_maiden_sprite_sheet");
+            Golem_Texture = Content.Load<Texture2D>("Asset 2D/Sprite/Enemy/Golem/Golem-Sheet");
+            Inventor_Texture = Content.Load<Texture2D>("Asset 2D/Sprite/Inventor/Inventor_Sprite_Sheet");
+            Lurker_Texture = Content.Load<Texture2D>("Asset 2D/Sprite/Lurker/Lurker_Sprite_Sheet");
+            first_floor_Background = Content.Load<Texture2D>("Asset 2D/Background/1st_floor_2");
+            Arrow_Texture = Content.Load<Texture2D>("Asset 2D/UI/Arrow");
+            Attack_Texture = Content.Load<Texture2D>("Asset 2D/UI/Attack");
+            Item_Texture = Content.Load<Texture2D>("Asset 2D/UI/Item");
+            Skill_Texture = Content.Load<Texture2D>("Asset 2D/UI/Skill");
+            Turn_Order_Texture  = Content.Load<Texture2D>("Asset 2D/UI/Turn-Order-Hub");
+            Turn_Selector_Texture = Content.Load<Texture2D>("Asset 2D/UI/Turn-Selector");
+
+            font = Content.Load<SpriteFont>("font");
 
             TitleBGM = Content.Load<Song>("BGM/at-the-bottom-of-the-sea-where-the-sun-never-reaches-112916");
             EventMapBGM = Content.Load<Song>("BGM/a-beautiful-step-99284");
@@ -632,7 +635,16 @@ namespace Burrow_Rune
 
                 isMap = false;
                 isBattle = true;
+            }
 
+            if (Keyboard.GetState().IsKeyUp(Keys.D4) == true && Old_keyboardState.IsKeyDown(Keys.D4))
+            {
+                EnemyGroup.Add(Rocky);
+
+                MediaPlayer.Play(BattleBGM_1);
+
+                isMap = false;
+                isBattle = true;
             }
         }
 
@@ -799,6 +811,8 @@ namespace Burrow_Rune
         private void DrawEventMap()
         {
             _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
+            String str = "Event Map: Press 1,2,3,4 to go to battle";
+            _spriteBatch.DrawString(font, str,new Vector2(50, 100), Color.White);
         }
     }
 }

@@ -13,7 +13,7 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin ASSET 2D/1st_floor_2.png
+#begin ASSET 2D/Background/1st_floor_2.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -23,9 +23,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/1st_floor_2.png
+/build:ASSET 2D/Background/1st_floor_2.png
 
-#begin ASSET 2D/Arrow.png
+#begin ASSET 2D/Sprite/Blood_maiden/Blood_maiden_sprite_sheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -35,9 +35,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/Arrow.png
+/build:ASSET 2D/Sprite/Blood_maiden/Blood_maiden_sprite_sheet.png
 
-#begin ASSET 2D/Attack.png
+#begin ASSET 2D/Sprite/Enemy/Beetle/Flying-Rock_Sheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -47,9 +47,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/Attack.png
+/build:ASSET 2D/Sprite/Enemy/Beetle/Flying-Rock_Sheet.png
 
-#begin ASSET 2D/Blood_maiden_sprite_sheet.png
+#begin ASSET 2D/Sprite/Enemy/Beetle/Flying-Rock-Icon.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -59,9 +59,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/Blood_maiden_sprite_sheet.png
+/build:ASSET 2D/Sprite/Enemy/Beetle/Flying-Rock-Icon.png
 
-#begin ASSET 2D/Char01.png
+#begin ASSET 2D/Sprite/Enemy/Golem/Golem_Sprite_sheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -71,9 +71,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/Char01.png
+/build:ASSET 2D/Sprite/Enemy/Golem/Golem_Sprite_sheet.png
 
-#begin ASSET 2D/Flying-Rock_Sheet.png
+#begin ASSET 2D/Sprite/Enemy/Golem/Golem-Sheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -83,9 +83,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/Flying-Rock_Sheet.png
+/build:ASSET 2D/Sprite/Enemy/Golem/Golem-Sheet.png
 
-#begin ASSET 2D/Flying-Rock-Icon.png
+#begin ASSET 2D/Sprite/Enemy/Rocky/Hermit-Rock-Icon.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -95,9 +95,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/Flying-Rock-Icon.png
+/build:ASSET 2D/Sprite/Enemy/Rocky/Hermit-Rock-Icon.png
 
-#begin ASSET 2D/Golem_Sprite_sheet.png
+#begin ASSET 2D/Sprite/Enemy/Rocky/Hermit-Rock-Sheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -107,9 +107,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/Golem_Sprite_sheet.png
+/build:ASSET 2D/Sprite/Enemy/Rocky/Hermit-Rock-Sheet.png
 
-#begin ASSET 2D/Golem-Sheet.png
+#begin ASSET 2D/Sprite/Inventor/Inventor_Sprite_Sheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -119,9 +119,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/Golem-Sheet.png
+/build:ASSET 2D/Sprite/Inventor/Inventor_Sprite_Sheet.png
 
-#begin ASSET 2D/Hermit-Rock-Icon.png
+#begin ASSET 2D/Sprite/Lurker/Lurker_Sprite_Sheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -131,9 +131,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/Hermit-Rock-Icon.png
+/build:ASSET 2D/Sprite/Lurker/Lurker_Sprite_Sheet.png
 
-#begin ASSET 2D/Hermit-Rock-Sheet.png
+#begin ASSET 2D/UI/Arrow.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -143,9 +143,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/Hermit-Rock-Sheet.png
+/build:ASSET 2D/UI/Arrow.png
 
-#begin ASSET 2D/Inventor_Sprite_Sheet.png
+#begin ASSET 2D/UI/Attack.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -155,9 +155,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/Inventor_Sprite_Sheet.png
+/build:ASSET 2D/UI/Attack.png
 
-#begin ASSET 2D/Item.png
+#begin ASSET 2D/UI/Item.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -167,9 +167,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/Item.png
+/build:ASSET 2D/UI/Item.png
 
-#begin ASSET 2D/Lurker_Sprite_Sheet.png
+#begin ASSET 2D/UI/Skill.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -179,9 +179,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/Lurker_Sprite_Sheet.png
+/build:ASSET 2D/UI/Skill.png
 
-#begin ASSET 2D/Skill.png
+#begin ASSET 2D/UI/Turn-Order-Hub.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -191,9 +191,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/Skill.png
+/build:ASSET 2D/UI/Turn-Order-Hub.png
 
-#begin ASSET 2D/Turn-Order-Hub.png
+#begin ASSET 2D/UI/Turn-Selector.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -203,19 +203,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/Turn-Order-Hub.png
-
-#begin ASSET 2D/Turn-Selector.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:ASSET 2D/Turn-Selector.png
+/build:ASSET 2D/UI/Turn-Selector.png
 
 #begin BGM/a-beautiful-step-99284.mp3
 /importer:Mp3Importer
@@ -235,11 +223,35 @@
 /processorParam:Quality=Best
 /build:BGM/cave-9207.mp3
 
+#begin BGM/cold-snow-116417.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:BGM/cold-snow-116417.mp3
+
+#begin BGM/cracked-40857.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:BGM/cracked-40857.mp3
+
 #begin BGM/epic-recovery-9797.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:BGM/epic-recovery-9797.mp3
+
+#begin BGM/eternal-loop-121064.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:BGM/eternal-loop-121064.mp3
+
+#begin BGM/fear-14380.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:BGM/fear-14380.mp3
 
 #begin BGM/fruit-9530.mp3
 /importer:Mp3Importer
@@ -253,11 +265,35 @@
 /processorParam:Quality=Best
 /build:BGM/go-back-to-the-heavens-49981.mp3
 
+#begin BGM/grasslands-9611.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:BGM/grasslands-9611.mp3
+
+#begin BGM/human-14050.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:BGM/human-14050.mp3
+
+#begin BGM/it39s-going-to-snow-today-12135.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:BGM/it39s-going-to-snow-today-12135.mp3
+
 #begin BGM/light-15800.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:BGM/light-15800.mp3
+
+#begin BGM/monster-forest-114171.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:BGM/monster-forest-114171.mp3
 
 #begin BGM/to-a-beautiful-flower-with-no-name-20871.mp3
 /importer:Mp3Importer
@@ -270,6 +306,13 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:BGM/warped-love-9260.mp3
+
+#begin font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:font.spritefont
 
 #begin SFX/Blow_Hori.wav
 /importer:WavImporter

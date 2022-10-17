@@ -11,6 +11,27 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Content\ASSET 2D\1st_floor_2.png" />
+    <None Remove="Content\ASSET 2D\Arrow.png" />
+    <None Remove="Content\ASSET 2D\Attack.png" />
+    <None Remove="Content\ASSET 2D\Blood_maiden_sprite_sheet.png" />
+    <None Remove="Content\ASSET 2D\Char01.png" />
+    <None Remove="Content\ASSET 2D\Flying-Rock-Icon.png" />
+    <None Remove="Content\ASSET 2D\Flying-Rock_Sheet.png" />
+    <None Remove="Content\ASSET 2D\Golem-Sheet.png" />
+    <None Remove="Content\ASSET 2D\Golem_Sprite_sheet.png" />
+    <None Remove="Content\ASSET 2D\Hermit-Rock-Icon.png" />
+    <None Remove="Content\ASSET 2D\Hermit-Rock-Sheet.png" />
+    <None Remove="Content\ASSET 2D\Inventor_Sprite_Sheet.png" />
+    <None Remove="Content\ASSET 2D\Item.png" />
+    <None Remove="Content\ASSET 2D\Lurker_Sprite_Sheet.png" />
+    <None Remove="Content\ASSET 2D\Skill.png" />
+    <None Remove="Content\ASSET 2D\Turn-Order-Hub.png" />
+    <None Remove="Content\ASSET 2D\Turn-Selector.png" />
+    <None Remove="Content\File.spritefont" />
+    <None Remove="Content\ZoodHarit4Bit-thai.ttf" />
+  </ItemGroup>
+  <ItemGroup>
     <TrimmerRootAssembly Include="Microsoft.Xna.Framework.Content.ContentTypeReader" Visible="false" />
   </ItemGroup>
   <ItemGroup>
