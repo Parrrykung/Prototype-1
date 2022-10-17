@@ -22,10 +22,24 @@ namespace Burrow_Rune
         private int framePerSec;
         private Vector2 SetPO1 = new Vector2(560, 240);
         private Vector2 SetPO2 = new Vector2(860, 180);
+        private Vector2 SetPO3 = new Vector2(620, 180);
         private int frame;
         private bool timeLoad;
         private int frameInCombat;
         private int waitingtime = 0;
+        private int roomNum = 1;
+        private int target = 0;
+        private int turn;
+        private int iconOrder = 0;
+        private int NodeNum;
+        private bool isFighting = false;
+        private bool isWalking = false;
+        bool isMap;
+        bool isBattle;
+        bool isTitle;
+        bool isEvent;
+        bool isLose;
+        private bool Attacking = false;
 
         private Texture2D first_floor_Background;
         private Texture2D Beetle_Text;
@@ -43,7 +57,9 @@ namespace Burrow_Rune
         private Texture2D Skill_Texture;
         private Texture2D Turn_Order_Texture;
         private Texture2D Turn_Selector_Texture;
-        
+        private Texture2D FightNode_Texture;
+        private Texture2D EventNode_Texture;
+
         public UnitClass Lurker = new UnitClass(true, 6, 20, 5, 0);
         public UnitClass Golem = new UnitClass(false,4, 40, 5, 3);
         public UnitClass inventor = new UnitClass(true, 5, 20, 5, 1);
@@ -59,21 +75,19 @@ namespace Burrow_Rune
         private Button Attack_B = new Button(new Vector2(100, 360));
         private Button Skill_B = new Button(new Vector2(130, 410));
         private Button Item_B = new Button(new Vector2(100, 460));
+        private Button Fight_B1 = new Button(new Vector2(1000, 1000));
+        private Button Fight_B2 = new Button(new Vector2(1000, 1000));
+        private Button Event_B1 = new Button(new Vector2(1000, 1000));
+        private Button Event_B2 = new Button(new Vector2(1000, 1000));
 
         private Vector2 Turn_Selector_Position;
         private Vector2 Turn_Order_Position = new Vector2(0, 360);
         private Vector2 Arrow_Position = new Vector2(1000, 1000);
 
-        private int target = 0;
-        private int turn;
-        private int iconOrder = 0;
-        bool isMap;
-        bool isBattle;
-        private bool Attacking = false;
-
         private List<UnitClass> Party = new List<UnitClass>();
         private List<UnitClass> EnemyGroup = new List<UnitClass>();
         private List<Button> ButtoninBattle = new List<Button>();
+        private List<Button> ButtoninMap = new List<Button>();
         private List<SoundEffect> BattleSFX = new List<SoundEffect>();
 
         private Song TitleBGM;
@@ -121,6 +135,8 @@ namespace Burrow_Rune
             Skill_Texture = Content.Load<Texture2D>("Asset 2D/UI/Skill");
             Turn_Order_Texture  = Content.Load<Texture2D>("Asset 2D/UI/Turn-Order-Hub");
             Turn_Selector_Texture = Content.Load<Texture2D>("Asset 2D/UI/Turn-Selector");
+            FightNode_Texture = Content.Load<Texture2D>("Asset 2D/UI/Fight Node");
+            EventNode_Texture = Content.Load<Texture2D>("Asset 2D/UI/Event Node");
 
             font = Content.Load<SpriteFont>("font");
 
@@ -132,7 +148,7 @@ namespace Burrow_Rune
             ShopBGM = Content.Load<Song>("BGM/fruit-9530");
             ClickSFX = Content.Load<SoundEffect>("SFX/Ui_Click");
 
-            MediaPlayer.Play(EventMapBGM);
+            MediaPlayer.Play(TitleBGM);
 
             framePerSec = 2;
             timePerFrame = (float)1 / framePerSec;
@@ -141,12 +157,21 @@ namespace Burrow_Rune
             timeLoad = false;
             frameInCombat = 0;
             turn = 0;
+            
             isBattle = false;
-            isMap = true;
+            isMap = false;
+            isTitle = true;
+            isEvent = false;
+            isLose = false;
 
             ButtoninBattle.Add(Attack_B);
             ButtoninBattle.Add(Skill_B);
             ButtoninBattle.Add(Item_B);
+
+            ButtoninMap.Add(Fight_B1);
+            ButtoninMap.Add(Event_B1);
+            ButtoninMap.Add(Fight_B2);
+            ButtoninMap.Add(Event_B2);
 
             BattleSFX.Add(Content.Load<SoundEffect>("SFX/Sword_Hori"));
             BattleSFX.Add(Content.Load<SoundEffect>("SFX/Blow_Hori"));
@@ -173,6 +198,18 @@ namespace Burrow_Rune
             {
                 UpdateEventMap();
             }
+            if (isTitle == true)
+            {
+                UpdateTitle();
+            }
+            if (isEvent == true)
+            {
+                UpdateEvent();
+            }
+            if (isLose == true)
+            {
+                UpdateLose();
+            }
 
             Old_keyboardState = _keyboardState;
             UpdateFrame((float)gameTime.ElapsedGameTime.TotalSeconds);
@@ -191,6 +228,18 @@ namespace Burrow_Rune
             if (isMap == true)
             {
                 DrawEventMap();
+            }
+            if (isTitle == true)
+            {
+                DrawTitle();
+            }
+            if (isEvent == true)
+            {
+                DrawEvent();
+            }
+            if (isLose == true)
+            {
+                DrawLose();
             }
 
             _spriteBatch.End();
@@ -409,7 +458,7 @@ namespace Burrow_Rune
                 {
                     TurnOrder[i].State = Color.Red;
                 }
-                if (TurnOrder[i].attacked == false && TurnOrder[i].myTurn == true)
+                if (TurnOrder[i].attacked == false && TurnOrder[i].Alive == true)
                 {
                     TurnOrder[i].State = Color.White;
                 }
@@ -425,22 +474,27 @@ namespace Burrow_Rune
                     if (i - iconOrder == 1 || i - iconOrder == -5)
                     {
                         TurnOrder[i].Small_iconLocation = new Vector2(0, 300);
+                        TurnOrder[i].Big_iconLocation = new Vector2(1000, 1000);
                     }
                     if (i - iconOrder == 2 || i - iconOrder == -4)
                     {
                         TurnOrder[i].Small_iconLocation = new Vector2(60, 250);
+                        TurnOrder[i].Big_iconLocation = new Vector2(1000, 1000);
                     }
                     if (i - iconOrder == 3 || i - iconOrder == -3)
                     {
                         TurnOrder[i].Small_iconLocation = new Vector2(0, 200);
+                        TurnOrder[i].Big_iconLocation = new Vector2(1000, 1000);
                     }
                     if (i - iconOrder == 4 || i - iconOrder == -2)
                     {
                         TurnOrder[i].Small_iconLocation = new Vector2(60, 150);
+                        TurnOrder[i].Big_iconLocation = new Vector2(1000, 1000);
                     }
                     if (i - iconOrder == 5 || i - iconOrder == -1)
                     {
                         TurnOrder[i].Small_iconLocation = new Vector2(0, 100);
+                        TurnOrder[i].Big_iconLocation = new Vector2(1000, 1000);
                     }
                 }
                 if (TurnOrder.Count == 5)
@@ -448,18 +502,22 @@ namespace Burrow_Rune
                     if (i - iconOrder == 1 || i - iconOrder == -4)
                     {
                         TurnOrder[i].Small_iconLocation = new Vector2(0, 300);
+                        TurnOrder[i].Big_iconLocation = new Vector2(1000, 1000);
                     }
                     if (i - iconOrder == 2 || i - iconOrder == -3)
                     {
                         TurnOrder[i].Small_iconLocation = new Vector2(60, 250);
+                        TurnOrder[i].Big_iconLocation = new Vector2(1000, 1000);
                     }
                     if (i - iconOrder == 3 || i - iconOrder == -2)
                     {
                         TurnOrder[i].Small_iconLocation = new Vector2(0, 200);
+                        TurnOrder[i].Big_iconLocation = new Vector2(1000, 1000);
                     }
                     if (i - iconOrder == 4 || i - iconOrder == -1)
                     {
                         TurnOrder[i].Small_iconLocation = new Vector2(60, 150);
+                        TurnOrder[i].Big_iconLocation = new Vector2(1000, 1000);
                     }
                 }
                 if (TurnOrder.Count == 4)
@@ -467,14 +525,17 @@ namespace Burrow_Rune
                     if (i - iconOrder == 1 || i - iconOrder == -3)
                     {
                         TurnOrder[i].Small_iconLocation = new Vector2(0, 300);
+                        TurnOrder[i].Big_iconLocation = new Vector2(1000, 1000);
                     }
                     if (i - iconOrder == 2 || i - iconOrder == -2)
                     {
                         TurnOrder[i].Small_iconLocation = new Vector2(60, 250);
+                        TurnOrder[i].Big_iconLocation = new Vector2(1000, 1000);
                     }
                     if (i - iconOrder == 3 || i - iconOrder == -1)
                     {
                         TurnOrder[i].Small_iconLocation = new Vector2(0, 200);
+                        TurnOrder[i].Big_iconLocation = new Vector2(1000, 1000);
                     }
                 }
                 if (TurnOrder.Count == 3)
@@ -482,10 +543,12 @@ namespace Burrow_Rune
                     if (i - iconOrder == 1 || i - iconOrder == -2)
                     {
                         TurnOrder[i].Small_iconLocation = new Vector2(0, 300);
+                        TurnOrder[i].Big_iconLocation = new Vector2(1000, 1000);
                     }
                     if (i - iconOrder == 2 || i - iconOrder == -1)
                     {
                         TurnOrder[i].Small_iconLocation = new Vector2(60, 250);
+                        TurnOrder[i].Big_iconLocation = new Vector2(1000, 1000);
                     }
                 }
                 if (TurnOrder.Count == 2)
@@ -493,6 +556,7 @@ namespace Burrow_Rune
                     if (i - iconOrder == 1 || i - iconOrder == -1)
                     {
                         TurnOrder[i].Small_iconLocation = new Vector2(0, 300);
+                        TurnOrder[i].Big_iconLocation = new Vector2(1000, 1000);
                     }
                 }
             }
@@ -514,91 +578,58 @@ namespace Burrow_Rune
             {
                 if (EnemyGroup[0].Alive == false && EnemyGroup[1].Alive == false && EnemyGroup[2].Alive == false)
                 {
-                    isMap = true;
-                    isBattle = false;
-                    turn = 0;
-                    timeLoad = false;
-                    frameInCombat = 0;
-                    waitingtime = 0;
-                    iconOrder = 0;
-                    Attacking = false;
-                    MediaPlayer.Play(EventMapBGM);
-                    for (int i = 0; i < EnemyGroup.Count; i++)
-                    {
-                        EnemyGroup[i].attacked = false;
-                        EnemyGroup[i].HP = EnemyGroup[i].MaxHP;
-                        EnemyGroup[i].Alive = true;
-                        EnemyGroup.RemoveAt(i);
-                    }
                     for (int i = 0; i < TurnOrder.Count; i++)
                     {
                         TurnOrder[i].myTurn = false;
                     }
-                    for (int i = 0; i < ButtoninBattle.Count; i++)
-                    {
-                        ButtoninBattle[i].Pressed = false;
-                    }
+                    MediaPlayer.Play(EventMapBGM);
+                    ResetCombat();
+                    RandomNode();
+                    isMap = true;
+                    isBattle = false;
                 }
             }
             if (EnemyGroup.Count == 2)
             {
                 if (EnemyGroup[0].Alive == false && EnemyGroup[1].Alive == false)
                 {
-                    isMap = true;
-                    isBattle = false;
-                    turn = 0;
-                    timeLoad = false;
-                    frameInCombat = 0;
-                    waitingtime = 0;
-                    iconOrder = 0;
-                    Attacking = false;
-                    MediaPlayer.Play(EventMapBGM);
-                    for (int i = 0; i < EnemyGroup.Count; i++)
-                    {
-                        EnemyGroup[i].attacked = false;
-                        EnemyGroup[i].HP = EnemyGroup[i].MaxHP;
-                        EnemyGroup[i].Alive = true;
-                        EnemyGroup.RemoveAt(i);
-                    }
                     for (int i = 0; i < TurnOrder.Count; i++)
                     {
                         TurnOrder[i].myTurn = false;
                     }
-                    for (int i = 0; i < ButtoninBattle.Count; i++)
-                    {
-                        ButtoninBattle[i].Pressed = false;
-                    }
+                    MediaPlayer.Play(EventMapBGM);
+                    ResetCombat();
+                    RandomNode();
+                    isMap = true;
+                    isBattle = false;
                 }
             }
             if (EnemyGroup.Count == 1)
             {
                 if (EnemyGroup[0].Alive == false)
                 {
-                    isMap = true;
-                    isBattle = false;
-                    turn = 0;
-                    timeLoad = false;
-                    frameInCombat = 0;
-                    waitingtime = 0;
-                    iconOrder = 0;
-                    Attacking = false;
-                    MediaPlayer.Play(EventMapBGM);
-                    for (int i = 0; i < EnemyGroup.Count; i++)
-                    {
-                        EnemyGroup[i].attacked = false;
-                        EnemyGroup[i].HP = EnemyGroup[i].MaxHP;
-                        EnemyGroup[i].Alive = true;
-                        EnemyGroup.RemoveAt(i);
-                    }
                     for (int i = 0; i < TurnOrder.Count; i++)
                     {
                         TurnOrder[i].myTurn = false;
                     }
-                    for (int i = 0; i < ButtoninBattle.Count; i++)
-                    {
-                        ButtoninBattle[i].Pressed = false;
-                    }
+                    MediaPlayer.Play(EventMapBGM);
+                    ResetCombat();
+                    RandomNode();
+                    isMap = true;
+                    isBattle = false;
                 }
+            }
+
+            if (Party[0].Alive == false && Party[1].Alive == false && Party[2].Alive == false)
+            {
+                MediaPlayer.Play(TitleBGM);
+                for (int i = 0; i < TurnOrder.Count; i++)
+                {
+                    TurnOrder[i].myTurn = false;
+                }
+                ResetCombat();
+                isLose = true;
+                isBattle = false;
             }
 
             Old_mouseState = mouseState;
@@ -608,59 +639,164 @@ namespace Burrow_Rune
 
         private void UpdateEventMap()
         {
-            
+            var mouseState = Mouse.GetState();
+            var mousePosition = new Point(mouseState.X, mouseState.Y);
 
-            if (Keyboard.GetState().IsKeyUp(Keys.D1) == true && Old_keyboardState.IsKeyDown(Keys.D1))
+            for (int i = 0; i < ButtoninBattle.Count; i++)
             {
-                EnemyGroup.Add(Rocky1);
-                EnemyGroup.Add(Golem);
-                EnemyGroup.Add(Beetle1);
-
-                MediaPlayer.Play(BossBGM);
-
-                isMap = false;
-                isBattle = true;
+                Rectangle buttonRectangle = new Rectangle((int)ButtoninMap[i].Position.X, (int)ButtoninMap[i].Position.Y, 215, 215);
+                if (buttonRectangle.Contains(mousePosition))
+                {
+                    ButtoninMap[i].mouseHover = true;
+                }
+                else
+                {
+                    ButtoninMap[i].mouseHover = false;
+                }
+                if (ButtoninMap[i].mouseHover == true)
+                {
+                    ButtoninMap[i].State = Color.Gray;
+                }
+                if (ButtoninMap[i].mouseHover == false && ButtoninMap[i].Pressed == false)
+                {
+                    ButtoninMap[i].State = Color.White;
+                }
+                if (mouseState.LeftButton != ButtonState.Pressed && ButtoninMap[i].mouseHover == true && Old_mouseState.LeftButton == ButtonState.Pressed)
+                {
+                    ButtoninMap[i].Pressed = true;
+                    ClickSFX.CreateInstance().Play();
+                    if (Fight_B1.Pressed == true || Fight_B2.Pressed == true)
+                    {
+                        isFighting = true;
+                    }
+                }
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.D2) == true && Old_keyboardState.IsKeyDown(Keys.D2))
+
+            if (isFighting == true)
             {
-                EnemyGroup.Add(Rocky1);
-                EnemyGroup.Add(Beetle1);
+                Random r = new Random();
+                int x = r.Next(0, 6);
 
-                MediaPlayer.Play(BattleBGM_1);
+                if (x == 1)
+                {
+                    EnemyGroup.Add(Rocky1);
+                    EnemyGroup.Add(Beetle1);
+                    roomNum += 1;
+                    MediaPlayer.Play(BattleBGM_1);
+                    for (int i = 0; i < ButtoninMap.Count; i++)
+                    {
+                        ButtoninMap[i].mouseHover = false;
+                        ButtoninMap[i].State = Color.White;
+                        ButtoninMap[i].Pressed = false;
+                        ButtoninMap[i].Position = new Vector2(1000, 1000);
+                    }
+                    isMap = false;
+                    isBattle = true;
+                    isFighting = false;
+                }
+                if (x == 2)
+                {
+                    EnemyGroup.Add(Golem);
+                    roomNum += 1;
+                    MediaPlayer.Play(BattleBGM_2);
+                    for (int i = 0; i < ButtoninMap.Count; i++)
+                    {
+                        ButtoninMap[i].mouseHover = false;
+                        ButtoninMap[i].State = Color.White;
+                        ButtoninMap[i].Pressed = false;
+                        ButtoninMap[i].Position = new Vector2(1000, 1000);
+                    }
+                    isMap = false;
+                    isBattle = true;
+                    isFighting = false;
+                }
 
-                isMap = false;
-                isBattle = true;
+                if (x == 3)
+                {
+                    EnemyGroup.Add(Rocky1);
+                    EnemyGroup.Add(Rocky2);
+                    EnemyGroup.Add(Rocky3);
+                    roomNum += 1;
+                    MediaPlayer.Play(BattleBGM_1);
+                    for (int i = 0; i < ButtoninMap.Count; i++)
+                    {
+                        ButtoninMap[i].mouseHover = false;
+                        ButtoninMap[i].State = Color.White;
+                        ButtoninMap[i].Pressed = false;
+                        ButtoninMap[i].Position = new Vector2(1000, 1000);
+                    }
+                    isMap = false;
+                    isBattle = true;
+                    isFighting = false;
+                }
+                if (x == 4)
+                {
+                    EnemyGroup.Add(Beetle1);
+                    EnemyGroup.Add(Beetle2);
+                    EnemyGroup.Add(Beetle3);
+                    roomNum += 1;
+                    MediaPlayer.Play(BattleBGM_1);
+                    for (int i = 0; i < ButtoninMap.Count; i++)
+                    {
+                        ButtoninMap[i].mouseHover = false;
+                        ButtoninMap[i].State = Color.White;
+                        ButtoninMap[i].Pressed = false;
+                        ButtoninMap[i].Position = new Vector2(1000, 1000);
+                    }
+                    isMap = false;
+                    isBattle = true;
+                    isFighting = false;
+                }
+                if (x == 5)
+                {
+                    EnemyGroup.Add(Rocky1);
+                    EnemyGroup.Add(Golem);
+                    EnemyGroup.Add(Beetle1);
+                    roomNum += 1;
+                    MediaPlayer.Play(BossBGM);
+                    for (int i = 0; i < ButtoninMap.Count; i++)
+                    {
+                        ButtoninMap[i].mouseHover = false;
+                        ButtoninMap[i].State = Color.White;
+                        ButtoninMap[i].Pressed = false;
+                        ButtoninMap[i].Position = new Vector2(1000, 1000);
+                    }
+                    isMap = false;
+                    isBattle = true;
+                    isFighting = false;
+                }
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.D3) == true && Old_keyboardState.IsKeyDown(Keys.D3))
+
+           
+           
+            Old_mouseState = mouseState;
+        }
+
+        private void UpdateTitle()
+        {
+            var mouseState = Mouse.GetState();
+            var mousePosition = new Point(mouseState.X, mouseState.Y);
+
+           
+            if (mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed)
             {
-                EnemyGroup.Add(Golem);
-
-                MediaPlayer.Play(BattleBGM_2);
-
-                isMap = false;
-                isBattle = true;
+                isMap = true;
+                isTitle = false;
+                MediaPlayer.Play(EventMapBGM);
+                RandomNode();
+                
             }
+            Old_mouseState = mouseState;
+        }
 
-            if (Keyboard.GetState().IsKeyUp(Keys.D4) == true && Old_keyboardState.IsKeyDown(Keys.D4))
-            {
-                EnemyGroup.Add(Rocky1);
-                EnemyGroup.Add(Rocky2);
-                EnemyGroup.Add(Rocky3);
-                MediaPlayer.Play(BattleBGM_1);
+        private void UpdateEvent()
+        {
 
-                isMap = false;
-                isBattle = true;
-            }
-            if (Keyboard.GetState().IsKeyUp(Keys.D5) == true && Old_keyboardState.IsKeyDown(Keys.D5))
-            {
-                EnemyGroup.Add(Beetle1);
-                EnemyGroup.Add(Beetle2);
-                EnemyGroup.Add(Beetle3);
-                MediaPlayer.Play(BattleBGM_1);
+        }
 
-                isMap = false;
-                isBattle = true;
-            }
+        private void UpdateLose()
+        {
+
         }
 
         private void DrawBattale1()
@@ -922,8 +1058,91 @@ namespace Burrow_Rune
         private void DrawEventMap()
         {
             _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
-            String str = "Event Map: Press 1,2,3,4,5 to go to battle";
-            _spriteBatch.DrawString(font, str,new Vector2(400, 200), Color.Red);
+            String room = "room: " + roomNum;
+            _spriteBatch.DrawString(font, room, new Vector2(200, 300), Color.Red);
+            _spriteBatch.Draw(FightNode_Texture, Fight_B1.Position, Fight_B1.State);
+            _spriteBatch.Draw(FightNode_Texture, Fight_B2.Position, Fight_B2.State);
+            _spriteBatch.Draw(EventNode_Texture, Event_B1.Position, Event_B1.State);
+            _spriteBatch.Draw(EventNode_Texture, Event_B2.Position, Event_B2.State);
+        }
+
+        private void DrawTitle()
+        {
+            _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
+            String str = "Title Screen is here \n Click anywhere to continue";
+            _spriteBatch.DrawString(font, str, new Vector2(400, 200), Color.Red);
+        }
+
+        private void DrawEvent()
+        {
+
+        }
+
+        private void DrawLose()
+        {
+            _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
+            String str = "You Lose";
+            _spriteBatch.DrawString(font, str, new Vector2(400, 200), Color.Red);
+        }
+
+        private void ResetCombat()
+        {
+            turn = 0;
+            timeLoad = false;
+            frameInCombat = 0;
+            waitingtime = 0;
+            iconOrder = 0;
+            Attacking = false;
+            for (int i = 0; i < EnemyGroup.Count; i++)
+            {
+                EnemyGroup[i].attacked = false;
+                EnemyGroup[i].HP = EnemyGroup[i].MaxHP;
+                EnemyGroup[i].Alive = true;
+                EnemyGroup.RemoveAt(i);
+            }
+            for (int i = 0; i < ButtoninBattle.Count; i++)
+            {
+                ButtoninBattle[i].Pressed = false;
+            }
+        }
+
+        private void RandomNode()
+        {
+            Random r = new Random();
+            int x = r.Next(0, 5);
+            if (x == 4)
+            {
+                int a = r.Next(0, 4);
+                for (int i = 0; i < ButtoninMap.Count; i++)
+                {
+                    if (i == a)
+                    {
+                        ButtoninMap[i].Position = SetPO3;
+                    }
+                }
+            }
+            else
+            {
+                int a, b;
+                do
+                {
+                    a = r.Next(0, 4);
+                    b = r.Next(0, 4);
+                }
+                while (a == b);
+                
+                for (int i = 0; i < ButtoninMap.Count; i++)
+                {
+                    if (i == a)
+                    {
+                        ButtoninMap[i].Position = new Vector2(SetPO3.X - 300, SetPO3.Y);
+                    }
+                    if (i == b)
+                    {
+                        ButtoninMap[i].Position = new Vector2(SetPO3.X + 300, SetPO3.Y);
+                    }
+                }
+            }
         }
     }
 }
