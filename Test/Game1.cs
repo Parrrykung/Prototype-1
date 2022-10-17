@@ -47,8 +47,8 @@ namespace Burrow_Rune
         public UnitClass Lurker = new UnitClass(true, 6, 20, 5, 0);
         public UnitClass Golem = new UnitClass(false,4, 40, 5, 3);
         public UnitClass inventor = new UnitClass(true, 5, 20, 5, 1);
-        public UnitClass Beetle = new UnitClass(false,5, 10, 5, 3);
-        public UnitClass Rocky = new UnitClass(false, 3, 10, 5, 3);
+        public UnitClass Beetle1 = new UnitClass(false,5, 10, 5, 3);
+        public UnitClass Rocky1 = new UnitClass(false, 3, 10, 5, 3);
         public UnitClass Blood_Maiden = new UnitClass(true, 3, 20, 5, 2);
         private UnitClass Nul = new UnitClass();
 
@@ -608,9 +608,9 @@ namespace Burrow_Rune
 
             if (Keyboard.GetState().IsKeyUp(Keys.D1) == true && Old_keyboardState.IsKeyDown(Keys.D1))
             {
-                EnemyGroup.Add(Rocky);
+                EnemyGroup.Add(Rocky1);
                 EnemyGroup.Add(Golem);
-                EnemyGroup.Add(Beetle);
+                EnemyGroup.Add(Beetle1);
 
                 MediaPlayer.Play(BossBGM);
 
@@ -619,8 +619,8 @@ namespace Burrow_Rune
             }
             if (Keyboard.GetState().IsKeyDown(Keys.D2) == true && Old_keyboardState.IsKeyDown(Keys.D2))
             {
-                EnemyGroup.Add(Rocky);
-                EnemyGroup.Add(Beetle);
+                EnemyGroup.Add(Rocky1);
+                EnemyGroup.Add(Beetle1);
 
                 MediaPlayer.Play(BattleBGM_1);
 
@@ -639,7 +639,7 @@ namespace Burrow_Rune
 
             if (Keyboard.GetState().IsKeyUp(Keys.D4) == true && Old_keyboardState.IsKeyDown(Keys.D4))
             {
-                EnemyGroup.Add(Rocky);
+                EnemyGroup.Add(Rocky1);
 
                 MediaPlayer.Play(BattleBGM_1);
 
@@ -713,9 +713,9 @@ namespace Burrow_Rune
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
                     }
                 }
-                if (EnemyGroup[i] == Rocky)
+                if (EnemyGroup[i] == Rocky1)
                 {
-                    _spriteBatch.Draw(Rocky_Text, Rocky.spriteLocation, new Rectangle(frame * 100, 0, 100, 100), Rocky.State);
+                    _spriteBatch.Draw(Rocky_Text, Rocky1.spriteLocation, new Rectangle(frame * 100, 0, 100, 100), Rocky1.State);
                     if (i == 0)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X, SetPO2.Y + 200);
@@ -732,9 +732,9 @@ namespace Burrow_Rune
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
                     }
                 }
-                if ( EnemyGroup[i] == Beetle)
+                if ( EnemyGroup[i] == Beetle1)
                 {
-                    _spriteBatch.Draw(Beetle_Text, Beetle.spriteLocation, new Rectangle(frame * 150, 0, 150, 150), Beetle.State);
+                    _spriteBatch.Draw(Beetle_Text, Beetle1.spriteLocation, new Rectangle(frame * 150, 0, 150, 150), Beetle1.State);
                     if (i == 0)
                     {
                         EnemyGroup[i].spriteLocation = SetPO2;
@@ -793,15 +793,15 @@ namespace Burrow_Rune
                     _spriteBatch.Draw(Golem_Icon, Golem.Small_iconLocation, new Rectangle(35, 315, 90, 90), Golem.State);
                     _spriteBatch.Draw(Golem_Texture, Golem.Big_iconLocation, new Rectangle(50, 70, 120, 140), Color.White);
                 }
-                if (EnemyGroup[i] == Rocky)
+                if (EnemyGroup[i] == Rocky1)
                 {
-                    _spriteBatch.Draw(Rocky_Icon, Rocky.Small_iconLocation, new Rectangle(0, 0, 90, 90), Rocky.State);
-                    _spriteBatch.Draw(Rocky_Text, Rocky.Big_iconLocation, new Rectangle(0, 0, 90, 90), Color.White);
+                    _spriteBatch.Draw(Rocky_Icon, Rocky1.Small_iconLocation, new Rectangle(0, 0, 90, 90), Rocky1.State);
+                    _spriteBatch.Draw(Rocky_Text, Rocky1.Big_iconLocation, new Rectangle(0, 0, 90, 90), Color.White);
                 }
-                if (EnemyGroup[i] == Beetle)
+                if (EnemyGroup[i] == Beetle1)
                 {
-                    _spriteBatch.Draw(Beetle_Icon, Beetle.Small_iconLocation, new Rectangle(0, 0, 90, 90), Beetle.State);
-                    _spriteBatch.Draw(Beetle_Text, Beetle.Big_iconLocation, new Rectangle(0, 20, 120, 920), Color.White);
+                    _spriteBatch.Draw(Beetle_Icon, Beetle1.Small_iconLocation, new Rectangle(0, 0, 90, 90), Beetle1.State);
+                    _spriteBatch.Draw(Beetle_Text, Beetle1.Big_iconLocation, new Rectangle(0, 20, 120, 920), Color.White);
                 }
 
             }
