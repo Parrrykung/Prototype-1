@@ -47,8 +47,17 @@ namespace Burrow_Rune
         private Texture2D Golem_Texture;
         private Texture2D Golem_Icon;
         private Texture2D Lurker_Texture;
+        private Texture2D Lurker_Small_Icon;
+        private Texture2D Lurker_Big_Icon;
         private Texture2D Inventor_Texture;
+        private Texture2D Inventor_Small_Icon;
+        private Texture2D Inventor_Big_Icon;
         private Texture2D Blood_Maiden_Texture;
+        private Texture2D Blood_Maiden_Small_Icon;
+        private Texture2D Blood_Maiden_Big_Icon;
+        private Texture2D Dragonic_Texture;
+        private Texture2D Dragonic_Small_Icon;
+        private Texture2D Dragonic_Big_Icon;
         private Texture2D Arrow_Texture;
         private Texture2D Attack_Texture;
         private Texture2D Item_Texture;
@@ -123,10 +132,17 @@ namespace Burrow_Rune
             Beetle_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Enemy/Beetle/Flying-Rock-Icon");
             Rocky_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Enemy/Rocky/Hermit-Rock-Icon");
             Golem_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Enemy/Golem/Golem_Sprite_sheet");
-            Blood_Maiden_Texture = Content.Load<Texture2D>("Asset 2D/Sprite/Blood_maiden/Blood_maiden_sprite_sheet");
+            Dragonic_Small_Icon = Content.Load<Texture2D>("Asset 2D/UI/Dragonic Icon");
+            Blood_Maiden_Texture = Content.Load<Texture2D>("Asset 2D/Sprite/Blood_maiden/Blood maiden sprite sheet-export");
+            Blood_Maiden_Small_Icon = Content.Load<Texture2D>("Asset 2D/UI/Blood Maiden Icon");
+            Blood_Maiden_Big_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Blood_maiden/Blood_maiden_sprite_sheet");
             Golem_Texture = Content.Load<Texture2D>("Asset 2D/Sprite/Enemy/Golem/Golem-Sheet");
-            Inventor_Texture = Content.Load<Texture2D>("Asset 2D/Sprite/Inventor/Inventor_Sprite_Sheet");
-            Lurker_Texture = Content.Load<Texture2D>("Asset 2D/Sprite/Lurker/Lurker_Sprite_Sheet");
+            Inventor_Texture = Content.Load<Texture2D>("Asset 2D/Sprite/Inventor/Inventor Sprite Sheet-export");
+            Inventor_Small_Icon = Content.Load<Texture2D>("Asset 2D/UI/Inventor Icon");
+            Inventor_Big_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Inventor/Inventor_Sprite_Sheet");
+            Lurker_Texture = Content.Load<Texture2D>("Asset 2D/Sprite/Lurker/Lurker Sprite Sheet-export");
+            Lurker_Small_Icon = Content.Load<Texture2D>("Asset 2D/UI/Lurker Icon");
+            Lurker_Big_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Lurker/Lurker_Sprite_Sheet");
             first_floor_Background = Content.Load<Texture2D>("Asset 2D/Background/1st_floor_2");
             Arrow_Texture = Content.Load<Texture2D>("Asset 2D/UI/Arrow");
             Attack_Texture = Content.Load<Texture2D>("Asset 2D/UI/Attack");
@@ -371,6 +387,7 @@ namespace Burrow_Rune
                                     EnemyGroup[m].HP -= TurnOrder[i].Atk;
                                     EnemyGroup[m].spriteLocation2 = EnemyGroup[m].spriteLocation;
                                     EnemyGroup[m].spriteLocation.X += 20;
+                                    TurnOrder[i].ATKframe = 1;
                                     BattleSFX[TurnOrder[i].AttackSFX].CreateInstance().Play();
                                 }
                             }
@@ -404,6 +421,7 @@ namespace Burrow_Rune
                         waitingtime += 1;
                         if (waitingtime == 50)
                         {
+                            TurnOrder[i].ATKframe = 1;
                             TurnOrder[i].isAttacking = true;
                             timeLoad = true;
                             Party[target].attacked = true;
@@ -428,10 +446,11 @@ namespace Burrow_Rune
                 {
                     TurnOrder[i].State = Color.White;
                 }
-                if (frameInCombat > 20 && TurnOrder[i].myTurn == true)
+                if (frameInCombat > 30 && TurnOrder[i].myTurn == true)
                 {
                     timeLoad = false;
                     frameInCombat = 0;
+                    TurnOrder[i].ATKframe = 0;
                     turn++;
                     Attacking = false;
                     TurnOrder[i].myTurn = false;
@@ -467,6 +486,7 @@ namespace Burrow_Rune
                 {
                     TurnOrder[i].spriteLocation = new Vector2(1000, 1000);
                     TurnOrder[i].Alive = false;
+                    
 
                 }
                 if (TurnOrder.Count == 6)
@@ -581,6 +601,7 @@ namespace Burrow_Rune
                     for (int i = 0; i < TurnOrder.Count; i++)
                     {
                         TurnOrder[i].myTurn = false;
+                        TurnOrder[i].ATKframe = 0;
                     }
                     MediaPlayer.Play(EventMapBGM);
                     ResetCombat();
@@ -596,6 +617,7 @@ namespace Burrow_Rune
                     for (int i = 0; i < TurnOrder.Count; i++)
                     {
                         TurnOrder[i].myTurn = false;
+                        TurnOrder[i].ATKframe = 0;
                     }
                     MediaPlayer.Play(EventMapBGM);
                     ResetCombat();
@@ -611,6 +633,7 @@ namespace Burrow_Rune
                     for (int i = 0; i < TurnOrder.Count; i++)
                     {
                         TurnOrder[i].myTurn = false;
+                        TurnOrder[i].ATKframe = 0;
                     }
                     MediaPlayer.Play(EventMapBGM);
                     ResetCombat();
@@ -626,6 +649,7 @@ namespace Burrow_Rune
                 for (int i = 0; i < TurnOrder.Count; i++)
                 {
                     TurnOrder[i].myTurn = false;
+                    TurnOrder[i].ATKframe = 0;
                 }
                 ResetCombat();
                 isLose = true;
@@ -808,15 +832,15 @@ namespace Burrow_Rune
             {
                 if (Party[i] == Lurker)
                 {
-                    _spriteBatch.Draw(Lurker_Texture, Lurker.spriteLocation, new Rectangle(0, 0, 270, 250), Lurker.State);
+                    _spriteBatch.Draw(Lurker_Texture, Lurker.spriteLocation, new Rectangle(0, Lurker.ATKframe * 240, 270, 230), Lurker.State);
                 }
                 if (Party[i] == inventor)
                 {
-                    _spriteBatch.Draw(Inventor_Texture, inventor.spriteLocation, new Rectangle(0, 0, 270, 250), inventor.State);
+                    _spriteBatch.Draw(Inventor_Texture, inventor.spriteLocation, new Rectangle(0, inventor.ATKframe * 240, 270, 230), inventor.State);
                 }
                 if (Party[i] == Blood_Maiden)
                 {
-                    _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.spriteLocation, new Rectangle(0, 0, 270, 250), Blood_Maiden.State);
+                    _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.spriteLocation, new Rectangle(0, Blood_Maiden.ATKframe * 240, 270, 230), Blood_Maiden.State);
                 }
                 if (i == 0)
                 {
@@ -853,22 +877,19 @@ namespace Burrow_Rune
                     {
                         EnemyGroup[i].spriteLocation = SetPO2;
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
-                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X, SetPO2.Y + 300);
-                        EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                        EnemyHP(i);
                     }
                     if (i == 1)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 200, SetPO2.Y);
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
-                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X + 200, SetPO2.Y + 300);
-                        EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                        EnemyHP(i);
                     }
                     if (i == 2)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 400, SetPO2.Y);
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
-                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X + 400, SetPO2.Y + 300);
-                        EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                        EnemyHP(i);
                     }
                 }
                 if (EnemyGroup[i] == Rocky1)
@@ -878,22 +899,19 @@ namespace Burrow_Rune
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X, SetPO2.Y + 200);
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
-                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X, SetPO2.Y + 300);
-                        EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                        EnemyHP(i);
                     }
                     if (i == 1)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 200, SetPO2.Y + 200);
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
-                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X + 200, SetPO2.Y + 300);
-                        EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                        EnemyHP(i);
                     }
                     if (i == 2)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 400, SetPO2.Y + 200);
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
-                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X + 400, SetPO2.Y + 300);
-                        EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                        EnemyHP(i);
                     }
                 }
                 if (EnemyGroup[i] == Rocky2)
@@ -903,22 +921,19 @@ namespace Burrow_Rune
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X, SetPO2.Y + 200);
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
-                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X, SetPO2.Y + 300);
-                        EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                        EnemyHP(i);
                     }
                     if (i == 1)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 200, SetPO2.Y + 200);
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
-                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X + 200, SetPO2.Y + 300);
-                        EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                        EnemyHP(i);
                     }
                     if (i == 2)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 400, SetPO2.Y + 200);
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
-                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X + 400, SetPO2.Y + 300);
-                        EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                        EnemyHP(i);
                     }
                 }
                 if (EnemyGroup[i] == Rocky3)
@@ -928,22 +943,19 @@ namespace Burrow_Rune
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X, SetPO2.Y + 200);
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
-                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X, SetPO2.Y + 300);
-                        EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                        EnemyHP(i);
                     }
                     if (i == 1)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 200, SetPO2.Y + 200);
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
-                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X + 200, SetPO2.Y + 300);
-                        EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                        EnemyHP(i);
                     }
                     if (i == 2)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 400, SetPO2.Y + 200);
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
-                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X + 400, SetPO2.Y + 300);
-                        EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                        EnemyHP(i);
                     }
                 }
                 if ( EnemyGroup[i] == Beetle1)
@@ -951,25 +963,21 @@ namespace Burrow_Rune
                     _spriteBatch.Draw(Beetle_Text, Beetle1.spriteLocation, new Rectangle(frame * 150, 0, 150, 150), Beetle1.State);
                     if (i == 0)
                     {
-                        EnemyGroup[i].spriteLocation = SetPO2;
+                        EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X, SetPO2.Y + 100);
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
-                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X, SetPO2.Y + 300);
-                        EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                        EnemyHP(i);
                     }
                     if (i == 1)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 200, SetPO2.Y + 100);
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
-                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X + 200, SetPO2.Y + 300);
-                        EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
-
+                        EnemyHP(i);
                     }
                     if (i == 2)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 400, SetPO2.Y + 100);
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
-                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X + 400, SetPO2.Y + 300);
-                        EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                        EnemyHP(i);
                     }
                 }
                 if (EnemyGroup[i] == Beetle2)
@@ -977,24 +985,21 @@ namespace Burrow_Rune
                     _spriteBatch.Draw(Beetle_Text, Beetle2.spriteLocation, new Rectangle(frame * 150, 0, 150, 150), Beetle2.State);
                     if (i == 0)
                     {
-                        EnemyGroup[i].spriteLocation = SetPO2;
+                        EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X, SetPO2.Y + 100);
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
-                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X, SetPO2.Y + 300);
-                        EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                        EnemyHP(i);
                     }
                     if (i == 1)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 200, SetPO2.Y + 100);
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
-                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X + 200, SetPO2.Y + 300);
-                        EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                        EnemyHP(i);
                     }
                     if (i == 2)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 400, SetPO2.Y + 100);
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
-                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X + 400, SetPO2.Y + 300);
-                        EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                        EnemyHP(i);
                     }
                 }
                 if (EnemyGroup[i] == Beetle3)
@@ -1002,24 +1007,21 @@ namespace Burrow_Rune
                     _spriteBatch.Draw(Beetle_Text, Beetle3.spriteLocation, new Rectangle(frame * 150, 0, 150, 150), Beetle3.State);
                     if (i == 0)
                     {
-                        EnemyGroup[i].spriteLocation = SetPO2;
+                        EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X, SetPO2.Y + 100);
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
-                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X, SetPO2.Y + 300);
-                        EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                        EnemyHP(i);
                     }
                     if (i == 1)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 200, SetPO2.Y + 100);
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
-                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X + 200, SetPO2.Y + 300);
-                        EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                        EnemyHP(i);
                     }
                     if (i == 2)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 400, SetPO2.Y + 100);
                         EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
-                        EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X + 400, SetPO2.Y + 300);
-                        EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                        EnemyHP(i);
                     }
                 }
 
@@ -1037,25 +1039,25 @@ namespace Burrow_Rune
                 {
                     _spriteBatch.Draw(HPbar_Texture, Lurker.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
                     _spriteBatch.Draw(HPbar_Texture, Lurker.HPbar_Location, new Rectangle(0, 0, Lurker.HP * (240 / Lurker.MaxHP), 30), Color.Red);
-                    _spriteBatch.Draw(Lurker_Texture, Lurker.Small_iconLocation, new Rectangle(50, 320, 90, 90), Lurker.State);
-                    _spriteBatch.Draw(Lurker_Texture, Lurker.Big_iconLocation, new Rectangle(0, 460, 200, 140), Color.White);
-                    _spriteBatch.Draw(Lurker_Texture, Lurker.HPicon_Location, new Rectangle(50, 320, 90, 90), Color.White);
+                    _spriteBatch.Draw(Lurker_Small_Icon, Lurker.Small_iconLocation, new Rectangle(0, 0, 126, 126), Lurker.State);
+                    _spriteBatch.Draw(Lurker_Big_Icon, Lurker.Big_iconLocation, new Rectangle(0, 460, 200, 140), Color.White);
+                    _spriteBatch.Draw(Lurker_Small_Icon, Lurker.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
                 }
                 if (Party[i] == inventor)
                 {
                     _spriteBatch.Draw(HPbar_Texture, inventor.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
                     _spriteBatch.Draw(HPbar_Texture, inventor.HPbar_Location, new Rectangle(0, 0, inventor.HP * (240 / inventor.MaxHP), 30), Color.Red);
-                    _spriteBatch.Draw(Inventor_Texture, inventor.Small_iconLocation, new Rectangle(20, 840, 90, 90), inventor.State);
-                    _spriteBatch.Draw(Inventor_Texture, inventor.Big_iconLocation, new Rectangle(0, 300, 200, 140), Color.White);
-                    _spriteBatch.Draw(Inventor_Texture, inventor.HPicon_Location, new Rectangle(20, 840, 90, 90), Color.White);
+                    _spriteBatch.Draw(Inventor_Small_Icon, inventor.Small_iconLocation, new Rectangle(0, 0, 126, 126), inventor.State);
+                    _spriteBatch.Draw(Inventor_Big_Icon, inventor.Big_iconLocation, new Rectangle(0, 300, 200, 140), Color.White);
+                    _spriteBatch.Draw(Inventor_Small_Icon, inventor.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
                 }
                 if (Party[i] == Blood_Maiden)
                 {
                     _spriteBatch.Draw(HPbar_Texture, Blood_Maiden.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
                     _spriteBatch.Draw(HPbar_Texture, Blood_Maiden.HPbar_Location, new Rectangle(0, 0, Blood_Maiden.HP * (240 / Blood_Maiden.MaxHP), 30), Color.Red);
-                    _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.Small_iconLocation, new Rectangle(50, 340, 90, 90), Blood_Maiden.State);
-                    _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.Big_iconLocation, new Rectangle(0, 480, 200, 140), Color.White);
-                    _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.HPicon_Location, new Rectangle(50, 340, 90, 90), Color.White);
+                    _spriteBatch.Draw(Blood_Maiden_Small_Icon, Blood_Maiden.Small_iconLocation, new Rectangle(0, 0, 126, 126), Blood_Maiden.State);
+                    _spriteBatch.Draw(Blood_Maiden_Big_Icon, Blood_Maiden.Big_iconLocation, new Rectangle(0, 480, 200, 140), Color.White);
+                    _spriteBatch.Draw(Blood_Maiden_Small_Icon, Blood_Maiden.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
                 }
             }
             for (int i = 0; i < EnemyGroup.Count; i++)
@@ -1202,6 +1204,50 @@ namespace Burrow_Rune
                     }
                 }
             }
+        }
+
+        private void EnemyHP(int i)
+        {
+            if (i == 0)
+            {
+                if (EnemyGroup[i].Alive == true)
+                {
+                    EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X, SetPO2.Y + 300);
+                    EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                }
+                else
+                {
+                    EnemyGroup[i].HPMPbar_iconLocation = new Vector2(1000, 1000);
+                    EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                }
+            }
+            if (i == 1)
+            {
+                if (EnemyGroup[i].Alive == true)
+                {
+                    EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X + 200, SetPO2.Y + 300);
+                    EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                }
+                else
+                {
+                    EnemyGroup[i].HPMPbar_iconLocation = new Vector2(1000, 1000);
+                    EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                }
+            }
+            if (i == 2)
+            {
+                if (EnemyGroup[i].Alive == true)
+                {
+                    EnemyGroup[i].HPMPbar_iconLocation = new Vector2(SetPO2.X + 400, SetPO2.Y + 300);
+                    EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                }
+                else
+                {
+                    EnemyGroup[i].HPMPbar_iconLocation = new Vector2(1000, 1000);
+                    EnemyGroup[i].HPbar_Location = EnemyGroup[i].HPMPbar_iconLocation;
+                }
+            }
+
         }
     }
 }

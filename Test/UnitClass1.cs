@@ -13,6 +13,7 @@ namespace Burrow_Rune
         public int MaxHP;
         public int Atk;
         public int direction;
+        public int ATKframe = 0;
         public Vector2 spriteLocation;
         public Vector2 spriteLocation2;
         public Color State = Color.White;
