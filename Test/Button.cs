@@ -13,7 +13,6 @@ namespace Burrow_Rune
         public bool Pressed = false;
         public Vector2 Position;
         public Color State = Color.White;
-        public int eventNum;
 
         public Button()
         {

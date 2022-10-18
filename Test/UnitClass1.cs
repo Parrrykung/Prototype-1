@@ -30,6 +30,7 @@ namespace Burrow_Rune
         public Vector2 Small_iconLocation = new Vector2(1000, 1000);
         public Vector2 HPMPbar_iconLocation = new Vector2(1000, 1000);
         public Vector2 HPbar_Location = new Vector2(1000, 1000);
+        public Vector2 HPicon_Location = new Vector2(1000, 1000);
         public int AttackSFX;
 
 
