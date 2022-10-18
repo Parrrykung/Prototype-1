@@ -25,6 +25,18 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Background/1st_floor_2.png
 
+#begin ASSET 2D/Sprite/Blood_maiden/Blood maiden sprite sheet-export.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Blood_maiden/Blood maiden sprite sheet-export.png
+
 #begin ASSET 2D/Sprite/Blood_maiden/Blood_maiden_sprite_sheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -36,6 +48,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Sprite/Blood_maiden/Blood_maiden_sprite_sheet.png
+
+#begin ASSET 2D/Sprite/Dragon_hunter/Dragonic Sheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Dragon_hunter/Dragonic Sheet.png
+
+#begin ASSET 2D/Sprite/Dragonic/Dragonic Sheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Dragonic/Dragonic Sheet.png
 
 #begin ASSET 2D/Sprite/Enemy/Beetle/Flying-Rock_Sheet.png
 /importer:TextureImporter
@@ -109,6 +145,18 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Sprite/Enemy/Rocky/Hermit-Rock-Sheet.png
 
+#begin ASSET 2D/Sprite/Inventor/Inventor Sprite Sheet-export.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Inventor/Inventor Sprite Sheet-export.png
+
 #begin ASSET 2D/Sprite/Inventor/Inventor_Sprite_Sheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -120,6 +168,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Sprite/Inventor/Inventor_Sprite_Sheet.png
+
+#begin ASSET 2D/Sprite/Lurker/Lurker Sprite Sheet-export.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Lurker/Lurker Sprite Sheet-export.png
 
 #begin ASSET 2D/Sprite/Lurker/Lurker_Sprite_Sheet.png
 /importer:TextureImporter
@@ -157,6 +217,30 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/UI/Attack.png
 
+#begin ASSET 2D/UI/Blood Maiden Icon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/UI/Blood Maiden Icon.png
+
+#begin ASSET 2D/UI/Dragonic Icon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/UI/Dragonic Icon.png
+
 #begin ASSET 2D/UI/Event Node.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -193,6 +277,18 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/UI/HP bar.png
 
+#begin ASSET 2D/UI/Inventor icon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/UI/Inventor icon.png
+
 #begin ASSET 2D/UI/Item.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -204,6 +300,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/UI/Item.png
+
+#begin ASSET 2D/UI/Lurker Icon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/UI/Lurker Icon.png
 
 #begin ASSET 2D/UI/Rest Node.png
 /importer:TextureImporter
