@@ -32,11 +32,15 @@ namespace Burrow_Rune
         private int turn;
         private int iconOrder = 0;
         private bool isFighting = false;
+        private bool Resting = false;
+        private bool isInteracting = false;
         bool isMap;
         bool isBattle;
         bool isTitle;
         bool isEvent;
         bool isLose;
+        bool isRest;
+        bool isCharactor;
         private bool Attacking = false;
 
         private Texture2D first_floor_Background;
@@ -66,18 +70,19 @@ namespace Burrow_Rune
         private Texture2D Turn_Selector_Texture;
         private Texture2D FightNode_Texture;
         private Texture2D EventNode_Texture;
+        private Texture2D RestNode_Texture;
         private Texture2D HPbar_Texture;
 
-        public UnitClass Lurker = new UnitClass(true, 6, 20, 5, 0);
+        public UnitClass Lurker = new UnitClass(true, 6, 30, 5, 0);
         public UnitClass Golem = new UnitClass(false,4, 40, 5, 3);
-        public UnitClass inventor = new UnitClass(true, 5, 20, 5, 1);
+        public UnitClass inventor = new UnitClass(true, 5, 30, 5, 1);
         public UnitClass Beetle1 = new UnitClass(false,5, 10, 5, 3);
         public UnitClass Beetle2 = new UnitClass(false, 5, 10, 5, 3);
         public UnitClass Beetle3 = new UnitClass(false, 5, 10, 5, 3);
         public UnitClass Rocky1 = new UnitClass(false, 3, 10, 5, 3);
         public UnitClass Rocky2 = new UnitClass(false, 3, 10, 5, 3);
         public UnitClass Rocky3 = new UnitClass(false, 3, 10, 5, 3);
-        public UnitClass Blood_Maiden = new UnitClass(true, 3, 20, 5, 2);
+        public UnitClass Blood_Maiden = new UnitClass(true, 3, 30, 5, 2);
         private UnitClass Nul = new UnitClass();
 
         private Button Attack_B = new Button(new Vector2(100, 360));
@@ -87,6 +92,7 @@ namespace Burrow_Rune
         private Button Fight_B2 = new Button(new Vector2(1000, 1000));
         private Button Event_B1 = new Button(new Vector2(1000, 1000));
         private Button Event_B2 = new Button(new Vector2(1000, 1000));
+        private Button Rest_B = new Button(new Vector2(1000, 1000));
 
         private Vector2 Turn_Selector_Position;
         private Vector2 Turn_Order_Position = new Vector2(0, 360);
@@ -153,6 +159,7 @@ namespace Burrow_Rune
             FightNode_Texture = Content.Load<Texture2D>("Asset 2D/UI/Fight Node");
             EventNode_Texture = Content.Load<Texture2D>("Asset 2D/UI/Event Node");
             HPbar_Texture = Content.Load<Texture2D>("Asset 2D/UI/HP bar");
+            RestNode_Texture = Content.Load<Texture2D>("Asset 2D/UI/Rest Node");
 
             font = Content.Load<SpriteFont>("font");
 
@@ -179,6 +186,8 @@ namespace Burrow_Rune
             isTitle = true;
             isEvent = false;
             isLose = false;
+            isRest = false;
+            isCharactor = false;
 
             ButtoninBattle.Add(Attack_B);
             ButtoninBattle.Add(Skill_B);
@@ -188,15 +197,14 @@ namespace Burrow_Rune
             ButtoninMap.Add(Event_B1);
             ButtoninMap.Add(Fight_B2);
             ButtoninMap.Add(Event_B2);
+            ButtoninMap.Add(Rest_B);
 
             BattleSFX.Add(Content.Load<SoundEffect>("SFX/Sword_Hori"));
             BattleSFX.Add(Content.Load<SoundEffect>("SFX/Blow_Hori"));
             BattleSFX.Add(Content.Load<SoundEffect>("SFX/Philip_Hit"));
             BattleSFX.Add(Content.Load<SoundEffect>("SFX/Greed_Stab"));
-
-            Party.Add(Lurker);
-            Party.Add(inventor);
-            Party.Add(Blood_Maiden);
+            BattleSFX.Add(Content.Load<SoundEffect>("SFX/Effect_Heal"));
+            BattleSFX.Add(Content.Load<SoundEffect>("SFX/Result_WaveLose"));
 
         }
 
@@ -225,6 +233,14 @@ namespace Burrow_Rune
             if (isLose == true)
             {
                 UpdateLose();
+            }
+            if (isRest == true)
+            {
+                UpdateRest();
+            }
+            if (isCharactor == true)
+            {
+                UpdateCharactor();
             }
 
             Old_keyboardState = _keyboardState;
@@ -256,6 +272,14 @@ namespace Burrow_Rune
             if (isLose == true)
             {
                 DrawLose();
+            }
+            if (isRest == true)
+            {
+                DrawRest();
+            }
+            if (isCharactor == true)
+            {
+                DrawCharactor();
             }
 
             _spriteBatch.End();
@@ -643,17 +667,53 @@ namespace Burrow_Rune
                 }
             }
 
-            if (Party[0].Alive == false && Party[1].Alive == false && Party[2].Alive == false)
+            if (Party.Count == 3)
             {
-                MediaPlayer.Play(TitleBGM);
-                for (int i = 0; i < TurnOrder.Count; i++)
+                if (Party[0].Alive == false && Party[1].Alive == false && Party[2].Alive == false)
                 {
-                    TurnOrder[i].myTurn = false;
-                    TurnOrder[i].ATKframe = 0;
+                    MediaPlayer.Play(TitleBGM);
+                    BattleSFX[5].CreateInstance().Play();
+                    for (int i = 0; i < TurnOrder.Count; i++)
+                    {
+                        TurnOrder[i].myTurn = false;
+                        TurnOrder[i].ATKframe = 0;
+                    }
+                    ResetCombat();
+                    isLose = true;
+                    isBattle = false;
                 }
-                ResetCombat();
-                isLose = true;
-                isBattle = false;
+            }
+            if (Party.Count == 2)
+            {
+                if (Party[0].Alive == false && Party[1].Alive == false)
+                {
+                    MediaPlayer.Play(TitleBGM);
+                    BattleSFX[5].CreateInstance().Play();
+                    for (int i = 0; i < TurnOrder.Count; i++)
+                    {
+                        TurnOrder[i].myTurn = false;
+                        TurnOrder[i].ATKframe = 0;
+                    }
+                    ResetCombat();
+                    isLose = true;
+                    isBattle = false;
+                }
+            }
+            if (Party.Count == 1)
+            {
+                if (Party[0].Alive == false)
+                {
+                    MediaPlayer.Play(TitleBGM);
+                    BattleSFX[5].CreateInstance().Play();
+                    for (int i = 0; i < TurnOrder.Count; i++)
+                    {
+                        TurnOrder[i].myTurn = false;
+                        TurnOrder[i].ATKframe = 0;
+                    }
+                    ResetCombat();
+                    isLose = true;
+                    isBattle = false;
+                }
             }
 
             Old_mouseState = mouseState;
@@ -666,7 +726,7 @@ namespace Burrow_Rune
             var mouseState = Mouse.GetState();
             var mousePosition = new Point(mouseState.X, mouseState.Y);
 
-            for (int i = 0; i < ButtoninBattle.Count; i++)
+            for (int i = 0; i < ButtoninBattle.Count + 2; i++)
             {
                 Rectangle buttonRectangle = new Rectangle((int)ButtoninMap[i].Position.X, (int)ButtoninMap[i].Position.Y, 215, 215);
                 if (buttonRectangle.Contains(mousePosition))
@@ -687,11 +747,26 @@ namespace Burrow_Rune
                 }
                 if (mouseState.LeftButton != ButtonState.Pressed && ButtoninMap[i].mouseHover == true && Old_mouseState.LeftButton == ButtonState.Pressed)
                 {
-                    ButtoninMap[i].Pressed = true;
                     ClickSFX.CreateInstance().Play();
-                    if (Fight_B1.Pressed == true || Fight_B2.Pressed == true)
+                    if (Fight_B1.mouseHover == true)
                     {
                         isFighting = true;
+                    }
+                    if (Fight_B2.mouseHover == true)
+                    {
+                        isFighting = true;
+                    }
+                    if (Event_B1.mouseHover == true)
+                    {
+                        isInteracting = true;
+                    }
+                    if (Event_B2.mouseHover == true)
+                    {
+                        isInteracting = true;
+                    }
+                    if (Rest_B.mouseHover == true)
+                    {
+                        Resting = true;
                     }
                 }
             }
@@ -703,7 +778,6 @@ namespace Burrow_Rune
 
                 if (x == 1)
                 {
-                    EnemyGroup.Add(Rocky1);
                     EnemyGroup.Add(Beetle1);
                     roomNum += 1;
                     MediaPlayer.Play(BattleBGM_1);
@@ -720,9 +794,9 @@ namespace Burrow_Rune
                 }
                 if (x == 2)
                 {
-                    EnemyGroup.Add(Golem);
+                    EnemyGroup.Add(Rocky1);
                     roomNum += 1;
-                    MediaPlayer.Play(BattleBGM_2);
+                    MediaPlayer.Play(BattleBGM_1);
                     for (int i = 0; i < ButtoninMap.Count; i++)
                     {
                         ButtoninMap[i].mouseHover = false;
@@ -739,7 +813,7 @@ namespace Burrow_Rune
                 {
                     EnemyGroup.Add(Rocky1);
                     EnemyGroup.Add(Rocky2);
-                    EnemyGroup.Add(Rocky3);
+
                     roomNum += 1;
                     MediaPlayer.Play(BattleBGM_1);
                     for (int i = 0; i < ButtoninMap.Count; i++)
@@ -757,9 +831,9 @@ namespace Burrow_Rune
                 {
                     EnemyGroup.Add(Beetle1);
                     EnemyGroup.Add(Beetle2);
-                    EnemyGroup.Add(Beetle3);
+
                     roomNum += 1;
-                    MediaPlayer.Play(BattleBGM_1);
+                    MediaPlayer.Play(BattleBGM_2);
                     for (int i = 0; i < ButtoninMap.Count; i++)
                     {
                         ButtoninMap[i].mouseHover = false;
@@ -773,9 +847,7 @@ namespace Burrow_Rune
                 }
                 if (x == 5)
                 {
-                    EnemyGroup.Add(Rocky1);
                     EnemyGroup.Add(Golem);
-                    EnemyGroup.Add(Beetle1);
                     roomNum += 1;
                     MediaPlayer.Play(BossBGM);
                     for (int i = 0; i < ButtoninMap.Count; i++)
@@ -790,9 +862,41 @@ namespace Burrow_Rune
                     isFighting = false;
                 }
             }
+            if (isInteracting == true)
+            {
+                roomNum += 1;
+                for (int i = 0; i < ButtoninMap.Count; i++)
+                {
+                    ButtoninMap[i].mouseHover = false;
+                    ButtoninMap[i].State = Color.White;
+                    ButtoninMap[i].Pressed = false;
+                    ButtoninMap[i].Position = new Vector2(1000, 1000);
+                }
+                isMap = false;
+                isEvent = true;
+                isInteracting = false;
+            }
+            if (Resting == true)
+            {
+                roomNum += 1;
+                BattleSFX[4].CreateInstance().Play();
+                for (int i = 0; i < Party.Count; i++)
+                {
+                    Party[i].HP = Party[i].MaxHP;
+                }
+                for (int i = 0; i < ButtoninMap.Count; i++)
+                {
+                    ButtoninMap[i].mouseHover = false;
+                    ButtoninMap[i].State = Color.White;
+                    ButtoninMap[i].Pressed = false;
+                    ButtoninMap[i].Position = new Vector2(1000, 1000);
+                }
+                isMap = false;
+                isRest = true;
+                Resting = false;
+            }
 
-           
-           
+
             Old_mouseState = mouseState;
         }
 
@@ -804,23 +908,81 @@ namespace Burrow_Rune
            
             if (mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed)
             {
-                isMap = true;
+                isCharactor = true;
                 isTitle = false;
-                MediaPlayer.Play(EventMapBGM);
-                RandomNode();
-                
             }
             Old_mouseState = mouseState;
         }
 
         private void UpdateEvent()
         {
+            var mouseState = Mouse.GetState();
+            var mousePosition = new Point(mouseState.X, mouseState.Y);
 
+
+            if (mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed)
+            {
+                isMap = true;
+                isEvent = false;
+                RandomNode();
+
+            }
+            Old_mouseState = mouseState;
         }
 
         private void UpdateLose()
         {
 
+        }
+
+        private void UpdateRest()
+        {
+            var mouseState = Mouse.GetState();
+
+            if (mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed)
+            {
+                isMap = true;
+                isRest = false;
+                RandomNode();
+
+            }
+            Old_mouseState = mouseState;
+        }
+
+        private void UpdateCharactor()
+        {
+            var mouseState = Mouse.GetState();
+            var mousePosition = new Point(mouseState.X, mouseState.Y);
+            Rectangle LurkerRectangle = new Rectangle((int)Lurker.spriteLocation.X, (int)Lurker.spriteLocation.Y, 215, 215);
+            Rectangle InventorRectangle = new Rectangle((int)inventor.spriteLocation.X, (int)inventor.spriteLocation.Y, 215, 215);
+            Rectangle BloodRectangle = new Rectangle((int)Blood_Maiden.spriteLocation.X, (int)Blood_Maiden.spriteLocation.Y, 215, 215);
+
+            if(LurkerRectangle.Contains(mousePosition) && mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed)
+            {
+                Party.Add(Lurker);
+                isMap = true;
+                isCharactor = false;
+                MediaPlayer.Play(EventMapBGM);
+                RandomNode();
+            }
+            if (InventorRectangle.Contains(mousePosition) && mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed)
+            {
+                Party.Add(inventor);
+                isMap = true;
+                isCharactor = false;
+                MediaPlayer.Play(EventMapBGM);
+                RandomNode();
+            }
+            if (BloodRectangle.Contains(mousePosition) && mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed)
+            {
+                Party.Add(Blood_Maiden);
+                isMap = true;
+                isCharactor = false;
+                MediaPlayer.Play(EventMapBGM);
+                RandomNode();
+            }
+
+            Old_mouseState = mouseState;
         }
 
         private void DrawBattale1()
@@ -876,19 +1038,19 @@ namespace Burrow_Rune
                     if (i == 0)
                     {
                         EnemyGroup[i].spriteLocation = SetPO2;
-                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].spriteLocation2 = EnemyGroup[i].spriteLocation;
                         EnemyHP(i);
                     }
                     if (i == 1)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 200, SetPO2.Y);
-                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].spriteLocation2 = EnemyGroup[i].spriteLocation;
                         EnemyHP(i);
                     }
                     if (i == 2)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 400, SetPO2.Y);
-                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].spriteLocation2 = EnemyGroup[i].spriteLocation;
                         EnemyHP(i);
                     }
                 }
@@ -898,19 +1060,19 @@ namespace Burrow_Rune
                     if (i == 0)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X, SetPO2.Y + 200);
-                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].spriteLocation2 = EnemyGroup[i].spriteLocation;
                         EnemyHP(i);
                     }
                     if (i == 1)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 200, SetPO2.Y + 200);
-                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].spriteLocation2 = EnemyGroup[i].spriteLocation;
                         EnemyHP(i);
                     }
                     if (i == 2)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 400, SetPO2.Y + 200);
-                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].spriteLocation2 = EnemyGroup[i].spriteLocation;
                         EnemyHP(i);
                     }
                 }
@@ -920,19 +1082,19 @@ namespace Burrow_Rune
                     if (i == 0)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X, SetPO2.Y + 200);
-                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].spriteLocation2 = EnemyGroup[i].spriteLocation;
                         EnemyHP(i);
                     }
                     if (i == 1)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 200, SetPO2.Y + 200);
-                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].spriteLocation2 = EnemyGroup[i].spriteLocation;
                         EnemyHP(i);
                     }
                     if (i == 2)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 400, SetPO2.Y + 200);
-                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].spriteLocation2 = EnemyGroup[i].spriteLocation;
                         EnemyHP(i);
                     }
                 }
@@ -942,19 +1104,19 @@ namespace Burrow_Rune
                     if (i == 0)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X, SetPO2.Y + 200);
-                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].spriteLocation2 = EnemyGroup[i].spriteLocation;
                         EnemyHP(i);
                     }
                     if (i == 1)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 200, SetPO2.Y + 200);
-                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].spriteLocation2 = EnemyGroup[i].spriteLocation;
                         EnemyHP(i);
                     }
                     if (i == 2)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 400, SetPO2.Y + 200);
-                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].spriteLocation2 = EnemyGroup[i].spriteLocation;
                         EnemyHP(i);
                     }
                 }
@@ -964,19 +1126,19 @@ namespace Burrow_Rune
                     if (i == 0)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X, SetPO2.Y + 100);
-                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].spriteLocation2 = EnemyGroup[i].spriteLocation;
                         EnemyHP(i);
                     }
                     if (i == 1)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 200, SetPO2.Y + 100);
-                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].spriteLocation2 = EnemyGroup[i].spriteLocation;
                         EnemyHP(i);
                     }
                     if (i == 2)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 400, SetPO2.Y + 100);
-                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].spriteLocation2 = EnemyGroup[i].spriteLocation;
                         EnemyHP(i);
                     }
                 }
@@ -986,19 +1148,19 @@ namespace Burrow_Rune
                     if (i == 0)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X, SetPO2.Y + 100);
-                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].spriteLocation2 = EnemyGroup[i].spriteLocation;
                         EnemyHP(i);
                     }
                     if (i == 1)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 200, SetPO2.Y + 100);
-                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].spriteLocation2 = EnemyGroup[i].spriteLocation;
                         EnemyHP(i);
                     }
                     if (i == 2)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 400, SetPO2.Y + 100);
-                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].spriteLocation2 = EnemyGroup[i].spriteLocation;
                         EnemyHP(i);
                     }
                 }
@@ -1008,19 +1170,19 @@ namespace Burrow_Rune
                     if (i == 0)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X, SetPO2.Y + 100);
-                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].spriteLocation2 = EnemyGroup[i].spriteLocation;
                         EnemyHP(i);
                     }
                     if (i == 1)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 200, SetPO2.Y + 100);
-                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].spriteLocation2 = EnemyGroup[i].spriteLocation;
                         EnemyHP(i);
                     }
                     if (i == 2)
                     {
                         EnemyGroup[i].spriteLocation = new Vector2(SetPO2.X + 400, SetPO2.Y + 100);
-                        EnemyGroup[i].spriteLocation2 = Party[i].spriteLocation;
+                        EnemyGroup[i].spriteLocation2 = EnemyGroup[i].spriteLocation;
                         EnemyHP(i);
                     }
                 }
@@ -1125,6 +1287,46 @@ namespace Burrow_Rune
             _spriteBatch.Draw(FightNode_Texture, Fight_B2.Position, Fight_B2.State);
             _spriteBatch.Draw(EventNode_Texture, Event_B1.Position, Event_B1.State);
             _spriteBatch.Draw(EventNode_Texture, Event_B2.Position, Event_B2.State);
+            _spriteBatch.Draw(RestNode_Texture, Rest_B.Position, Rest_B.State);
+            for (int i = 0; i < Party.Count; i++)
+            {
+                if (Party[i] == Lurker)
+                {
+                    _spriteBatch.Draw(HPbar_Texture, Lurker.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
+                    _spriteBatch.Draw(HPbar_Texture, Lurker.HPbar_Location, new Rectangle(0, 0, Lurker.HP * (240 / Lurker.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(Lurker_Small_Icon, Lurker.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
+                }
+                if (Party[i] == inventor)
+                {
+                    _spriteBatch.Draw(HPbar_Texture, inventor.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
+                    _spriteBatch.Draw(HPbar_Texture, inventor.HPbar_Location, new Rectangle(0, 0, inventor.HP * (240 / inventor.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(Inventor_Small_Icon, inventor.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
+                }
+                if (Party[i] == Blood_Maiden)
+                {
+                    _spriteBatch.Draw(HPbar_Texture, Blood_Maiden.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
+                    _spriteBatch.Draw(HPbar_Texture, Blood_Maiden.HPbar_Location, new Rectangle(0, 0, Blood_Maiden.HP * (240 / Blood_Maiden.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(Blood_Maiden_Small_Icon, Blood_Maiden.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
+                }
+                if (i == 0)
+                {
+                    Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X + 40, SetPO1.Y - 220);
+                    Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
+                    Party[i].HPicon_Location = new Vector2(SetPO1.X, SetPO1.Y - 240);
+                }
+                if (i == 1)
+                {
+                    Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X - 240, SetPO1.Y - 220);
+                    Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
+                    Party[i].HPicon_Location = new Vector2(SetPO1.X - 270, SetPO1.Y - 240);
+                }
+                if (i == 2)
+                {
+                    Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X - 520, SetPO1.Y - 220);
+                    Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
+                    Party[i].HPicon_Location = new Vector2(SetPO1.X - 540, SetPO1.Y - 240);
+                }
+            }
         }
 
         private void DrawTitle()
@@ -1136,7 +1338,9 @@ namespace Burrow_Rune
 
         private void DrawEvent()
         {
-
+            _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
+            String str = "Something is suppose to happen here \n Click anywhere to continue";
+            _spriteBatch.DrawString(font, str, new Vector2(400, 200), Color.Red);
         }
 
         private void DrawLose()
@@ -1144,6 +1348,26 @@ namespace Burrow_Rune
             _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
             String str = "You Lose";
             _spriteBatch.DrawString(font, str, new Vector2(400, 200), Color.Red);
+        }
+
+        private void DrawRest()
+        {
+            _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
+            String str = "Your party is healed YAY :) \n Click anywhere to continue";
+            _spriteBatch.DrawString(font, str, new Vector2(400, 200), Color.Red);
+        }
+
+        private void DrawCharactor()
+        {
+            _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
+            String str = "Select Charactor";
+            _spriteBatch.DrawString(font, str, new Vector2(400, 200), Color.Red);
+            Lurker.spriteLocation = new Vector2(200, 300);
+            inventor.spriteLocation = new Vector2(500, 300);
+            Blood_Maiden.spriteLocation = new Vector2(800, 300);
+            _spriteBatch.Draw(Lurker_Texture, Lurker.spriteLocation, new Rectangle(0, Lurker.ATKframe * 240, 270, 230), Lurker.State);
+            _spriteBatch.Draw(Inventor_Texture, inventor.spriteLocation, new Rectangle(0, inventor.ATKframe * 240, 270, 230), inventor.State);
+            _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.spriteLocation, new Rectangle(0, Blood_Maiden.ATKframe * 240, 270, 230), Blood_Maiden.State);
         }
 
         private void ResetCombat()
@@ -1187,8 +1411,8 @@ namespace Burrow_Rune
                 int a, b;
                 do
                 {
-                    a = r.Next(0, 4);
-                    b = r.Next(0, 4);
+                    a = r.Next(0, 5);
+                    b = r.Next(0, 5);
                 }
                 while (a == b);
                 
