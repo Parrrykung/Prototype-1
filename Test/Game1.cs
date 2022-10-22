@@ -26,9 +26,11 @@ namespace Burrow_Rune
         private int frame;
         private bool timeLoad;
         private int frameInCombat;
-        private int waitingtime = 0;
+        private int Enemywaitingtime = 0;
+        private int Partywaitingtime = 0;
         private int roomNum = 1;
         private int target = 0;
+        private int ATKcount = 0;
         private int turn;
         private int iconOrder = 0;
         private bool isFighting = false;
@@ -42,6 +44,10 @@ namespace Burrow_Rune
         bool isRest;
         bool isCharactor;
         private bool Attacking = false;
+        private bool Skilling = false;
+        private bool Skilling2 = false;
+        private bool Skilling3 = false;
+        private int UseSkill = 0;
 
         private Texture2D first_floor_Background;
         private Texture2D Beetle_Text;
@@ -93,6 +99,8 @@ namespace Burrow_Rune
         private Button Event_B1 = new Button(new Vector2(1000, 1000));
         private Button Event_B2 = new Button(new Vector2(1000, 1000));
         private Button Rest_B = new Button(new Vector2(1000, 1000));
+        private Button Double_Slash = new Button(new Vector2(1000, 1000));
+        private Button Wide_Slash = new Button(new Vector2(1000, 1000));
 
         private Vector2 Turn_Selector_Position;
         private Vector2 Turn_Order_Position = new Vector2(0, 360);
@@ -206,6 +214,8 @@ namespace Burrow_Rune
             BattleSFX.Add(Content.Load<SoundEffect>("SFX/Effect_Heal"));
             BattleSFX.Add(Content.Load<SoundEffect>("SFX/Result_WaveLose"));
 
+            Lurker.Skill_list.Add(Double_Slash);
+            Lurker.Skill_list.Add(Wide_Slash);
         }
 
         protected override void Update(GameTime gameTime)
@@ -321,6 +331,17 @@ namespace Burrow_Rune
             for (int i = 0; i < TurnOrder.Count; i++)
             {
                 Rectangle unitRectangle = new Rectangle((int)TurnOrder[i].spriteLocation.X, (int)TurnOrder[i].spriteLocation.Y, 270, 250);
+                for (int m = 0; m < TurnOrder[i].Skill_list.Count; m++)
+                {
+                    if (m == 0)
+                    {
+                        TurnOrder[i].Skill_list[m].ShowPosition = new Vector2(TurnOrder[i].spriteLocation.X, TurnOrder[i].spriteLocation.Y + 100);
+                    }
+                    if (m == 1)
+                    {
+                        TurnOrder[i].Skill_list[m].ShowPosition = new Vector2(TurnOrder[i].spriteLocation.X, TurnOrder[i].spriteLocation.Y + 160);
+                    }
+                }
                 if (unitRectangle.Contains(mousePosition))
                 {
                     TurnOrder[i].mouseHover = true;
@@ -357,10 +378,15 @@ namespace Burrow_Rune
                             if(TurnOrder[i].isAttacking == true)
                             {
                                 ButtoninBattle[n].Pressed = false;
+                                for (int m = 0; m < TurnOrder[i].Skill_list.Count; m++)
+                                {
+                                    TurnOrder[i].Skill_list[m].Pressed = false;
+                                }
                             }
+
                             if (ButtoninBattle[n].Pressed == false && Attacking == false)
                             {
-                                Rectangle buttonRectangle = new Rectangle((int)ButtoninBattle[n].Position.X, (int)ButtoninBattle[n].Position.Y, 160, 80);
+                                Rectangle buttonRectangle = new Rectangle((int)ButtoninBattle[n].Position.X, (int)ButtoninBattle[n].Position.Y, 160, 50);
                                 if (buttonRectangle.Contains(mousePosition))
                                 {
                                     ButtoninBattle[n].mouseHover = true;
@@ -380,9 +406,21 @@ namespace Burrow_Rune
                                 if (mouseState.LeftButton == ButtonState.Pressed && ButtoninBattle[n].mouseHover == true)
                                 {
                                     ButtoninBattle[n].State = Color.Gray;
-                                    Attacking = true;
                                     ButtoninBattle[n].Pressed = true;
                                     ClickSFX.CreateInstance().Play();
+                                    if (ButtoninBattle[n] == Attack_B)
+                                    {
+                                        Attacking = true;
+                                    }
+                                    if (ButtoninBattle[n] == Skill_B)
+                                    {
+                                        for (int m = 0; m < TurnOrder[i].Skill_list.Count; m++)
+                                        {
+                                            TurnOrder[i].Skill_list[m].Pressed = false;
+                                            TurnOrder[i].Skill_list[m].mouseHover = false;
+                                        }
+                                        Skilling = true;
+                                    }
                                 }
                             }
                             if (ButtoninBattle[n].Pressed == false && Attacking == true)
@@ -416,11 +454,115 @@ namespace Burrow_Rune
                                 }
                             }
                         }
+                        if (Skilling == true)
+                        {
+                            for (int m = 0; m < TurnOrder[i].Skill_list.Count; m++)
+                            {
+                                TurnOrder[i].Skill_list[m].Position = TurnOrder[i].Skill_list[m].ShowPosition;
+                                Rectangle buttonRectangle = new Rectangle((int)TurnOrder[i].Skill_list[m].Position.X, (int)TurnOrder[i].Skill_list[m].Position.Y, 160, 50);
+                                if (buttonRectangle.Contains(mousePosition))
+                                {
+                                    TurnOrder[i].Skill_list[m].mouseHover = true;
+                                }
+                                else
+                                {
+                                    TurnOrder[i].Skill_list[m].mouseHover = false;
+                                }
+                                if (TurnOrder[i].Skill_list[m].mouseHover == false && ButtoninBattle[m].Pressed == false)
+                                {
+                                    TurnOrder[i].Skill_list[m].State = Color.White;
+                                }
+                                if (TurnOrder[i].Skill_list[m].Pressed == true)
+                                {
+                                    TurnOrder[i].Skill_list[m].State = Color.Gray;
+                                }
+                                if (mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed && TurnOrder[i].Skill_list[m].mouseHover == true)
+                                {
+                                    Skilling2 = true;
+                                    TurnOrder[i].Skill_list[m].Pressed = true;
+                                    if (TurnOrder[i].Skill_list[m] == Double_Slash)
+                                    {
+                                        UseSkill = 1;
+                                    }
+                                    if (TurnOrder[i].Skill_list[m] == Wide_Slash)
+                                    {
+                                        UseSkill = 2;
+                                    }
+                                }
+                                
+                                if (Skilling2 == true)
+                                {
+                                    for (int n = 0; n < EnemyGroup.Count; n++)
+                                    {
+                                        if (EnemyGroup[n].mouseHover == true)
+                                        {
+                                            EnemyGroup[n].State = Color.Gray;
+                                        }
+                                        else
+                                        {
+                                            EnemyGroup[n].State = Color.White;
+                                        }
+                                        if (mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed && EnemyGroup[n].mouseHover == true && EnemyGroup[n].Alive == true)
+                                        {
+                                            Skilling3 = true;
+                                            target = n;
+                                        }
+                                        
+                                    }
+                                }
+                                if (Skilling3 == true)
+                                {
+                                    if (UseSkill == 1)
+                                    {
+                                        if (Partywaitingtime == 0)
+                                        {
+                                            EnemyGroup[target].attacked = true;
+                                            EnemyGroup[target].HP -= TurnOrder[i].Atk;
+                                            EnemyGroup[target].spriteLocation2 = EnemyGroup[target].spriteLocation;
+                                            EnemyGroup[target].spriteLocation.X += 20;
+                                            TurnOrder[i].ATKframe = 1;
+                                            BattleSFX[TurnOrder[i].AttackSFX].CreateInstance().Play();
+                                        }
+                                        Partywaitingtime += 1;
+                                        if (Partywaitingtime == 20)
+                                        {
+                                            TurnOrder[i].isAttacking = true;
+                                            timeLoad = true;
+                                            EnemyGroup[target].attacked = true;
+                                            EnemyGroup[target].HP -= TurnOrder[i].Atk;
+                                            EnemyGroup[target].spriteLocation2 = EnemyGroup[target].spriteLocation;
+                                            EnemyGroup[target].spriteLocation.X += 20;
+                                            TurnOrder[i].ATKframe = 1;
+                                            BattleSFX[TurnOrder[i].AttackSFX].CreateInstance().Play();
+                                        }
+                                    }
+                                    if (UseSkill == 2)
+                                    {
+                                        TurnOrder[i].isAttacking = true;
+                                        TurnOrder[i].ATKframe = 1;
+                                        if (ATKcount < EnemyGroup.Count)
+                                        {
+                                            EnemyGroup[ATKcount].attacked = true;
+                                            EnemyGroup[ATKcount].HP -= TurnOrder[i].Atk;
+                                            EnemyGroup[ATKcount].spriteLocation2 = EnemyGroup[ATKcount].spriteLocation;
+                                            EnemyGroup[ATKcount].spriteLocation.X += 20;
+                                            ATKcount += 1;
+                                            BattleSFX[TurnOrder[i].AttackSFX].CreateInstance().Play();
+                                        }
+                                        else
+                                        {
+                                            timeLoad = true;
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
                     }
 
                     if (TurnOrder[i].playable == false && TurnOrder[i].Alive == true)
                     {
-                        if (waitingtime == 0)
+                        if (Enemywaitingtime == 0)
                         {
                             Random r = new Random();
                             target = r.Next(0, Party.Count);
@@ -442,8 +584,8 @@ namespace Burrow_Rune
                                 Party[target].targeted = true;
                             }
                         }
-                        waitingtime += 1;
-                        if (waitingtime == 50)
+                        Enemywaitingtime += 1;
+                        if (Enemywaitingtime == 50)
                         {
                             TurnOrder[i].ATKframe = 1;
                             TurnOrder[i].isAttacking = true;
@@ -463,7 +605,7 @@ namespace Burrow_Rune
                         turn++;
                         TurnOrder[i].myTurn = false;
                         TurnOrder[i].isAttacking = false;
-                        waitingtime = 0;
+                        Enemywaitingtime = 0;
                     }
                 }
                 if (TurnOrder[i].isAttacking == false && TurnOrder[i].targeted == false && TurnOrder[i].myTurn == false && TurnOrder[i].mouseHover == false && TurnOrder[i].Alive == true)
@@ -472,26 +614,38 @@ namespace Burrow_Rune
                 }
                 if (frameInCombat > 30 && TurnOrder[i].myTurn == true)
                 {
+                    for (int m = 0; m < TurnOrder.Count; m++)
+                    {
+                        TurnOrder[m].targeted = false;
+                        TurnOrder[m].attacked = false;
+                        for (int n = 0; n < TurnOrder[i].Skill_list.Count;n++)
+                        {
+                            TurnOrder[i].Skill_list[n].Position = new Vector2(1000, 1000);
+                            TurnOrder[i].Skill_list[n].Pressed = false;
+                            TurnOrder[i].Skill_list[n].mouseHover = false;
+                        }
+                    }
+                    for (int m = 0; m < ButtoninBattle.Count; m++)
+                    {
+                        ButtoninBattle[m].Pressed = false;
+                        ButtoninBattle[m].mouseHover = false;
+                    }
                     timeLoad = false;
                     frameInCombat = 0;
                     TurnOrder[i].ATKframe = 0;
                     turn++;
                     Attacking = false;
+                    Skilling = false;
+                    Skilling2 = false;
+                    Skilling3 = false;
                     TurnOrder[i].myTurn = false;
                     TurnOrder[i].isAttacking = false;
-                    waitingtime = 0;
+                    Enemywaitingtime = 0;
+                    Partywaitingtime = 0;
+                    ATKcount = 0;
                     iconOrder += 1;
+                    UseSkill = 0;
                     TurnOrder[i].Big_iconLocation = new Vector2(1000, 1000);
-                    for (int m = 0; m < TurnOrder.Count; m++)
-                    {
-                        TurnOrder[m].targeted = false;
-                        TurnOrder[m].attacked = false;
-                    }
-                    for (int m = 0; m < ButtoninBattle.Count; m++)
-                    {
-                        ButtoninBattle[m].Pressed = false;
-                    }
-
                 }
                 if (TurnOrder[i].targeted == true)
                 {
@@ -626,6 +780,12 @@ namespace Burrow_Rune
                     {
                         TurnOrder[i].myTurn = false;
                         TurnOrder[i].ATKframe = 0;
+                        for (int n = 0; n < TurnOrder[i].Skill_list.Count; n++)
+                        {
+                            TurnOrder[i].Skill_list[n].Position = new Vector2(1000, 1000);
+                            TurnOrder[i].Skill_list[n].Pressed = false;
+                            TurnOrder[i].Skill_list[n].mouseHover = false;
+                        }
                     }
                     MediaPlayer.Play(EventMapBGM);
                     ResetCombat();
@@ -642,6 +802,12 @@ namespace Burrow_Rune
                     {
                         TurnOrder[i].myTurn = false;
                         TurnOrder[i].ATKframe = 0;
+                        for (int n = 0; n < TurnOrder[i].Skill_list.Count; n++)
+                        {
+                            TurnOrder[i].Skill_list[n].Position = new Vector2(1000, 1000);
+                            TurnOrder[i].Skill_list[n].Pressed = false;
+                            TurnOrder[i].Skill_list[n].mouseHover = false;
+                        }
                     }
                     MediaPlayer.Play(EventMapBGM);
                     ResetCombat();
@@ -658,6 +824,12 @@ namespace Burrow_Rune
                     {
                         TurnOrder[i].myTurn = false;
                         TurnOrder[i].ATKframe = 0;
+                        for (int n = 0; n < TurnOrder[i].Skill_list.Count; n++)
+                        {
+                            TurnOrder[i].Skill_list[n].Position = new Vector2(1000, 1000);
+                            TurnOrder[i].Skill_list[n].Pressed = false;
+                            TurnOrder[i].Skill_list[n].mouseHover = false;
+                        }
                     }
                     MediaPlayer.Play(EventMapBGM);
                     ResetCombat();
@@ -677,6 +849,12 @@ namespace Burrow_Rune
                     {
                         TurnOrder[i].myTurn = false;
                         TurnOrder[i].ATKframe = 0;
+                        for (int n = 0; n < TurnOrder[i].Skill_list.Count; n++)
+                        {
+                            TurnOrder[i].Skill_list[n].Position = new Vector2(1000, 1000);
+                            TurnOrder[i].Skill_list[n].Pressed = false;
+                            TurnOrder[i].Skill_list[n].mouseHover = false;
+                        }
                     }
                     ResetCombat();
                     isLose = true;
@@ -726,7 +904,7 @@ namespace Burrow_Rune
             var mouseState = Mouse.GetState();
             var mousePosition = new Point(mouseState.X, mouseState.Y);
 
-            for (int i = 0; i < ButtoninBattle.Count + 2; i++)
+            for (int i = 0; i < ButtoninMap.Count; i++)
             {
                 Rectangle buttonRectangle = new Rectangle((int)ButtoninMap[i].Position.X, (int)ButtoninMap[i].Position.Y, 215, 215);
                 if (buttonRectangle.Contains(mousePosition))
@@ -1275,7 +1453,8 @@ namespace Burrow_Rune
                 }
 
             }
-
+            _spriteBatch.Draw(Skill_Texture, Double_Slash.Position, Double_Slash.State);
+            _spriteBatch.Draw(Skill_Texture, Wide_Slash.Position, Wide_Slash.State);
         }
 
         private void DrawEventMap()
@@ -1372,12 +1551,6 @@ namespace Burrow_Rune
 
         private void ResetCombat()
         {
-            turn = 0;
-            timeLoad = false;
-            frameInCombat = 0;
-            waitingtime = 0;
-            iconOrder = 0;
-            Attacking = false;
             for (int i = 0; i < EnemyGroup.Count; i++)
             {
                 EnemyGroup[i].attacked = false;
@@ -1388,7 +1561,19 @@ namespace Burrow_Rune
             for (int i = 0; i < ButtoninBattle.Count; i++)
             {
                 ButtoninBattle[i].Pressed = false;
+                ButtoninBattle[i].mouseHover = false;
             }
+            turn = 0;
+            timeLoad = false;
+            frameInCombat = 0;
+            Enemywaitingtime = 0;
+            iconOrder = 0;
+            Attacking = false;
+            Skilling = false;
+            Skilling2 = false;
+            Skilling3 = false;
+            UseSkill = 0;
+            ATKcount = 0;
         }
 
         private void RandomNode()
