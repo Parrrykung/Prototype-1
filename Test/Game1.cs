@@ -33,6 +33,7 @@ namespace Burrow_Rune
         private int ATKcount = 0;
         private int turn;
         private int iconOrder = 0;
+        private string BattleTxt = "";
         private bool isFighting = false;
         private bool Resting = false;
         private bool isInteracting = false;
@@ -47,7 +48,11 @@ namespace Burrow_Rune
         private bool Skilling = false;
         private bool Skilling2 = false;
         private bool Skilling3 = false;
+        private bool Iteming = false;
+        private bool Iteming2 = false;
+        private bool Iteming3 = false;
         private int UseSkill = 0;
+        private int UseItem = 0;
 
         private Texture2D first_floor_Background;
         private Texture2D Beetle_Text;
@@ -99,8 +104,11 @@ namespace Burrow_Rune
         private Button Event_B1 = new Button(new Vector2(1000, 1000));
         private Button Event_B2 = new Button(new Vector2(1000, 1000));
         private Button Rest_B = new Button(new Vector2(1000, 1000));
+        
         private Button Double_Slash = new Button(new Vector2(1000, 1000));
         private Button Wide_Slash = new Button(new Vector2(1000, 1000));
+
+        private Button HeathPotion = new Button(new Vector2(1000, 1000));
 
         private Vector2 Turn_Selector_Position;
         private Vector2 Turn_Order_Position = new Vector2(0, 360);
@@ -216,6 +224,8 @@ namespace Burrow_Rune
 
             Lurker.Skill_list.Add(Double_Slash);
             Lurker.Skill_list.Add(Wide_Slash);
+
+            Lurker.Item_list.Add(HeathPotion);
         }
 
         protected override void Update(GameTime gameTime)
@@ -342,6 +352,13 @@ namespace Burrow_Rune
                         TurnOrder[i].Skill_list[m].ShowPosition = new Vector2(TurnOrder[i].spriteLocation.X, TurnOrder[i].spriteLocation.Y + 160);
                     }
                 }
+                for (int m = 0; m < TurnOrder[i].Skill_list.Count; m++)
+                {
+                    if (m == 0)
+                    {
+                        TurnOrder[i].Item_list[m].ShowPosition = new Vector2(TurnOrder[i].spriteLocation.X, TurnOrder[i].spriteLocation.Y + 100);
+                    }
+                }
                 if (unitRectangle.Contains(mousePosition))
                 {
                     TurnOrder[i].mouseHover = true;
@@ -373,6 +390,33 @@ namespace Burrow_Rune
 
                     if (TurnOrder[i].playable == true)
                     {
+                        if (mouseState.RightButton != ButtonState.Pressed && Old_mouseState.RightButton == ButtonState.Pressed)
+                        {
+                            Attacking = false;
+                            Skilling = false;
+                            Skilling2 = false;
+                            Skilling3 = false;
+                            Iteming = false;
+                            Iteming2 = false;
+                            Iteming3 = false;
+                            for (int n = 0; n < TurnOrder[i].Skill_list.Count; n++)
+                            {
+                                TurnOrder[i].Skill_list[n].Position = new Vector2(1000, 1000);
+                                TurnOrder[i].Skill_list[n].Pressed = false;
+                                TurnOrder[i].Skill_list[n].mouseHover = false;
+                            }
+                            for (int n = 0; n < TurnOrder[i].Item_list.Count; n++)
+                            {
+                                TurnOrder[i].Item_list[n].Position = new Vector2(1000, 1000);
+                                TurnOrder[i].Item_list[n].Pressed = false;
+                                TurnOrder[i].Item_list[n].mouseHover = false;
+                            }
+                            for (int m = 0; m < ButtoninBattle.Count; m++)
+                            {
+                                ButtoninBattle[m].Pressed = false;
+                                ButtoninBattle[m].mouseHover = false;
+                            }
+                        }
                         for (int n = 0; n < ButtoninBattle.Count; n++)
                         {
                             if(TurnOrder[i].isAttacking == true)
@@ -414,12 +458,11 @@ namespace Burrow_Rune
                                     }
                                     if (ButtoninBattle[n] == Skill_B)
                                     {
-                                        for (int m = 0; m < TurnOrder[i].Skill_list.Count; m++)
-                                        {
-                                            TurnOrder[i].Skill_list[m].Pressed = false;
-                                            TurnOrder[i].Skill_list[m].mouseHover = false;
-                                        }
                                         Skilling = true;
+                                    }
+                                    if (ButtoninBattle[n] == Item_B)
+                                    {
+                                        Iteming = true;
                                     }
                                 }
                             }
@@ -483,10 +526,12 @@ namespace Burrow_Rune
                                     if (TurnOrder[i].Skill_list[m] == Double_Slash)
                                     {
                                         UseSkill = 1;
+                                        BattleTxt = "Attack one target twice";
                                     }
                                     if (TurnOrder[i].Skill_list[m] == Wide_Slash)
                                     {
                                         UseSkill = 2;
+                                        BattleTxt = "Attack all enemy once";
                                     }
                                 }
                                 
@@ -558,6 +603,71 @@ namespace Burrow_Rune
                                 }
                             }
                         }
+                        if (Iteming == true)
+                        {
+                            for (int m = 0; m < TurnOrder[i].Item_list.Count; m++)
+                            {
+                                TurnOrder[i].Item_list[m].Position = TurnOrder[i].Item_list[m].ShowPosition;
+                                Rectangle buttonRectangle = new Rectangle((int)TurnOrder[i].Item_list[m].Position.X, (int)TurnOrder[i].Item_list[m].Position.Y, 160, 50);
+                                if (buttonRectangle.Contains(mousePosition))
+                                {
+                                    TurnOrder[i].Item_list[m].mouseHover = true;
+                                }
+                                else
+                                {
+                                    TurnOrder[i].Item_list[m].mouseHover = false;
+                                }
+                                if (TurnOrder[i].Item_list[m].mouseHover == false && ButtoninBattle[m].Pressed == false)
+                                {
+                                    TurnOrder[i].Item_list[m].State = Color.White;
+                                }
+                                if (TurnOrder[i].Item_list[m].Pressed == true)
+                                {
+                                    TurnOrder[i].Item_list[m].State = Color.Gray;
+                                }
+                                if (mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed && TurnOrder[i].Item_list[m].mouseHover == true)
+                                {
+                                    Iteming2 = true;
+                                    TurnOrder[i].Item_list[m].Pressed = true;
+                                    if (TurnOrder[i].Item_list[m] == HeathPotion)
+                                    {
+                                        UseItem = 1;
+                                        BattleTxt = "Heal one ally 20 ";
+                                    }
+                                }
+                                if (Iteming2 == true)
+                                {
+                                    Partywaitingtime += 1;
+                                    for (int n = 0; n < Party.Count; n++)
+                                    {
+                                        if (Party[n].mouseHover == true)
+                                        {
+                                            Party[n].State = Color.Gray;
+                                        }
+                                        else
+                                        {
+                                            Party[n].State = Color.White;
+                                        }
+                                        if (Partywaitingtime > 5)
+                                        {
+                                            if (mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed && Party[n].mouseHover == true && Party[n].Alive == true)
+                                            {
+                                                Party[n].healed = true;
+                                                Party[n].HP += 20;
+                                                {
+                                                    if (Party[n].HP > Party[n].MaxHP)
+                                                    {
+                                                        Party[n].HP = Party[n].MaxHP;
+                                                    }
+                                                }
+                                                BattleSFX[4].CreateInstance().Play();
+                                                timeLoad = true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
 
                     if (TurnOrder[i].playable == false && TurnOrder[i].Alive == true)
@@ -608,7 +718,7 @@ namespace Burrow_Rune
                         Enemywaitingtime = 0;
                     }
                 }
-                if (TurnOrder[i].isAttacking == false && TurnOrder[i].targeted == false && TurnOrder[i].myTurn == false && TurnOrder[i].mouseHover == false && TurnOrder[i].Alive == true)
+                if (TurnOrder[i].isAttacking == false && TurnOrder[i].targeted == false && TurnOrder[i].myTurn == false && TurnOrder[i].mouseHover == false && TurnOrder[i].Alive == true && TurnOrder[i].healed == false)
                 {
                     TurnOrder[i].State = Color.White;
                 }
@@ -618,11 +728,18 @@ namespace Burrow_Rune
                     {
                         TurnOrder[m].targeted = false;
                         TurnOrder[m].attacked = false;
+                        TurnOrder[m].healed = false;
                         for (int n = 0; n < TurnOrder[i].Skill_list.Count;n++)
                         {
                             TurnOrder[i].Skill_list[n].Position = new Vector2(1000, 1000);
                             TurnOrder[i].Skill_list[n].Pressed = false;
                             TurnOrder[i].Skill_list[n].mouseHover = false;
+                        }
+                        for (int n = 0; n < TurnOrder[i].Item_list.Count; n++)
+                        {
+                            TurnOrder[i].Item_list[n].Position = new Vector2(1000, 1000);
+                            TurnOrder[i].Item_list[n].Pressed = false;
+                            TurnOrder[i].Item_list[n].mouseHover = false;
                         }
                     }
                     for (int m = 0; m < ButtoninBattle.Count; m++)
@@ -638,6 +755,10 @@ namespace Burrow_Rune
                     Skilling = false;
                     Skilling2 = false;
                     Skilling3 = false;
+                    Iteming = false;
+                    Iteming2 = false;
+                    Iteming3 = false;
+                    BattleTxt = "";
                     TurnOrder[i].myTurn = false;
                     TurnOrder[i].isAttacking = false;
                     Enemywaitingtime = 0;
@@ -654,6 +775,10 @@ namespace Burrow_Rune
                 if (TurnOrder[i].attacked == true)
                 {
                     TurnOrder[i].State = Color.Red;
+                }
+                if (TurnOrder[i].healed == true)
+                {
+                    TurnOrder[i].State = Color.Green;
                 }
                 if (TurnOrder[i].attacked == false && TurnOrder[i].Alive == true)
                 {
@@ -786,6 +911,12 @@ namespace Burrow_Rune
                             TurnOrder[i].Skill_list[n].Pressed = false;
                             TurnOrder[i].Skill_list[n].mouseHover = false;
                         }
+                        for (int n = 0; n < TurnOrder[i].Item_list.Count; n++)
+                        {
+                            TurnOrder[i].Item_list[n].Position = new Vector2(1000, 1000);
+                            TurnOrder[i].Item_list[n].Pressed = false;
+                            TurnOrder[i].Item_list[n].mouseHover = false;
+                        }
                     }
                     MediaPlayer.Play(EventMapBGM);
                     ResetCombat();
@@ -808,6 +939,12 @@ namespace Burrow_Rune
                             TurnOrder[i].Skill_list[n].Pressed = false;
                             TurnOrder[i].Skill_list[n].mouseHover = false;
                         }
+                        for (int n = 0; n < TurnOrder[i].Item_list.Count; n++)
+                        {
+                            TurnOrder[i].Item_list[n].Position = new Vector2(1000, 1000);
+                            TurnOrder[i].Item_list[n].Pressed = false;
+                            TurnOrder[i].Item_list[n].mouseHover = false;
+                        }
                     }
                     MediaPlayer.Play(EventMapBGM);
                     ResetCombat();
@@ -829,6 +966,12 @@ namespace Burrow_Rune
                             TurnOrder[i].Skill_list[n].Position = new Vector2(1000, 1000);
                             TurnOrder[i].Skill_list[n].Pressed = false;
                             TurnOrder[i].Skill_list[n].mouseHover = false;
+                        }
+                        for (int n = 0; n < TurnOrder[i].Item_list.Count; n++)
+                        {
+                            TurnOrder[i].Item_list[n].Position = new Vector2(1000, 1000);
+                            TurnOrder[i].Item_list[n].Pressed = false;
+                            TurnOrder[i].Item_list[n].mouseHover = false;
                         }
                     }
                     MediaPlayer.Play(EventMapBGM);
@@ -854,6 +997,12 @@ namespace Burrow_Rune
                             TurnOrder[i].Skill_list[n].Position = new Vector2(1000, 1000);
                             TurnOrder[i].Skill_list[n].Pressed = false;
                             TurnOrder[i].Skill_list[n].mouseHover = false;
+                        }
+                        for (int n = 0; n < TurnOrder[i].Item_list.Count; n++)
+                        {
+                            TurnOrder[i].Item_list[n].Position = new Vector2(1000, 1000);
+                            TurnOrder[i].Item_list[n].Pressed = false;
+                            TurnOrder[i].Item_list[n].mouseHover = false;
                         }
                     }
                     ResetCombat();
@@ -1455,6 +1604,9 @@ namespace Burrow_Rune
             }
             _spriteBatch.Draw(Skill_Texture, Double_Slash.Position, Double_Slash.State);
             _spriteBatch.Draw(Skill_Texture, Wide_Slash.Position, Wide_Slash.State);
+            _spriteBatch.Draw(Item_Texture, HeathPotion.Position, HeathPotion.State);
+
+            _spriteBatch.DrawString(font, BattleTxt, new Vector2(300, 520), Color.White);
         }
 
         private void DrawEventMap()
@@ -1574,6 +1726,7 @@ namespace Burrow_Rune
             Skilling3 = false;
             UseSkill = 0;
             ATKcount = 0;
+            BattleTxt = "";
         }
 
         private void RandomNode()

@@ -23,6 +23,7 @@ namespace Burrow_Rune
         public bool playable;
         public bool targeted = false;
         public bool attacked = false;
+        public bool healed = false;
         public bool Alive = true;
         public Texture2D Unit_Sprite;
         public bool mouseHover = false;
@@ -34,7 +35,7 @@ namespace Burrow_Rune
         public Vector2 HPicon_Location = new Vector2(1000, 1000);
         public int AttackSFX;
         public List<Button> Skill_list = new List<Button>();
-
+        public List<Button> Item_list = new List<Button>();
 
         public UnitClass()
         {
