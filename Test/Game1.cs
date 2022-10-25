@@ -94,6 +94,7 @@ namespace Burrow_Rune
         public UnitClass Rocky2 = new UnitClass(false, 3, 10, 5, 3);
         public UnitClass Rocky3 = new UnitClass(false, 3, 10, 5, 3);
         public UnitClass Blood_Maiden = new UnitClass(true, 3, 30, 5, 2);
+        public UnitClass Dragonic_hunter = new UnitClass(true, 3, 30, 6, 4);
         private UnitClass Nul = new UnitClass();
 
         private Button Attack_B = new Button(new Vector2(100, 360));
@@ -154,6 +155,7 @@ namespace Burrow_Rune
             Beetle_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Enemy/Beetle/Flying-Rock-Icon");
             Rocky_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Enemy/Rocky/Hermit-Rock-Icon");
             Golem_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Enemy/Golem/Golem_Sprite_sheet");
+            Dragonic_Texture = Content.Load<Texture2D>("Asset 2D/Sprite/Dragonic_hunter/Dragonic Sheet");
             Dragonic_Small_Icon = Content.Load<Texture2D>("Asset 2D/UI/Dragonic Icon");
             Blood_Maiden_Texture = Content.Load<Texture2D>("Asset 2D/Sprite/Blood_maiden/Blood maiden sprite sheet-export");
             Blood_Maiden_Small_Icon = Content.Load<Texture2D>("Asset 2D/UI/Blood Maiden Icon");
@@ -1283,8 +1285,9 @@ namespace Burrow_Rune
             Rectangle LurkerRectangle = new Rectangle((int)Lurker.spriteLocation.X, (int)Lurker.spriteLocation.Y, 215, 215);
             Rectangle InventorRectangle = new Rectangle((int)inventor.spriteLocation.X, (int)inventor.spriteLocation.Y, 215, 215);
             Rectangle BloodRectangle = new Rectangle((int)Blood_Maiden.spriteLocation.X, (int)Blood_Maiden.spriteLocation.Y, 215, 215);
+           
 
-            if(LurkerRectangle.Contains(mousePosition) && mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed)
+            if (LurkerRectangle.Contains(mousePosition) && mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed)
             {
                 Party.Add(Lurker);
                 isMap = true;
@@ -1308,7 +1311,7 @@ namespace Burrow_Rune
                 MediaPlayer.Play(EventMapBGM);
                 RandomNode();
             }
-
+          
             Old_mouseState = mouseState;
         }
 
@@ -1331,6 +1334,7 @@ namespace Burrow_Rune
                 {
                     _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.spriteLocation, new Rectangle(0, Blood_Maiden.ATKframe * 240, 270, 230), Blood_Maiden.State);
                 }
+                
                 if (i == 0)
                 {
                     Party[i].spriteLocation = SetPO1; 
