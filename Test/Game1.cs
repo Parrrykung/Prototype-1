@@ -1285,7 +1285,8 @@ namespace Burrow_Rune
             Rectangle LurkerRectangle = new Rectangle((int)Lurker.spriteLocation.X, (int)Lurker.spriteLocation.Y, 215, 215);
             Rectangle InventorRectangle = new Rectangle((int)inventor.spriteLocation.X, (int)inventor.spriteLocation.Y, 215, 215);
             Rectangle BloodRectangle = new Rectangle((int)Blood_Maiden.spriteLocation.X, (int)Blood_Maiden.spriteLocation.Y, 215, 215);
-           
+            Rectangle DragonicRectangle = new Rectangle((int)Dragonic_hunter.spriteLocation.X, (int)Dragonic_hunter.spriteLocation.Y, 215, 215);
+
 
             if (LurkerRectangle.Contains(mousePosition) && mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed)
             {
@@ -1311,7 +1312,16 @@ namespace Burrow_Rune
                 MediaPlayer.Play(EventMapBGM);
                 RandomNode();
             }
-          
+            if (DragonicRectangle.Contains(mousePosition) && mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed)
+            {
+                Party.Add(Dragonic_hunter);
+                isMap = true;
+                isCharactor = false;
+                MediaPlayer.Play(EventMapBGM);
+                RandomNode();
+            }
+
+
             Old_mouseState = mouseState;
         }
 
@@ -1334,7 +1344,10 @@ namespace Burrow_Rune
                 {
                     _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.spriteLocation, new Rectangle(0, Blood_Maiden.ATKframe * 240, 270, 230), Blood_Maiden.State);
                 }
-                
+                if (Party[i] == Dragonic_hunter)
+                {
+                    _spriteBatch.Draw(Dragonic_Texture, Dragonic_hunter.spriteLocation, new Rectangle(0, Dragonic_hunter.ATKframe * 240, 270, 230), Dragonic_hunter.State);
+                }
                 if (i == 0)
                 {
                     Party[i].spriteLocation = SetPO1; 
@@ -1552,6 +1565,14 @@ namespace Burrow_Rune
                     _spriteBatch.Draw(Blood_Maiden_Big_Icon, Blood_Maiden.Big_iconLocation, new Rectangle(0, 480, 200, 140), Color.White);
                     _spriteBatch.Draw(Blood_Maiden_Small_Icon, Blood_Maiden.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
                 }
+                //if (Party[i] == Dragonic_hunter)
+                //{
+                  //  _spriteBatch.Draw(HPbar_Texture, Dragonic_hunter.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
+                    //_spriteBatch.Draw(HPbar_Texture, Dragonic_hunter.HPbar_Location, new Rectangle(0, 0, Dragonic_hunter.HP * (240 / Dragonic_hunter.MaxHP), 30), Color.Red);
+                    //_spriteBatch.Draw(Dragonic_Small_Icon, Dragonic_hunter.Small_iconLocation, new Rectangle(0, 0, 126, 126), Dragonic_hunter.State);
+                    //_spriteBatch.Draw(Dragonic_Big_Icon, Dragonic_hunter.Big_iconLocation, new Rectangle(0, 480, 200, 140), Color.White);
+                    //_spriteBatch.Draw(Dragonic_Small_Icon, Dragonic_hunter.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
+                //}
             }
             for (int i = 0; i < EnemyGroup.Count; i++)
             {
@@ -1643,6 +1664,12 @@ namespace Burrow_Rune
                     _spriteBatch.Draw(HPbar_Texture, Blood_Maiden.HPbar_Location, new Rectangle(0, 0, Blood_Maiden.HP * (240 / Blood_Maiden.MaxHP), 30), Color.Red);
                     _spriteBatch.Draw(Blood_Maiden_Small_Icon, Blood_Maiden.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
                 }
+                if (Party[i] == Dragonic_hunter)
+                {
+                    _spriteBatch.Draw(HPbar_Texture, Dragonic_hunter.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
+                    _spriteBatch.Draw(HPbar_Texture, Dragonic_hunter.HPbar_Location, new Rectangle(0, 0, Dragonic_hunter.HP * (240 / Dragonic_hunter.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(Dragonic_Small_Icon, Dragonic_hunter.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
+                }
                 if (i == 0)
                 {
                     Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X + 40, SetPO1.Y - 220);
@@ -1661,6 +1688,7 @@ namespace Burrow_Rune
                     Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
                     Party[i].HPicon_Location = new Vector2(SetPO1.X - 540, SetPO1.Y - 240);
                 }
+               
             }
         }
 
@@ -1697,12 +1725,14 @@ namespace Burrow_Rune
             _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
             String str = "Select Charactor";
             _spriteBatch.DrawString(font, str, new Vector2(400, 200), Color.Red);
-            Lurker.spriteLocation = new Vector2(200, 300);
-            inventor.spriteLocation = new Vector2(500, 300);
-            Blood_Maiden.spriteLocation = new Vector2(800, 300);
+            Lurker.spriteLocation = new Vector2(100, 300);
+            inventor.spriteLocation = new Vector2(400, 300);
+            Blood_Maiden.spriteLocation = new Vector2(700, 300);
+            Dragonic_hunter.spriteLocation = new Vector2(1000, 300);
             _spriteBatch.Draw(Lurker_Texture, Lurker.spriteLocation, new Rectangle(0, Lurker.ATKframe * 240, 270, 230), Lurker.State);
             _spriteBatch.Draw(Inventor_Texture, inventor.spriteLocation, new Rectangle(0, inventor.ATKframe * 240, 270, 230), inventor.State);
             _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.spriteLocation, new Rectangle(0, Blood_Maiden.ATKframe * 240, 270, 230), Blood_Maiden.State);
+            _spriteBatch.Draw(Dragonic_Texture, Dragonic_hunter.spriteLocation, new Rectangle(0, Dragonic_hunter.ATKframe * 240, 270, 230), Dragonic_hunter.State);
         }
 
         private void ResetCombat()
