@@ -36,6 +36,7 @@ namespace Burrow_Rune
         public int AttackSFX;
         public List<Button> Skill_list = new List<Button>();
         public List<Button> Item_list = new List<Button>();
+        public string HPtext = "";
 
         public UnitClass()
         {
