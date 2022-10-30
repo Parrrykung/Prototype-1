@@ -29,6 +29,9 @@ namespace Burrow_Rune
         private int Enemywaitingtime = 0;
         private int Partywaitingtime = 0;
         private int roomNum = 1;
+        private int CharactorCode;
+        private int eventNum = 0;
+        private int eventChance = 0;
         private int target = 0;
         private int ATKcount = 0;
         private int Gold = 0;
@@ -38,9 +41,12 @@ namespace Burrow_Rune
         private int iconOrder = 0;
         private string BattleTxt = "";
         private string ShopTxt = "Click an item to buy";
+        private string EventTxt = "";
         private bool isFighting = false;
         private bool Resting = false;
         private bool isInteracting = false;
+        private bool Yes = false;
+        private bool No = false;
         bool isMap;
         bool isBattle;
         bool isTitle;
@@ -101,6 +107,7 @@ namespace Burrow_Rune
         public UnitClass Dragonic_hunter = new UnitClass(true, 3, 30, 6, 0);
         private UnitClass Nul = new UnitClass();
 
+
         private Button Attack_B = new Button(new Vector2(100, 360));
         private Button Skill_B = new Button(new Vector2(130, 410));
         private Button Item_B = new Button(new Vector2(100, 460));
@@ -110,6 +117,8 @@ namespace Burrow_Rune
         private Button Event_B2 = new Button(new Vector2(1000, 1000));
         private Button Rest_B = new Button(new Vector2(1000, 1000));
         private Button Return_B = new Button(new Vector2(1000, 1000));
+        private Button Yes_B = new Button(new Vector2(1000, 1000));
+        private Button No_B = new Button(new Vector2(1000, 1000));
 
         private Button Double_Slash = new Button(new Vector2(1000, 1000));
         private Button Wide_Slash = new Button(new Vector2(1000, 1000));
@@ -122,9 +131,11 @@ namespace Burrow_Rune
 
         private List<UnitClass> Party = new List<UnitClass>();
         private List<UnitClass> EnemyGroup = new List<UnitClass>();
+        private List<UnitClass> AllplayAble = new List<UnitClass>();
         private List<Button> ButtoninBattle = new List<Button>();
         private List<Button> ButtoninMap = new List<Button>();
         private List<Button> ButtoninShop1 = new List<Button>();
+        private List<Button> ButtoninEvent = new List<Button>();
         private List<SoundEffect> BattleSFX = new List<SoundEffect>();
 
         private Song TitleBGM;
@@ -214,6 +225,11 @@ namespace Burrow_Rune
             isRest = false;
             isCharactor = false;
 
+            AllplayAble.Add(Lurker);
+            AllplayAble.Add(inventor);
+            AllplayAble.Add(Blood_Maiden);
+            AllplayAble.Add(Dragonic_hunter);
+
             ButtoninBattle.Add(Attack_B);
             ButtoninBattle.Add(Skill_B);
             ButtoninBattle.Add(Item_B);
@@ -225,6 +241,9 @@ namespace Burrow_Rune
             ButtoninMap.Add(Rest_B);
 
             ButtoninShop1.Add(HeathPotion);
+
+            ButtoninEvent.Add(Yes_B);
+            ButtoninEvent.Add(No_B);
 
             BattleSFX.Add(Content.Load<SoundEffect>("SFX/Sword_Hori"));
             BattleSFX.Add(Content.Load<SoundEffect>("SFX/Blow_Hori"));
@@ -242,7 +261,8 @@ namespace Burrow_Rune
             inventor.Item_list.Add(HeathPotion);
             Blood_Maiden.Item_list.Add(HeathPotion);
             Dragonic_hunter.Item_list.Add(HeathPotion);
-        }
+
+    }
 
         protected override void Update(GameTime gameTime)
         {
@@ -1191,19 +1211,29 @@ namespace Burrow_Rune
             if (isInteracting == true && isFighting == false && Resting == false)
             {
                 Random r = new Random();
-                int x = r.Next(1, 2);
-                if (x == 2)
+                int x = r.Next(1, 4);
+                if (x == 1 || x == 3)
                 {
+                    eventNum = r.Next(1, 3);
                     isEvent = true;
                     ResetMap();
                     roomNum += 1;
                     isMap = false;
                     isInteracting = false;
                 }
-                if (x == 1)
+                if (x == 2)
                 {
                     isShop = true;
                     MediaPlayer.Play(ShopBGM);
+                    ResetMap();
+                    roomNum += 1;
+                    isMap = false;
+                    isInteracting = false;
+                }
+                else
+                {
+                    eventNum = r.Next(1, 3);
+                    isEvent = true;
                     ResetMap();
                     roomNum += 1;
                     isMap = false;
@@ -1264,21 +1294,157 @@ namespace Burrow_Rune
         {
             var mouseState = Mouse.GetState();
             var mousePosition = new Point(mouseState.X, mouseState.Y);
-
-
-            if (mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed)
+            Random r = new Random();
+            for (int i = 0; i < Party.Count; i++)
             {
+                Party[i].HPtext = "" + Party[i].HP;
+            }
+
+            if (eventNum == 1)
+            {
+                if (Yes == false)
+                {
+                    EventTxt = "There's a unopen 'chest' \n Do you want to open it?";
+                }
+                if (Yes == true)
+                {
+                    if(eventChance == 1 || eventChance == 4)
+                    {
+                        if (Partywaitingtime == 0)
+                        {
+                            EventTxt = "It was trap!";
+                            int x = r.Next(0, Party.Count);
+                            BattleSFX[0].CreateInstance().Play();
+                            Party[x].HP -= 10;
+                        }
+                        Partywaitingtime += 1;
+                        if (Partywaitingtime == 50)
+                        {
+                            EventTxt = "";
+                            isMap = true;
+                            isEvent = false;
+                            RandomNode();
+                            Yes = false;
+                            Partywaitingtime = 0;
+                        }
+                    }
+                    if (eventChance == 2 || eventChance == 3)
+                    {
+                        if (Partywaitingtime == 0)
+                        {
+                            EventTxt = "You gain 150 gold!";
+                            Gold += 150;
+                        }
+                        Partywaitingtime += 1;
+                        if (Partywaitingtime == 100)
+                        {
+                            EventTxt = "";
+                            isMap = true;
+                            isEvent = false;
+                            RandomNode();
+                            Yes = false;
+                            Partywaitingtime = 0;
+                        }
+                    }
+                }
+            }
+            if (eventNum == 2)
+            {
+                if (Yes == false)
+                {
+                    EventTxt = "You hear a person fight group of monster \n Do you want to help?";
+                }
+                if (Yes == true)
+                {
+                    for (int i = 0; i < Party.Count; i++)
+                    {
+                        if (Partywaitingtime == 0)
+                        {
+                            do
+                            {
+                                CharactorCode = r.Next(0, AllplayAble.Count);
+                            }
+                            while (Party[i] == AllplayAble[CharactorCode]);
+                        }
+                        Partywaitingtime += 1;
+                        if (Partywaitingtime == 5)
+                        {
+                            Party.Add(AllplayAble[CharactorCode]);
+                            EnemyGroup.Add(Rocky1);
+                            EnemyGroup.Add(Rocky2);
+                            EnemyGroup.Add(Rocky3);
+                            MediaPlayer.Play(BattleBGM_2);
+                            EventTxt = "";
+                            isBattle = true;
+                            isEvent = false;
+                            Yes = false;
+                            Partywaitingtime = 0;
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < ButtoninEvent.Count; i++)
+            {
+                if (Yes == false && No == false)
+                {
+                    Rectangle buttonRectangle = new Rectangle((int)ButtoninEvent[i].Position.X, (int)ButtoninEvent[i].Position.Y, 160, 60);
+                    if (Yes == false && No == false)
+                    {
+
+                    }
+                    if (buttonRectangle.Contains(mousePosition))
+                    {
+                        ButtoninEvent[i].mouseHover = true;
+                    }
+                    else
+                    {
+                        ButtoninEvent[i].mouseHover = false;
+                    }
+                    if (ButtoninEvent[i].mouseHover == true)
+                    {
+                        ButtoninEvent[i].State = Color.Gray;
+                    }
+                    if (ButtoninEvent[i].mouseHover == false && ButtoninEvent[i].Pressed == false)
+                    {
+                        ButtoninEvent[i].State = Color.White;
+                    }
+                    if (mouseState.LeftButton != ButtonState.Pressed && ButtoninEvent[i].mouseHover == true && Old_mouseState.LeftButton == ButtonState.Pressed)
+                    {
+                        eventChance = r.Next(1, 5);
+                        ClickSFX.CreateInstance().Play();
+                        if (ButtoninEvent[i] == Yes_B)
+                        {
+                            Yes = true;
+                        }
+                        if (ButtoninEvent[i] == No_B)
+                        {
+                            No = true;
+                        }
+                    }
+                }
+            }
+            if (No == true)
+            {
+                EventTxt = "";
                 isMap = true;
                 isEvent = false;
                 RandomNode();
-
+                No = false;
             }
+
             Old_mouseState = mouseState;
         }
 
         private void UpdateLose()
         {
-
+            var mouseState = Mouse.GetState();
+            if (mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed)
+            {
+                isTitle = true;
+                isLose = false;
+                MediaPlayer.Play(TitleBGM);
+            }
+            Old_mouseState = mouseState;
         }
 
         private void UpdateRest()
@@ -1311,6 +1477,7 @@ namespace Burrow_Rune
                 isMap = true;
                 isCharactor = false;
                 MediaPlayer.Play(EventMapBGM);
+                ClickSFX.CreateInstance().Play();
                 RandomNode();
             }
             if (InventorRectangle.Contains(mousePosition) && mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed)
@@ -1319,6 +1486,7 @@ namespace Burrow_Rune
                 isMap = true;
                 isCharactor = false;
                 MediaPlayer.Play(EventMapBGM);
+                ClickSFX.CreateInstance().Play();
                 RandomNode();
             }
             if (BloodRectangle.Contains(mousePosition) && mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed)
@@ -1327,6 +1495,7 @@ namespace Burrow_Rune
                 isMap = true;
                 isCharactor = false;
                 MediaPlayer.Play(EventMapBGM);
+                ClickSFX.CreateInstance().Play();
                 RandomNode();
             }
             if (DragonicRectangle.Contains(mousePosition) && mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed)
@@ -1335,6 +1504,7 @@ namespace Burrow_Rune
                 isMap = true;
                 isCharactor = false;
                 MediaPlayer.Play(EventMapBGM);
+                ClickSFX.CreateInstance().Play();
                 RandomNode();
             }
             
@@ -1378,6 +1548,7 @@ namespace Burrow_Rune
                         {
                             Gold -= 100;
                             PotionAmo += 1;
+                            ClickSFX.CreateInstance().Play();
                         }
                         else
                         {
@@ -1413,6 +1584,7 @@ namespace Burrow_Rune
                 isMap = true;
                 isShop = false;
                 RandomNode();
+                ClickSFX.CreateInstance().Play();
                 MediaPlayer.Play(EventMapBGM);
             }
 
@@ -1817,10 +1989,63 @@ namespace Burrow_Rune
         private void DrawEvent()
         {
             _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
-            String str = "Something is suppose to happen here \n Click anywhere to continue";
-            _spriteBatch.DrawString(font, str, new Vector2(400, 200), Color.Red);
+            _spriteBatch.DrawString(font, EventTxt, new Vector2(400, 200), Color.Red);
             String goldtxt = "Gold: " + Gold;
             _spriteBatch.DrawString(font, goldtxt, new Vector2(1300, 15), Color.Red);
+            No_B.Position = new Vector2(400, 400);
+            _spriteBatch.Draw(Skill_Texture, No_B.Position, No_B.State);
+            Yes_B.Position = new Vector2(800, 400);
+            _spriteBatch.Draw(Attack_Texture, Yes_B.Position, Yes_B.State);
+            for (int i = 0; i < Party.Count; i++)
+            {
+                if (Party[i] == Lurker)
+                {
+                    _spriteBatch.Draw(HPbar_Texture, Lurker.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
+                    _spriteBatch.Draw(HPbar_Texture, Lurker.HPbar_Location, new Rectangle(0, 0, Lurker.HP * (240 / Lurker.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(Lurker_Small_Icon, Lurker.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
+                    _spriteBatch.DrawString(font, Lurker.HPtext, new Vector2(Lurker.HPMPbar_iconLocation.X + 120, Lurker.HPMPbar_iconLocation.Y), Color.Black);
+                }
+                if (Party[i] == inventor)
+                {
+                    _spriteBatch.Draw(HPbar_Texture, inventor.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
+                    _spriteBatch.Draw(HPbar_Texture, inventor.HPbar_Location, new Rectangle(0, 0, inventor.HP * (240 / inventor.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(Inventor_Small_Icon, inventor.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
+                    _spriteBatch.DrawString(font, inventor.HPtext, new Vector2(inventor.HPMPbar_iconLocation.X + 120, inventor.HPMPbar_iconLocation.Y), Color.Black);
+                }
+                if (Party[i] == Blood_Maiden)
+                {
+                    _spriteBatch.Draw(HPbar_Texture, Blood_Maiden.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
+                    _spriteBatch.Draw(HPbar_Texture, Blood_Maiden.HPbar_Location, new Rectangle(0, 0, Blood_Maiden.HP * (240 / Blood_Maiden.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(Blood_Maiden_Small_Icon, Blood_Maiden.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
+                    _spriteBatch.DrawString(font, Blood_Maiden.HPtext, new Vector2(Blood_Maiden.HPMPbar_iconLocation.X + 120, Blood_Maiden.HPMPbar_iconLocation.Y), Color.Black);
+                }
+                if (Party[i] == Dragonic_hunter)
+                {
+                    _spriteBatch.Draw(HPbar_Texture, Dragonic_hunter.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
+                    _spriteBatch.Draw(HPbar_Texture, Dragonic_hunter.HPbar_Location, new Rectangle(0, 0, Dragonic_hunter.HP * (240 / Dragonic_hunter.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(Dragonic_Small_Icon, Dragonic_hunter.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
+                    _spriteBatch.DrawString(font, Dragonic_hunter.HPtext, new Vector2(Dragonic_hunter.HPMPbar_iconLocation.X + 120, Dragonic_hunter.HPMPbar_iconLocation.Y), Color.Black);
+                }
+                if (i == 0)
+                {
+                    Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X + 40, SetPO1.Y - 220);
+                    Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
+                    Party[i].HPicon_Location = new Vector2(SetPO1.X, SetPO1.Y - 240);
+                }
+                if (i == 1)
+                {
+                    Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X - 240, SetPO1.Y - 220);
+                    Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
+                    Party[i].HPicon_Location = new Vector2(SetPO1.X - 270, SetPO1.Y - 240);
+                }
+                if (i == 2)
+                {
+                    Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X - 520, SetPO1.Y - 220);
+                    Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
+                    Party[i].HPicon_Location = new Vector2(SetPO1.X - 540, SetPO1.Y - 240);
+                }
+
+            }
         }
 
         private void DrawLose()
