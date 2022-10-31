@@ -24,6 +24,7 @@ namespace Burrow_Rune
         private Vector2 SetPO2 = new Vector2(860, 180);
         private Vector2 SetPO3 = new Vector2(620, 180);
         private int frame;
+        private int unloop_frame;
         private bool timeLoad;
         private int frameInCombat;
         private int Enemywaitingtime = 0;
@@ -93,22 +94,24 @@ namespace Burrow_Rune
         private Texture2D FightNode_Texture;
         private Texture2D EventNode_Texture;
         private Texture2D RestNode_Texture;
-        private Texture2D HPbar_Texture;
+        private Texture2D HPMPbar_Texture;
         private Texture2D Yes_Texture;
         private Texture2D No_Texture;
         private Texture2D Return_Texture;
+        private Texture2D Logo_Texture;
+        private Texture2D Taptostart_Texture;
 
-        public UnitClass Lurker = new UnitClass(true, 6, 30, 5, 0);
-        public UnitClass Golem = new UnitClass(false,4, 40, 5, 3);
-        public UnitClass inventor = new UnitClass(true, 5, 30, 5, 1);
-        public UnitClass Beetle1 = new UnitClass(false,5, 10, 5, 3);
-        public UnitClass Beetle2 = new UnitClass(false, 5, 10, 5, 3);
-        public UnitClass Beetle3 = new UnitClass(false, 5, 10, 5, 3);
-        public UnitClass Rocky1 = new UnitClass(false, 3, 10, 5, 3);
-        public UnitClass Rocky2 = new UnitClass(false, 3, 10, 5, 3);
-        public UnitClass Rocky3 = new UnitClass(false, 3, 10, 5, 3);
-        public UnitClass Blood_Maiden = new UnitClass(true, 3, 30, 5, 2);
-        public UnitClass Dragonic_hunter = new UnitClass(true, 3, 30, 6, 0);
+        public UnitClass Lurker = new UnitClass(true, 6, 30, 5, 0, 20);
+        public UnitClass Golem = new UnitClass(false,4, 40, 5, 3, 0);
+        public UnitClass inventor = new UnitClass(true, 5, 30, 5, 1, 25);
+        public UnitClass Beetle1 = new UnitClass(false,5, 10, 5, 3, 0);
+        public UnitClass Beetle2 = new UnitClass(false, 5, 10, 5, 3, 0);
+        public UnitClass Beetle3 = new UnitClass(false, 5, 10, 5, 3, 0);
+        public UnitClass Rocky1 = new UnitClass(false, 3, 10, 5, 3, 0);
+        public UnitClass Rocky2 = new UnitClass(false, 3, 10, 5, 3, 0);
+        public UnitClass Rocky3 = new UnitClass(false, 3, 10, 5, 3, 0);
+        public UnitClass Blood_Maiden = new UnitClass(true, 3, 30, 5, 2, 30);
+        public UnitClass Dragonic_hunter = new UnitClass(true, 3, 30, 6, 0, 20);
         private UnitClass Nul = new UnitClass();
 
 
@@ -203,11 +206,13 @@ namespace Burrow_Rune
             Turn_Selector_Texture = Content.Load<Texture2D>("Asset 2D/UI/Turn-Selector");
             FightNode_Texture = Content.Load<Texture2D>("Asset 2D/UI/Fight Node");
             EventNode_Texture = Content.Load<Texture2D>("Asset 2D/UI/Event Node");
-            HPbar_Texture = Content.Load<Texture2D>("Asset 2D/UI/HP bar");
+            HPMPbar_Texture = Content.Load<Texture2D>("Asset 2D/UI/HP_MP_Bar");
             RestNode_Texture = Content.Load<Texture2D>("Asset 2D/UI/Rest Node");
             Yes_Texture = Content.Load<Texture2D>("Asset 2D/UI/button_yes");
             No_Texture = Content.Load<Texture2D>("Asset 2D/UI/button_no");
             Return_Texture = Content.Load<Texture2D>("Asset 2D/UI/button_return");
+            Logo_Texture = Content.Load<Texture2D>("Asset 2D/UI/item");
+            Taptostart_Texture = Content.Load<Texture2D>("Asset 2D/UI/tap to start");
 
             font = Content.Load<SpriteFont>("font");
 
@@ -406,6 +411,7 @@ namespace Burrow_Rune
             for (int i = 0; i < TurnOrder.Count; i++)
             {
                 TurnOrder[i].HPtext = "" + TurnOrder[i].HP;
+                TurnOrder[i].MPtext = "" + TurnOrder[i].MP;
                 Rectangle unitRectangle = new Rectangle((int)TurnOrder[i].spriteLocation.X, (int)TurnOrder[i].spriteLocation.Y, 270, 250);
                 for (int m = 0; m < TurnOrder[i].Skill_list.Count; m++)
                 {
@@ -596,33 +602,75 @@ namespace Burrow_Rune
                                     TurnOrder[i].Skill_list[m].Pressed = true;
                                     if (TurnOrder[i].Skill_list[m] == Double_Slash)
                                     {
-                                        UseSkill = 1;
-                                        BattleTxt = "Attack one target twice";
+                                        if (TurnOrder[i].MP >= 5)
+                                        {
+                                            UseSkill = 1;
+                                            BattleTxt = "Attack one target twice";
+                                        }
+                                        else
+                                        {
+                                            BattleTxt = "No enought mana";
+                                        }
                                     }
                                     if (TurnOrder[i].Skill_list[m] == Wide_Slash)
                                     {
-                                        UseSkill = 2;
-                                        BattleTxt = "Attack all enemy once";
+                                        if (TurnOrder[i].MP >= 5)
+                                        {
+                                            UseSkill = 2;
+                                            BattleTxt = "Attack all enemy once";
+                                        }
+                                        else
+                                        {
+                                            BattleTxt = "No enought mana";
+                                        }
                                     }
                                     if (TurnOrder[i].Skill_list[m] == Blood_Drain)
                                     {
-                                        UseSkill = 3;
-                                        BattleTxt = "Drain one enemy";
+                                        if (TurnOrder[i].MP >= 5)
+                                        {
+                                            UseSkill = 3;
+                                            BattleTxt = "Drain one enemy";
+                                        }
+                                        else
+                                        {
+                                            BattleTxt = "No enought mana";
+                                        }
                                     }
                                     if (TurnOrder[i].Skill_list[m] == Power_Boost)
                                     {
-                                        UseSkill = 4;
-                                        BattleTxt = "increse ally attack power by 2 for this battle";
+                                        if (TurnOrder[i].MP >= 5)
+                                        {
+                                            UseSkill = 4;
+                                            BattleTxt = "increse ally attack power by 2 for this battle";
+                                        }
+                                        else
+                                        {
+                                            BattleTxt = "No enought mana";
+                                        }
                                     }
                                     if (TurnOrder[i].Skill_list[m] == Ankle_Cut)
                                     {
-                                        UseSkill = 5;
-                                        BattleTxt = "Attack and decrese enemy speed by 2";
+                                        if (TurnOrder[i].MP >= 5)
+                                        {
+                                            UseSkill = 5;
+                                            BattleTxt = "Attack and decrese enemy speed by 2";
+                                        }
+                                        else
+                                        {
+                                            BattleTxt = "No enought mana";
+                                        }
                                     }
                                     if (TurnOrder[i].Skill_list[m] == Blood_Curse)
                                     {
-                                        UseSkill = 6;
-                                        BattleTxt = "Decrese all enemy Attack by 2";
+                                        if (TurnOrder[i].MP >= 5)
+                                        {
+                                            UseSkill = 6;
+                                            BattleTxt = "Decrese all enemy Attack by 2";
+                                        }
+                                        else
+                                        {
+                                            BattleTxt = "No enought mana";
+                                        }
                                     }
                                 }
                                 
@@ -665,6 +713,7 @@ namespace Burrow_Rune
                                         {
                                             TurnOrder[i].isAttacking = true;
                                             timeLoad = true;
+                                            TurnOrder[i].MP -= 5;
                                             EnemyGroup[target].attacked = true;
                                             EnemyGroup[target].HP -= TurnOrder[i].Atk;
                                             EnemyGroup[target].spriteLocation2 = EnemyGroup[target].spriteLocation;
@@ -675,6 +724,11 @@ namespace Burrow_Rune
                                     }
                                     if (UseSkill == 2)
                                     {
+                                        if (Partywaitingtime == 0)
+                                        {
+                                            TurnOrder[i].MP -= 5;
+                                        }
+                                        Partywaitingtime += 1;
                                         TurnOrder[i].isAttacking = true;
                                         TurnOrder[i].ATKframe = 1;
                                         if (ATKcount < EnemyGroup.Count)
@@ -707,12 +761,18 @@ namespace Burrow_Rune
                                                 TurnOrder[i].HP = TurnOrder[i].MaxHP;
                                             }
                                             timeLoad = true;
+                                            TurnOrder[i].MP -= 5;
                                             BattleSFX[5].CreateInstance().Play();
                                         }
                                         Partywaitingtime += 1;
                                     }
                                     if (UseSkill == 4)
                                     {
+                                        if (Partywaitingtime == 0)
+                                        {
+                                            TurnOrder[i].MP -= 5;
+                                        }
+                                        Partywaitingtime += 1;
                                         TurnOrder[i].isAttacking = true;
                                         if (ATKcount < Party.Count)
                                         {
@@ -1218,6 +1278,7 @@ namespace Burrow_Rune
             for (int i = 0; i < Party.Count; i++)
             {
                 Party[i].HPtext = "" + Party[i].HP;
+                Party[i].MPtext = "" + Party[i].MP;
             }
 
             for (int i = 0; i < ButtoninMap.Count; i++)
@@ -1343,6 +1404,7 @@ namespace Burrow_Rune
                 for (int i = 0; i < Party.Count; i++)
                 {
                     Party[i].HP = Party[i].MaxHP;
+                    Party[i].MP = Party[i].MaxMP;
                 }
                 ResetMap();
                 isMap = false;
@@ -1392,6 +1454,7 @@ namespace Burrow_Rune
             for (int i = 0; i < Party.Count; i++)
             {
                 Party[i].HPtext = "" + Party[i].HP;
+                Party[i].MPtext = "" + Party[i].MP;
             }
 
             if (eventNum == 1)
@@ -1550,6 +1613,11 @@ namespace Burrow_Rune
         private void UpdateRest()
         {
             var mouseState = Mouse.GetState();
+            for (int i = 0; i < Party.Count; i++)
+            {
+                Party[i].HPtext = "" + Party[i].HP;
+                Party[i].MPtext = "" + Party[i].MP;
+            }
 
             if (mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed)
             {
@@ -1708,6 +1776,7 @@ namespace Burrow_Rune
                     Party[i].spriteLocation2 = Party[i].spriteLocation;
                     Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X + 40, SetPO1.Y - 220);
                     Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
+                    Party[i].MPbar_Location = new Vector2(Party[i].HPMPbar_iconLocation.X, Party[i].HPMPbar_iconLocation.Y + 30);
                     Party[i].HPicon_Location = new Vector2(SetPO1.X, SetPO1.Y - 240);
                 }
                 if (i == 1)
@@ -1716,6 +1785,7 @@ namespace Burrow_Rune
                     Party[i].spriteLocation2 = Party[i].spriteLocation;
                     Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X - 240, SetPO1.Y - 220);
                     Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
+                    Party[i].MPbar_Location = new Vector2(Party[i].HPMPbar_iconLocation.X, Party[i].HPMPbar_iconLocation.Y + 30);
                     Party[i].HPicon_Location = new Vector2(SetPO1.X - 270, SetPO1.Y - 240);
                 }
                 if (i == 2)
@@ -1724,6 +1794,7 @@ namespace Burrow_Rune
                     Party[i].spriteLocation2 = Party[i].spriteLocation;
                     Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X - 520, SetPO1.Y - 220);
                     Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
+                    Party[i].MPbar_Location = new Vector2(Party[i].HPMPbar_iconLocation.X, Party[i].HPMPbar_iconLocation.Y + 30);
                     Party[i].HPicon_Location = new Vector2(SetPO1.X - 540, SetPO1.Y - 240);
                 }
             }
@@ -1897,95 +1968,103 @@ namespace Burrow_Rune
             {
                 if (Party[i] == Lurker)
                 {
-                    _spriteBatch.Draw(HPbar_Texture, Lurker.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, Lurker.HPbar_Location, new Rectangle(0, 0, Lurker.HP * (240 / Lurker.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, Lurker.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 54), Color.White);
+                    _spriteBatch.Draw(HPMPbar_Texture, Lurker.HPbar_Location, new Rectangle(0, 0, Lurker.HP * (240 / Lurker.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, Lurker.MPbar_Location, new Rectangle(0, 30, Lurker.MP * (240 / Lurker.MaxMP), 30), Color.DodgerBlue);
                     _spriteBatch.Draw(Lurker_Small_Icon, Lurker.Small_iconLocation, new Rectangle(0, 0, 126, 126), Lurker.State);
                     _spriteBatch.Draw(Lurker_Big_Icon, Lurker.Big_iconLocation, new Rectangle(0, 460, 200, 140), Color.White);
                     _spriteBatch.Draw(Lurker_Small_Icon, Lurker.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
                     _spriteBatch.DrawString(font, Lurker.HPtext, new Vector2(Lurker.HPMPbar_iconLocation.X + 120, Lurker.HPMPbar_iconLocation.Y), Color.Black);
+                    _spriteBatch.DrawString(font, Lurker.MPtext, new Vector2(Lurker.MPbar_Location.X + 120, Lurker.MPbar_Location.Y - 7), Color.Black);
                 }
                 if (Party[i] == inventor)
                 {
-                    _spriteBatch.Draw(HPbar_Texture, inventor.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, inventor.HPbar_Location, new Rectangle(0, 0, inventor.HP * (240 / inventor.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, inventor.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 54), Color.White);
+                    _spriteBatch.Draw(HPMPbar_Texture, inventor.HPbar_Location, new Rectangle(0, 0, inventor.HP * (240 / inventor.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, inventor.MPbar_Location, new Rectangle(0, 30, inventor.MP * (240 / inventor.MaxMP), 30), Color.DodgerBlue);
                     _spriteBatch.Draw(Inventor_Small_Icon, inventor.Small_iconLocation, new Rectangle(0, 0, 126, 126), inventor.State);
                     _spriteBatch.Draw(Inventor_Big_Icon, inventor.Big_iconLocation, new Rectangle(0, 300, 200, 140), Color.White);
                     _spriteBatch.Draw(Inventor_Small_Icon, inventor.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
                     _spriteBatch.DrawString(font, inventor.HPtext, new Vector2(inventor.HPMPbar_iconLocation.X + 120, inventor.HPMPbar_iconLocation.Y), Color.Black);
+                    _spriteBatch.DrawString(font, inventor.MPtext, new Vector2(inventor.MPbar_Location.X + 120, inventor.MPbar_Location.Y - 7), Color.Black);
                 }
                 if (Party[i] == Blood_Maiden)
                 {
-                    _spriteBatch.Draw(HPbar_Texture, Blood_Maiden.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, Blood_Maiden.HPbar_Location, new Rectangle(0, 0, Blood_Maiden.HP * (240 / Blood_Maiden.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, Blood_Maiden.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 54), Color.White);
+                    _spriteBatch.Draw(HPMPbar_Texture, Blood_Maiden.HPbar_Location, new Rectangle(0, 0, Blood_Maiden.HP * (240 / Blood_Maiden.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, Blood_Maiden.MPbar_Location, new Rectangle(0, 30, Blood_Maiden.MP * (240 / Blood_Maiden.MaxMP), 30), Color.DodgerBlue);
                     _spriteBatch.Draw(Blood_Maiden_Small_Icon, Blood_Maiden.Small_iconLocation, new Rectangle(0, 0, 126, 126), Blood_Maiden.State);
                     _spriteBatch.Draw(Blood_Maiden_Big_Icon, Blood_Maiden.Big_iconLocation, new Rectangle(0, 480, 200, 140), Color.White);
                     _spriteBatch.Draw(Blood_Maiden_Small_Icon, Blood_Maiden.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
                     _spriteBatch.DrawString(font, Blood_Maiden.HPtext, new Vector2(Blood_Maiden.HPMPbar_iconLocation.X + 120, Blood_Maiden.HPMPbar_iconLocation.Y), Color.Black);
+                    _spriteBatch.DrawString(font, Blood_Maiden.MPtext, new Vector2(Blood_Maiden.MPbar_Location.X + 120, Blood_Maiden.MPbar_Location.Y - 7), Color.Black);
                 }
                 if (Party[i] == Dragonic_hunter)
                 {
-                    _spriteBatch.Draw(HPbar_Texture, Dragonic_hunter.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, Dragonic_hunter.HPbar_Location, new Rectangle(0, 0, Dragonic_hunter.HP * (240 / Dragonic_hunter.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, Dragonic_hunter.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 54), Color.White);
+                    _spriteBatch.Draw(HPMPbar_Texture, Dragonic_hunter.HPbar_Location, new Rectangle(0, 0, Dragonic_hunter.HP * (240 / Dragonic_hunter.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, Dragonic_hunter.MPbar_Location, new Rectangle(0, 30, Dragonic_hunter.MP * (240 / Dragonic_hunter.MaxMP), 30), Color.DodgerBlue);
                     _spriteBatch.Draw(Dragonic_Small_Icon, Dragonic_hunter.Small_iconLocation, new Rectangle(0, 0, 126, 126), Dragonic_hunter.State);
                     _spriteBatch.Draw(Dragonic_Texture, Dragonic_hunter.Big_iconLocation, new Rectangle(0, 480, 200, 140), Color.White);
                     _spriteBatch.Draw(Dragonic_Small_Icon, Dragonic_hunter.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
                     _spriteBatch.DrawString(font, Dragonic_hunter.HPtext, new Vector2(Dragonic_hunter.HPMPbar_iconLocation.X + 120, Dragonic_hunter.HPMPbar_iconLocation.Y), Color.Black);
+                    _spriteBatch.DrawString(font, Dragonic_hunter.MPtext, new Vector2(Dragonic_hunter.MPbar_Location.X + 120, Dragonic_hunter.MPbar_Location.Y - 7), Color.Black);
                 }
             }
             for (int i = 0; i < EnemyGroup.Count; i++)
             {
                 if (EnemyGroup[i] == Golem)
                 {
-                    _spriteBatch.Draw(HPbar_Texture, Golem.HPMPbar_iconLocation, new Rectangle(0, 0, 270, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, Golem.HPbar_Location, new Rectangle(0, 0, Golem.HP * (280 / Golem.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, Golem.HPMPbar_iconLocation, new Rectangle(0, 0, 270, 30), Color.White);
+                    _spriteBatch.Draw(HPMPbar_Texture, Golem.HPbar_Location, new Rectangle(0, 0, Golem.HP * (280 / Golem.MaxHP), 30), Color.Red);
                     _spriteBatch.Draw(Golem_Icon, Golem.Small_iconLocation, new Rectangle(35, 315, 90, 90), Golem.State);
                     _spriteBatch.Draw(Golem_Texture, Golem.Big_iconLocation, new Rectangle(50, 70, 120, 140), Color.White);
                     _spriteBatch.DrawString(font, Golem.HPtext, new Vector2(Golem.HPMPbar_iconLocation.X + 120, Golem.HPMPbar_iconLocation.Y), Color.Black);
                 }
                 if (EnemyGroup[i] == Rocky1)
                 {
-                    _spriteBatch.Draw(HPbar_Texture, Rocky1.HPMPbar_iconLocation, new Rectangle(0, 0, 180, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, Rocky1.HPbar_Location, new Rectangle(0, 0, Rocky1.HP * (190 / Rocky1.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, Rocky1.HPMPbar_iconLocation, new Rectangle(0, 0, 180, 30), Color.White);
+                    _spriteBatch.Draw(HPMPbar_Texture, Rocky1.HPbar_Location, new Rectangle(0, 0, Rocky1.HP * (190 / Rocky1.MaxHP), 30), Color.Red);
                     _spriteBatch.Draw(Rocky_Icon, Rocky1.Small_iconLocation, new Rectangle(0, 0, 90, 90), Rocky1.State);
                     _spriteBatch.Draw(Rocky_Text, Rocky1.Big_iconLocation, new Rectangle(0, 0, 90, 90), Color.White);
                     _spriteBatch.DrawString(font, Rocky1.HPtext, new Vector2(Rocky1.HPMPbar_iconLocation.X + 90, Rocky1.HPMPbar_iconLocation.Y), Color.Black);
                 }
                 if (EnemyGroup[i] == Rocky2)
                 {
-                    _spriteBatch.Draw(HPbar_Texture, Rocky2.HPMPbar_iconLocation, new Rectangle(0, 0, 180, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, Rocky2.HPbar_Location, new Rectangle(0, 0, Rocky2.HP * (190 / Rocky2.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, Rocky2.HPMPbar_iconLocation, new Rectangle(0, 0, 180, 30), Color.White);
+                    _spriteBatch.Draw(HPMPbar_Texture, Rocky2.HPbar_Location, new Rectangle(0, 0, Rocky2.HP * (190 / Rocky2.MaxHP), 30), Color.Red);
                     _spriteBatch.Draw(Rocky_Icon, Rocky2.Small_iconLocation, new Rectangle(0, 0, 90, 90), Rocky2.State);
                     _spriteBatch.Draw(Rocky_Text, Rocky2.Big_iconLocation, new Rectangle(0, 0, 90, 90), Color.White);
                     _spriteBatch.DrawString(font, Rocky2.HPtext, new Vector2(Rocky2.HPMPbar_iconLocation.X + 90, Rocky2.HPMPbar_iconLocation.Y), Color.Black);
                 }
                 if (EnemyGroup[i] == Rocky3)
                 {
-                    _spriteBatch.Draw(HPbar_Texture, Rocky3.HPMPbar_iconLocation, new Rectangle(0, 0, 180, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, Rocky3.HPbar_Location, new Rectangle(0, 0, Rocky3.HP * (190 / Rocky3.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, Rocky3.HPMPbar_iconLocation, new Rectangle(0, 0, 180, 30), Color.White);
+                    _spriteBatch.Draw(HPMPbar_Texture, Rocky3.HPbar_Location, new Rectangle(0, 0, Rocky3.HP * (190 / Rocky3.MaxHP), 30), Color.Red);
                     _spriteBatch.Draw(Rocky_Icon, Rocky3.Small_iconLocation, new Rectangle(0, 0, 90, 90), Rocky3.State);
                     _spriteBatch.Draw(Rocky_Text, Rocky3.Big_iconLocation, new Rectangle(0, 0, 90, 90), Color.White);
                     _spriteBatch.DrawString(font, Rocky3.HPtext, new Vector2(Rocky3.HPMPbar_iconLocation.X + 90, Rocky3.HPMPbar_iconLocation.Y), Color.Black);
                 }
                 if (EnemyGroup[i] == Beetle1)
                 {
-                    _spriteBatch.Draw(HPbar_Texture, Beetle1.HPMPbar_iconLocation, new Rectangle(0, 0, 180, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, Beetle1.HPbar_Location, new Rectangle(0, 0, Beetle1.HP * (190 / Beetle1.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, Beetle1.HPMPbar_iconLocation, new Rectangle(0, 0, 180, 30), Color.White);
+                    _spriteBatch.Draw(HPMPbar_Texture, Beetle1.HPbar_Location, new Rectangle(0, 0, Beetle1.HP * (190 / Beetle1.MaxHP), 30), Color.Red);
                     _spriteBatch.Draw(Beetle_Icon, Beetle1.Small_iconLocation, new Rectangle(0, 0, 90, 90), Beetle1.State);
                     _spriteBatch.Draw(Beetle_Text, Beetle1.Big_iconLocation, new Rectangle(0, 20, 120, 920), Color.White);
                     _spriteBatch.DrawString(font, Beetle1.HPtext, new Vector2(Beetle1.HPMPbar_iconLocation.X + 90, Beetle1.HPMPbar_iconLocation.Y), Color.Black);
                 }
                 if (EnemyGroup[i] == Beetle2)
                 {
-                    _spriteBatch.Draw(HPbar_Texture, Beetle2.HPMPbar_iconLocation, new Rectangle(0, 0, 180, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, Beetle2.HPbar_Location, new Rectangle(0, 0, Beetle2.HP * (190 / Beetle2.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, Beetle2.HPMPbar_iconLocation, new Rectangle(0, 0, 180, 30), Color.White);
+                    _spriteBatch.Draw(HPMPbar_Texture, Beetle2.HPbar_Location, new Rectangle(0, 0, Beetle2.HP * (190 / Beetle2.MaxHP), 30), Color.Red);
                     _spriteBatch.Draw(Beetle_Icon, Beetle2.Small_iconLocation, new Rectangle(0, 0, 90, 90), Beetle2.State);
                     _spriteBatch.Draw(Beetle_Text, Beetle2.Big_iconLocation, new Rectangle(0, 20, 120, 920), Color.White);
                     _spriteBatch.DrawString(font, Beetle2.HPtext, new Vector2(Beetle2.HPMPbar_iconLocation.X + 90, Beetle2.HPMPbar_iconLocation.Y), Color.Black);
                 }
                 if (EnemyGroup[i] == Beetle3)
                 {
-                    _spriteBatch.Draw(HPbar_Texture, Beetle3.HPMPbar_iconLocation, new Rectangle(0, 0, 180, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, Beetle3.HPbar_Location, new Rectangle(0, 0, Beetle3.HP * (190 / Beetle3.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, Beetle3.HPMPbar_iconLocation, new Rectangle(0, 0, 180, 30), Color.White);
+                    _spriteBatch.Draw(HPMPbar_Texture, Beetle3.HPbar_Location, new Rectangle(0, 0, Beetle3.HP * (190 / Beetle3.MaxHP), 30), Color.Red);
                     _spriteBatch.Draw(Beetle_Icon, Beetle3.Small_iconLocation, new Rectangle(0, 0, 90, 90), Beetle3.State);
                     _spriteBatch.Draw(Beetle_Text, Beetle3.Big_iconLocation, new Rectangle(0, 20, 120, 920), Color.White);
                     _spriteBatch.DrawString(font, Beetle3.HPtext, new Vector2(Beetle3.HPMPbar_iconLocation.X + 90, Beetle3.HPMPbar_iconLocation.Y), Color.Black);
@@ -2024,9 +2103,8 @@ namespace Burrow_Rune
 
         private void DrawTitle()
         {
-            _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
-            String str = "Title Screen is here \n Click anywhere to continue";
-            _spriteBatch.DrawString(font, str, new Vector2(400, 200), Color.Red);
+            _spriteBatch.Draw(Logo_Texture, Vector2.Zero, new Rectangle(unloop_frame * 1440, 0, 1440, 560),Color.White);
+            _spriteBatch.Draw(Taptostart_Texture, new Vector2(500,450), Color.White);
         }
 
         private void DrawEvent()
@@ -2215,48 +2293,59 @@ namespace Burrow_Rune
             {
                 if (Party[i] == Lurker)
                 {
-                    _spriteBatch.Draw(HPbar_Texture, Lurker.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, Lurker.HPbar_Location, new Rectangle(0, 0, Lurker.HP * (240 / Lurker.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, Lurker.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 54), Color.White);
+                    _spriteBatch.Draw(HPMPbar_Texture, Lurker.HPbar_Location, new Rectangle(0, 0, Lurker.HP * (240 / Lurker.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, Lurker.MPbar_Location, new Rectangle(0, 30, Lurker.MP * (240 / Lurker.MaxMP), 30), Color.DodgerBlue);
                     _spriteBatch.Draw(Lurker_Small_Icon, Lurker.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
                     _spriteBatch.DrawString(font, Lurker.HPtext, new Vector2(Lurker.HPMPbar_iconLocation.X + 120, Lurker.HPMPbar_iconLocation.Y), Color.Black);
+                    _spriteBatch.DrawString(font, Lurker.MPtext, new Vector2(Lurker.MPbar_Location.X + 120, Lurker.MPbar_Location.Y - 7), Color.Black);
                 }
                 if (Party[i] == inventor)
                 {
-                    _spriteBatch.Draw(HPbar_Texture, inventor.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, inventor.HPbar_Location, new Rectangle(0, 0, inventor.HP * (240 / inventor.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, inventor.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 54), Color.White);
+                    _spriteBatch.Draw(HPMPbar_Texture, inventor.HPbar_Location, new Rectangle(0, 0, inventor.HP * (240 / inventor.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, inventor.MPbar_Location, new Rectangle(0, 30, inventor.MP * (240 / inventor.MaxMP), 30), Color.DodgerBlue);
                     _spriteBatch.Draw(Inventor_Small_Icon, inventor.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
                     _spriteBatch.DrawString(font, inventor.HPtext, new Vector2(inventor.HPMPbar_iconLocation.X + 120, inventor.HPMPbar_iconLocation.Y), Color.Black);
+                    _spriteBatch.DrawString(font, inventor.MPtext, new Vector2(inventor.MPbar_Location.X + 120, inventor.MPbar_Location.Y - 7), Color.Black);
                 }
                 if (Party[i] == Blood_Maiden)
                 {
-                    _spriteBatch.Draw(HPbar_Texture, Blood_Maiden.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, Blood_Maiden.HPbar_Location, new Rectangle(0, 0, Blood_Maiden.HP * (240 / Blood_Maiden.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, Blood_Maiden.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 54), Color.White);
+                    _spriteBatch.Draw(HPMPbar_Texture, Blood_Maiden.HPbar_Location, new Rectangle(0, 0, Blood_Maiden.HP * (240 / Blood_Maiden.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, Blood_Maiden.MPbar_Location, new Rectangle(0, 30, Blood_Maiden.MP * (240 / Blood_Maiden.MaxMP), 30), Color.DodgerBlue);
                     _spriteBatch.Draw(Blood_Maiden_Small_Icon, Blood_Maiden.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
                     _spriteBatch.DrawString(font, Blood_Maiden.HPtext, new Vector2(Blood_Maiden.HPMPbar_iconLocation.X + 120, Blood_Maiden.HPMPbar_iconLocation.Y), Color.Black);
+                    _spriteBatch.DrawString(font, Blood_Maiden.MPtext, new Vector2(Blood_Maiden.MPbar_Location.X + 120, Blood_Maiden.MPbar_Location.Y - 7), Color.Black);
                 }
                 if (Party[i] == Dragonic_hunter)
                 {
-                    _spriteBatch.Draw(HPbar_Texture, Dragonic_hunter.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, Dragonic_hunter.HPbar_Location, new Rectangle(0, 0, Dragonic_hunter.HP * (240 / Dragonic_hunter.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, Dragonic_hunter.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 54), Color.White);
+                    _spriteBatch.Draw(HPMPbar_Texture, Dragonic_hunter.HPbar_Location, new Rectangle(0, 0, Dragonic_hunter.HP * (240 / Dragonic_hunter.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(HPMPbar_Texture, Dragonic_hunter.MPbar_Location, new Rectangle(0, 30, Dragonic_hunter.MP * (240 / Dragonic_hunter.MaxMP), 30), Color.DodgerBlue);
                     _spriteBatch.Draw(Dragonic_Small_Icon, Dragonic_hunter.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
                     _spriteBatch.DrawString(font, Dragonic_hunter.HPtext, new Vector2(Dragonic_hunter.HPMPbar_iconLocation.X + 120, Dragonic_hunter.HPMPbar_iconLocation.Y), Color.Black);
+                    _spriteBatch.DrawString(font, Dragonic_hunter.MPtext, new Vector2(Dragonic_hunter.MPbar_Location.X + 120, Dragonic_hunter.MPbar_Location.Y - 7), Color.Black);
                 }
                 if (i == 0)
                 {
                     Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X + 40, SetPO1.Y - 220);
                     Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
+                    Party[i].MPbar_Location = new Vector2(Party[i].HPMPbar_iconLocation.X, Party[i].HPMPbar_iconLocation.Y + 30);
                     Party[i].HPicon_Location = new Vector2(SetPO1.X, SetPO1.Y - 240);
                 }
                 if (i == 1)
                 {
                     Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X - 240, SetPO1.Y - 220);
                     Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
+                    Party[i].MPbar_Location = new Vector2(Party[i].HPMPbar_iconLocation.X, Party[i].HPMPbar_iconLocation.Y + 30);
                     Party[i].HPicon_Location = new Vector2(SetPO1.X - 270, SetPO1.Y - 240);
                 }
                 if (i == 2)
                 {
                     Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X - 520, SetPO1.Y - 220);
                     Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
+                    Party[i].MPbar_Location = new Vector2(Party[i].HPMPbar_iconLocation.X, Party[i].HPMPbar_iconLocation.Y + 30);
                     Party[i].HPicon_Location = new Vector2(SetPO1.X - 540, SetPO1.Y - 240);
                 }
             }

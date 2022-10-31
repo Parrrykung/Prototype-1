@@ -11,6 +11,8 @@ namespace Burrow_Rune
     {
         public int HP;
         public int MaxHP;
+        public int MP;
+        public int MaxMP;
         public int Atk;
         public int Oatk;
         public int direction;
@@ -34,18 +36,20 @@ namespace Burrow_Rune
         public Vector2 Small_iconLocation = new Vector2(1000, 1000);
         public Vector2 HPMPbar_iconLocation = new Vector2(1000, 1000);
         public Vector2 HPbar_Location = new Vector2(1000, 1000);
+        public Vector2 MPbar_Location = new Vector2(1000, 1000);
         public Vector2 HPicon_Location = new Vector2(1000, 1000);
         public int AttackSFX;
         public List<Button> Skill_list = new List<Button>();
         public List<Button> Item_list = new List<Button>();
         public string HPtext = "";
+        public string MPtext = "";
 
         public UnitClass()
         {
 
         }
 
-        public UnitClass( bool playable, int speed, int HP, int Atk, int AttackSFX)
+        public UnitClass( bool playable, int speed, int HP, int Atk, int AttackSFX, int MP)
         {
             
             this.speed = speed;
@@ -56,6 +60,8 @@ namespace Burrow_Rune
             this.Atk = Atk;
             Oatk = Atk;
             this.AttackSFX = AttackSFX;
+            this.MP = MP;
+            MaxMP = MP;
         }
 
     }

@@ -289,7 +289,7 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/UI/Fight Node.png
 
-#begin ASSET 2D/UI/HP bar.png
+#begin ASSET 2D/UI/HP_MP_Bar.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -299,7 +299,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/UI/HP bar.png
+/build:ASSET 2D/UI/HP_MP_Bar.png
 
 #begin ASSET 2D/UI/Inventor icon.png
 /importer:TextureImporter
@@ -324,6 +324,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/UI/Item.png
+
+#begin ASSET 2D/UI/Logo.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/UI/Logo.png
 
 #begin ASSET 2D/UI/Lurker Icon.png
 /importer:TextureImporter
@@ -360,6 +372,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/UI/Skill.png
+
+#begin ASSET 2D/UI/tap to start.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/UI/tap to start.png
 
 #begin ASSET 2D/UI/Turn-Order-Hub.png
 /importer:TextureImporter
