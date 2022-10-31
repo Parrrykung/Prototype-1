@@ -28,6 +28,9 @@
     <None Remove="Content\ASSET 2D\Skill.png" />
     <None Remove="Content\ASSET 2D\Turn-Order-Hub.png" />
     <None Remove="Content\ASSET 2D\Turn-Selector.png" />
+    <None Remove="Content\ASSET 2D\UI\Blood Maiden Icon.png" />
+    <None Remove="Content\ASSET 2D\UI\Inventor icon.png" />
+    <None Remove="Content\ASSET 2D\UI\Lurker Icon.png" />
     <None Remove="Content\File.spritefont" />
     <None Remove="Content\ZoodHarit4Bit-thai.ttf" />
   </ItemGroup>

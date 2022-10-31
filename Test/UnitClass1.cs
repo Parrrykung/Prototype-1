@@ -12,6 +12,7 @@ namespace Burrow_Rune
         public int HP;
         public int MaxHP;
         public int Atk;
+        public int Oatk;
         public int direction;
         public int ATKframe = 0;
         public Vector2 spriteLocation;
@@ -51,6 +52,7 @@ namespace Burrow_Rune
             this.HP = HP;
             MaxHP = HP;
             this.Atk = Atk;
+            Oatk = Atk;
             this.AttackSFX = AttackSFX;
         }
 

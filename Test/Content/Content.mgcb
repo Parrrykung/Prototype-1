@@ -217,6 +217,30 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/UI/Blood Maiden Icon.png
 
+#begin ASSET 2D/UI/button_no.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/UI/button_no.png
+
+#begin ASSET 2D/UI/button_yes.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/UI/button_yes.png
+
 #begin ASSET 2D/UI/Dragonic Icon.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -476,6 +500,18 @@
 /processorParam:Quality=Best
 /build:SFX/Dice_Click.wav
 
+#begin SFX/Effect_Bleeding.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/Effect_Bleeding.wav
+
+#begin SFX/Effect_Buff.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/Effect_Buff.wav
+
 #begin SFX/Effect_Heal.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -523,6 +559,12 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:SFX/Sword_Hori.wav
+
+#begin SFX/Ui_Cancel.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/Ui_Cancel.wav
 
 #begin SFX/Ui_Click.wav
 /importer:WavImporter

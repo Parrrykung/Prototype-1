@@ -93,6 +93,8 @@ namespace Burrow_Rune
         private Texture2D EventNode_Texture;
         private Texture2D RestNode_Texture;
         private Texture2D HPbar_Texture;
+        private Texture2D Yes_Texture;
+        private Texture2D No_Texture;
 
         public UnitClass Lurker = new UnitClass(true, 6, 30, 5, 0);
         public UnitClass Golem = new UnitClass(false,4, 40, 5, 3);
@@ -122,6 +124,8 @@ namespace Burrow_Rune
 
         private Button Double_Slash = new Button(new Vector2(1000, 1000));
         private Button Wide_Slash = new Button(new Vector2(1000, 1000));
+        private Button Blood_Drain = new Button(new Vector2(1000, 1000));
+        private Button Power_Boost = new Button(new Vector2(1000, 1000));
 
         private Button HeathPotion = new Button(new Vector2(1000, 1000));
 
@@ -145,6 +149,9 @@ namespace Burrow_Rune
         private Song BossBGM;
         private Song ShopBGM;
         private SoundEffect ClickSFX;
+        private SoundEffect WinSFX;
+        private SoundEffect CancleSFX;
+        private SoundEffect GainSFX;
 
 
         //ok
@@ -195,6 +202,8 @@ namespace Burrow_Rune
             EventNode_Texture = Content.Load<Texture2D>("Asset 2D/UI/Event Node");
             HPbar_Texture = Content.Load<Texture2D>("Asset 2D/UI/HP bar");
             RestNode_Texture = Content.Load<Texture2D>("Asset 2D/UI/Rest Node");
+            Yes_Texture = Content.Load<Texture2D>("Asset 2D/UI/button_yes");
+            No_Texture = Content.Load<Texture2D>("Asset 2D/UI/button_no");
 
             font = Content.Load<SpriteFont>("font");
 
@@ -205,6 +214,9 @@ namespace Burrow_Rune
             BossBGM = Content.Load<Song>("BGM/go-back-to-the-heavens-49981");
             ShopBGM = Content.Load<Song>("BGM/fruit-9530");
             ClickSFX = Content.Load<SoundEffect>("SFX/Ui_Click");
+            WinSFX = Content.Load<SoundEffect>("SFX/Result_EndWin");
+            CancleSFX = Content.Load<SoundEffect>("SFX/Ui_Cancel");
+            GainSFX = Content.Load<SoundEffect>("SFX/Story_ClothCatch");
 
             MediaPlayer.Play(TitleBGM);
 
@@ -245,17 +257,20 @@ namespace Burrow_Rune
             ButtoninEvent.Add(Yes_B);
             ButtoninEvent.Add(No_B);
 
-            BattleSFX.Add(Content.Load<SoundEffect>("SFX/Sword_Hori"));
+            BattleSFX.Add(Content.Load<SoundEffect>("SFX/Sword_Hori")); //0//
             BattleSFX.Add(Content.Load<SoundEffect>("SFX/Blow_Hori"));
             BattleSFX.Add(Content.Load<SoundEffect>("SFX/Philip_Hit"));
             BattleSFX.Add(Content.Load<SoundEffect>("SFX/Greed_Stab"));
             BattleSFX.Add(Content.Load<SoundEffect>("SFX/Effect_Heal"));
-            BattleSFX.Add(Content.Load<SoundEffect>("SFX/Result_WaveLose"));
+            BattleSFX.Add(Content.Load<SoundEffect>("SFX/Effect_Bleeding")); //5//
+            BattleSFX.Add(Content.Load<SoundEffect>("SFX/Effect_Buff"));
 
             Lurker.Skill_list.Add(Double_Slash);
             Lurker.Skill_list.Add(Wide_Slash);
             Dragonic_hunter.Skill_list.Add(Double_Slash);
             Dragonic_hunter.Skill_list.Add(Wide_Slash);
+            inventor.Skill_list.Add(Power_Boost);
+            Blood_Maiden.Skill_list.Add(Blood_Drain);
 
             Lurker.Item_list.Add(HeathPotion);
             inventor.Item_list.Add(HeathPotion);
@@ -583,6 +598,16 @@ namespace Burrow_Rune
                                         UseSkill = 2;
                                         BattleTxt = "Attack all enemy once";
                                     }
+                                    if (TurnOrder[i].Skill_list[m] == Blood_Drain)
+                                    {
+                                        UseSkill = 3;
+                                        BattleTxt = "Drain one enemy";
+                                    }
+                                    if (TurnOrder[i].Skill_list[m] == Power_Boost)
+                                    {
+                                        UseSkill = 4;
+                                        BattleTxt = "increse ally attack power by 2 for this battle";
+                                    }
                                 }
                                 
                                 if (Skilling2 == true)
@@ -649,7 +674,36 @@ namespace Burrow_Rune
                                         {
                                             timeLoad = true;
                                         }
-
+                                    }
+                                    if (UseSkill == 3)
+                                    {
+                                        if (Partywaitingtime == 0)
+                                        {
+                                            TurnOrder[i].isAttacking = true;
+                                            TurnOrder[i].ATKframe = 1;
+                                            EnemyGroup[target].attacked = true;
+                                            EnemyGroup[target].HP -= TurnOrder[i].Atk;
+                                            EnemyGroup[target].spriteLocation2 = EnemyGroup[ATKcount].spriteLocation;
+                                            EnemyGroup[target].spriteLocation.X += 20;
+                                            TurnOrder[i].HP += TurnOrder[i].Atk;
+                                            timeLoad = true;
+                                            BattleSFX[5].CreateInstance().Play();
+                                        }
+                                        Partywaitingtime += 1;
+                                    }
+                                    if (UseSkill == 4)
+                                    {
+                                        TurnOrder[i].isAttacking = true;
+                                        if (ATKcount < Party.Count)
+                                        {
+                                            Party[ATKcount].Atk += 2;
+                                            ATKcount += 1;
+                                            BattleSFX[6].CreateInstance().Play();
+                                        }
+                                        else
+                                        {
+                                            timeLoad = true;
+                                        }
                                     }
                                 }
                             }
@@ -959,10 +1013,12 @@ namespace Burrow_Rune
             {
                 if (EnemyGroup[0].Alive == false && EnemyGroup[1].Alive == false && EnemyGroup[2].Alive == false)
                 {
+                    WinSFX.CreateInstance().Play();
                     for (int i = 0; i < TurnOrder.Count; i++)
                     {
                         TurnOrder[i].myTurn = false;
                         TurnOrder[i].ATKframe = 0;
+                        TurnOrder[i].Atk = TurnOrder[i].Oatk;
                         for (int n = 0; n < TurnOrder[i].Skill_list.Count; n++)
                         {
                             TurnOrder[i].Skill_list[n].Position = new Vector2(1000, 1000);
@@ -977,8 +1033,8 @@ namespace Burrow_Rune
                         }
                     }
                     MediaPlayer.Play(EventMapBGM);
-                    ResetCombat();
                     RandomNode();
+                    ResetCombat();
                     isMap = true;
                     isBattle = false;
                 }
@@ -987,10 +1043,12 @@ namespace Burrow_Rune
             {
                 if (EnemyGroup[0].Alive == false && EnemyGroup[1].Alive == false)
                 {
+                    WinSFX.CreateInstance().Play();
                     for (int i = 0; i < TurnOrder.Count; i++)
                     {
                         TurnOrder[i].myTurn = false;
                         TurnOrder[i].ATKframe = 0;
+                        TurnOrder[i].Atk = TurnOrder[i].Oatk;
                         for (int n = 0; n < TurnOrder[i].Skill_list.Count; n++)
                         {
                             TurnOrder[i].Skill_list[n].Position = new Vector2(1000, 1000);
@@ -1005,8 +1063,8 @@ namespace Burrow_Rune
                         }
                     }
                     MediaPlayer.Play(EventMapBGM);
-                    ResetCombat();
                     RandomNode();
+                    ResetCombat();
                     isMap = true;
                     isBattle = false;
                 }
@@ -1015,10 +1073,12 @@ namespace Burrow_Rune
             {
                 if (EnemyGroup[0].Alive == false)
                 {
+                    WinSFX.CreateInstance().Play();
                     for (int i = 0; i < TurnOrder.Count; i++)
                     {
                         TurnOrder[i].myTurn = false;
                         TurnOrder[i].ATKframe = 0;
+                        TurnOrder[i].Atk = TurnOrder[i].Oatk;
                         for (int n = 0; n < TurnOrder[i].Skill_list.Count; n++)
                         {
                             TurnOrder[i].Skill_list[n].Position = new Vector2(1000, 1000);
@@ -1033,11 +1093,10 @@ namespace Burrow_Rune
                         }
                     }
                     MediaPlayer.Play(EventMapBGM);
-                    ResetCombat();
                     RandomNode();
+                    ResetCombat();
                     isMap = true;
                     isBattle = false;
-                    
                 }
             }
 
@@ -1046,7 +1105,6 @@ namespace Burrow_Rune
                 if (Party[0].Alive == false && Party[1].Alive == false && Party[2].Alive == false)
                 {
                     MediaPlayer.Play(TitleBGM);
-                    BattleSFX[5].CreateInstance().Play();
                     for (int i = 0; i < TurnOrder.Count; i++)
                     {
                         TurnOrder[i].myTurn = false;
@@ -1074,11 +1132,22 @@ namespace Burrow_Rune
                 if (Party[0].Alive == false && Party[1].Alive == false)
                 {
                     MediaPlayer.Play(TitleBGM);
-                    BattleSFX[5].CreateInstance().Play();
                     for (int i = 0; i < TurnOrder.Count; i++)
                     {
                         TurnOrder[i].myTurn = false;
                         TurnOrder[i].ATKframe = 0;
+                        for (int n = 0; n < TurnOrder[i].Skill_list.Count; n++)
+                        {
+                            TurnOrder[i].Skill_list[n].Position = new Vector2(1000, 1000);
+                            TurnOrder[i].Skill_list[n].Pressed = false;
+                            TurnOrder[i].Skill_list[n].mouseHover = false;
+                        }
+                        for (int n = 0; n < TurnOrder[i].Item_list.Count; n++)
+                        {
+                            TurnOrder[i].Item_list[n].Position = new Vector2(1000, 1000);
+                            TurnOrder[i].Item_list[n].Pressed = false;
+                            TurnOrder[i].Item_list[n].mouseHover = false;
+                        }
                     }
                     ResetCombat();
                     isLose = true;
@@ -1090,11 +1159,22 @@ namespace Burrow_Rune
                 if (Party[0].Alive == false)
                 {
                     MediaPlayer.Play(TitleBGM);
-                    BattleSFX[5].CreateInstance().Play();
                     for (int i = 0; i < TurnOrder.Count; i++)
                     {
                         TurnOrder[i].myTurn = false;
                         TurnOrder[i].ATKframe = 0;
+                        for (int n = 0; n < TurnOrder[i].Skill_list.Count; n++)
+                        {
+                            TurnOrder[i].Skill_list[n].Position = new Vector2(1000, 1000);
+                            TurnOrder[i].Skill_list[n].Pressed = false;
+                            TurnOrder[i].Skill_list[n].mouseHover = false;
+                        }
+                        for (int n = 0; n < TurnOrder[i].Item_list.Count; n++)
+                        {
+                            TurnOrder[i].Item_list[n].Position = new Vector2(1000, 1000);
+                            TurnOrder[i].Item_list[n].Pressed = false;
+                            TurnOrder[i].Item_list[n].mouseHover = false;
+                        }
                     }
                     ResetCombat();
                     isLose = true;
@@ -1206,6 +1286,7 @@ namespace Burrow_Rune
                 isMap = false;
                 isBattle = true;
                 isFighting = false;
+                BattleTxt = "";
             }
 
             if (isInteracting == true && isFighting == false && Resting == false)
@@ -1224,22 +1305,11 @@ namespace Burrow_Rune
                 if (x == 2)
                 {
                     isShop = true;
-                    MediaPlayer.Play(ShopBGM);
                     ResetMap();
                     roomNum += 1;
                     isMap = false;
                     isInteracting = false;
                 }
-                else
-                {
-                    eventNum = r.Next(1, 3);
-                    isEvent = true;
-                    ResetMap();
-                    roomNum += 1;
-                    isMap = false;
-                    isInteracting = false;
-                }
-                
             }
 
             if (Resting == true && isFighting == false && isInteracting == false)
@@ -1334,6 +1404,7 @@ namespace Burrow_Rune
                         {
                             EventTxt = "You gain 150 gold!";
                             Gold += 150;
+                            GainSFX.CreateInstance().Play();
                         }
                         Partywaitingtime += 1;
                         if (Partywaitingtime == 100)
@@ -1411,14 +1482,15 @@ namespace Burrow_Rune
                     if (mouseState.LeftButton != ButtonState.Pressed && ButtoninEvent[i].mouseHover == true && Old_mouseState.LeftButton == ButtonState.Pressed)
                     {
                         eventChance = r.Next(1, 5);
-                        ClickSFX.CreateInstance().Play();
                         if (ButtoninEvent[i] == Yes_B)
                         {
                             Yes = true;
+                            ClickSFX.CreateInstance().Play();
                         }
                         if (ButtoninEvent[i] == No_B)
                         {
                             No = true;
+                            CancleSFX.CreateInstance().Play();
                         }
                     }
                 }
@@ -1584,8 +1656,7 @@ namespace Burrow_Rune
                 isMap = true;
                 isShop = false;
                 RandomNode();
-                ClickSFX.CreateInstance().Play();
-                MediaPlayer.Play(EventMapBGM);
+                CancleSFX.CreateInstance().Play();
             }
 
                 Old_mouseState = mouseState;
@@ -1906,6 +1977,8 @@ namespace Burrow_Rune
             }
             _spriteBatch.Draw(Skill_Texture, Double_Slash.Position, Double_Slash.State);
             _spriteBatch.Draw(Skill_Texture, Wide_Slash.Position, Wide_Slash.State);
+            _spriteBatch.Draw(Skill_Texture, Blood_Drain.Position, Blood_Drain.State);
+            _spriteBatch.Draw(Skill_Texture, Power_Boost.Position, Power_Boost.State);
             _spriteBatch.Draw(Item_Texture, HeathPotion.Position, HeathPotion.State);
 
             string potiontxt = "" + PotionAmo;
@@ -1993,9 +2066,9 @@ namespace Burrow_Rune
             String goldtxt = "Gold: " + Gold;
             _spriteBatch.DrawString(font, goldtxt, new Vector2(1300, 15), Color.Red);
             No_B.Position = new Vector2(400, 400);
-            _spriteBatch.Draw(Skill_Texture, No_B.Position, No_B.State);
+            _spriteBatch.Draw(No_Texture, No_B.Position, No_B.State);
             Yes_B.Position = new Vector2(800, 400);
-            _spriteBatch.Draw(Attack_Texture, Yes_B.Position, Yes_B.State);
+            _spriteBatch.Draw(Yes_Texture, Yes_B.Position, Yes_B.State);
             for (int i = 0; i < Party.Count; i++)
             {
                 if (Party[i] == Lurker)
@@ -2227,5 +2300,6 @@ namespace Burrow_Rune
                 ButtoninMap[i].Position = new Vector2(1000, 1000);
             }
         }
+
     }
 }
