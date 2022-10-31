@@ -19,6 +19,7 @@ namespace Burrow_Rune
         public Vector2 spriteLocation2;
         public Color State = Color.White;
         public int speed;
+        public int Ospeed;
         public bool myTurn = false;
         public bool isAttacking = false;
         public bool playable;
@@ -48,6 +49,7 @@ namespace Burrow_Rune
         {
             
             this.speed = speed;
+            Ospeed = speed;
             this.playable = playable;
             this.HP = HP;
             MaxHP = HP;

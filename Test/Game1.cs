@@ -47,6 +47,7 @@ namespace Burrow_Rune
         private bool isInteracting = false;
         private bool Yes = false;
         private bool No = false;
+        private bool Rreturn = false;
         bool isMap;
         bool isBattle;
         bool isTitle;
@@ -95,6 +96,7 @@ namespace Burrow_Rune
         private Texture2D HPbar_Texture;
         private Texture2D Yes_Texture;
         private Texture2D No_Texture;
+        private Texture2D Return_Texture;
 
         public UnitClass Lurker = new UnitClass(true, 6, 30, 5, 0);
         public UnitClass Golem = new UnitClass(false,4, 40, 5, 3);
@@ -126,6 +128,8 @@ namespace Burrow_Rune
         private Button Wide_Slash = new Button(new Vector2(1000, 1000));
         private Button Blood_Drain = new Button(new Vector2(1000, 1000));
         private Button Power_Boost = new Button(new Vector2(1000, 1000));
+        private Button Ankle_Cut = new Button(new Vector2(1000, 1000));
+        private Button Blood_Curse = new Button(new Vector2(1000, 1000));
 
         private Button HeathPotion = new Button(new Vector2(1000, 1000));
 
@@ -138,7 +142,7 @@ namespace Burrow_Rune
         private List<UnitClass> AllplayAble = new List<UnitClass>();
         private List<Button> ButtoninBattle = new List<Button>();
         private List<Button> ButtoninMap = new List<Button>();
-        private List<Button> ButtoninShop1 = new List<Button>();
+        private List<Button> ButtoninShop = new List<Button>();
         private List<Button> ButtoninEvent = new List<Button>();
         private List<SoundEffect> BattleSFX = new List<SoundEffect>();
 
@@ -152,9 +156,8 @@ namespace Burrow_Rune
         private SoundEffect WinSFX;
         private SoundEffect CancleSFX;
         private SoundEffect GainSFX;
+        private SoundEffect DeadSFX;
 
-
-        //ok
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -204,6 +207,7 @@ namespace Burrow_Rune
             RestNode_Texture = Content.Load<Texture2D>("Asset 2D/UI/Rest Node");
             Yes_Texture = Content.Load<Texture2D>("Asset 2D/UI/button_yes");
             No_Texture = Content.Load<Texture2D>("Asset 2D/UI/button_no");
+            Return_Texture = Content.Load<Texture2D>("Asset 2D/UI/button_return");
 
             font = Content.Load<SpriteFont>("font");
 
@@ -217,6 +221,7 @@ namespace Burrow_Rune
             WinSFX = Content.Load<SoundEffect>("SFX/Result_EndWin");
             CancleSFX = Content.Load<SoundEffect>("SFX/Ui_Cancel");
             GainSFX = Content.Load<SoundEffect>("SFX/Story_ClothCatch");
+            DeadSFX = Content.Load<SoundEffect>("SFX/WoodMachine_Kill");
 
             MediaPlayer.Play(TitleBGM);
 
@@ -252,7 +257,8 @@ namespace Burrow_Rune
             ButtoninMap.Add(Event_B2);
             ButtoninMap.Add(Rest_B);
 
-            ButtoninShop1.Add(HeathPotion);
+            ButtoninShop.Add(HeathPotion);
+            ButtoninShop.Add(Return_B);
 
             ButtoninEvent.Add(Yes_B);
             ButtoninEvent.Add(No_B);
@@ -266,17 +272,17 @@ namespace Burrow_Rune
             BattleSFX.Add(Content.Load<SoundEffect>("SFX/Effect_Buff"));
 
             Lurker.Skill_list.Add(Double_Slash);
-            Lurker.Skill_list.Add(Wide_Slash);
+            Lurker.Skill_list.Add(Ankle_Cut);
             Dragonic_hunter.Skill_list.Add(Double_Slash);
             Dragonic_hunter.Skill_list.Add(Wide_Slash);
             inventor.Skill_list.Add(Power_Boost);
             Blood_Maiden.Skill_list.Add(Blood_Drain);
+            Blood_Maiden.Skill_list.Add(Blood_Curse);
 
             Lurker.Item_list.Add(HeathPotion);
             inventor.Item_list.Add(HeathPotion);
             Blood_Maiden.Item_list.Add(HeathPotion);
             Dragonic_hunter.Item_list.Add(HeathPotion);
-
     }
 
         protected override void Update(GameTime gameTime)
@@ -608,6 +614,16 @@ namespace Burrow_Rune
                                         UseSkill = 4;
                                         BattleTxt = "increse ally attack power by 2 for this battle";
                                     }
+                                    if (TurnOrder[i].Skill_list[m] == Ankle_Cut)
+                                    {
+                                        UseSkill = 5;
+                                        BattleTxt = "Attack and decrese enemy speed by 2";
+                                    }
+                                    if (TurnOrder[i].Skill_list[m] == Blood_Curse)
+                                    {
+                                        UseSkill = 6;
+                                        BattleTxt = "Decrese all enemy Attack by 2";
+                                    }
                                 }
                                 
                                 if (Skilling2 == true)
@@ -686,6 +702,10 @@ namespace Burrow_Rune
                                             EnemyGroup[target].spriteLocation2 = EnemyGroup[ATKcount].spriteLocation;
                                             EnemyGroup[target].spriteLocation.X += 20;
                                             TurnOrder[i].HP += TurnOrder[i].Atk;
+                                            if (TurnOrder[i].HP > TurnOrder[i].MaxHP)
+                                            {
+                                                TurnOrder[i].HP = TurnOrder[i].MaxHP;
+                                            }
                                             timeLoad = true;
                                             BattleSFX[5].CreateInstance().Play();
                                         }
@@ -699,6 +719,40 @@ namespace Burrow_Rune
                                             Party[ATKcount].Atk += 2;
                                             ATKcount += 1;
                                             BattleSFX[6].CreateInstance().Play();
+                                        }
+                                        else
+                                        {
+                                            timeLoad = true;
+                                        }
+                                    }
+                                    if (UseSkill == 5)
+                                    {
+                                        if (Partywaitingtime == 0)
+                                        {
+                                            TurnOrder[i].isAttacking = true;
+                                            TurnOrder[i].ATKframe = 1;
+                                            EnemyGroup[target].attacked = true;
+                                            EnemyGroup[target].HP -= TurnOrder[i].Atk;
+                                            EnemyGroup[target].spriteLocation2 = EnemyGroup[ATKcount].spriteLocation;
+                                            EnemyGroup[target].spriteLocation.X += 20;
+                                            EnemyGroup[target].speed -= 2;
+                                            timeLoad = true;
+                                            BattleSFX[TurnOrder[i].AttackSFX].CreateInstance().Play();
+                                        }
+                                        Partywaitingtime += 1;
+                                    }
+                                    if (UseSkill == 6)
+                                    {
+                                        TurnOrder[i].isAttacking = true;
+                                        TurnOrder[i].ATKframe = 1;
+                                        if (ATKcount < EnemyGroup.Count)
+                                        {
+                                            EnemyGroup[ATKcount].attacked = true;
+                                            EnemyGroup[ATKcount].Atk -= 2;
+                                            EnemyGroup[ATKcount].spriteLocation2 = EnemyGroup[ATKcount].spriteLocation;
+                                            EnemyGroup[ATKcount].spriteLocation.X += 20;
+                                            ATKcount += 1;
+                                            BattleSFX[TurnOrder[i].AttackSFX].CreateInstance().Play();
                                         }
                                         else
                                         {
@@ -901,7 +955,30 @@ namespace Burrow_Rune
                 {
                     TurnOrder[i].spriteLocation = new Vector2(1000, 1000);
                     TurnOrder[i].Alive = false;
-                    
+                    if (TurnOrder[i].playable == false)
+                    {
+                        for (int m = 0; m < EnemyGroup.Count; m++)
+                        {
+                            if (TurnOrder[i] == EnemyGroup[m])
+                            {
+                                DeadSFX.CreateInstance().Play();
+                                EnemyGroup[m].attacked = false;
+                                EnemyGroup[m].HP = EnemyGroup[m].MaxHP;
+                                EnemyGroup[m].Alive = true;
+                                EnemyGroup[m].speed = EnemyGroup[m].Ospeed;
+                                EnemyGroup[m].Atk = EnemyGroup[m].Oatk;
+                                if (EnemyGroup[m] == Golem)
+                                {
+                                    Gold += 200;
+                                }
+                                else
+                                {
+                                    Gold += 50;
+                                }
+                                EnemyGroup.RemoveAt(m);
+                            }
+                        }
+                    }
 
                 }
                 if (TurnOrder.Count == 6)
@@ -1009,11 +1086,17 @@ namespace Burrow_Rune
                 iconOrder = 0;
             }
 
-            if (EnemyGroup.Count == 3)
+            if (EnemyGroup.Count == 0)
             {
-                if (EnemyGroup[0].Alive == false && EnemyGroup[1].Alive == false && EnemyGroup[2].Alive == false)
+                if (Partywaitingtime == 1)
                 {
                     WinSFX.CreateInstance().Play();
+                    BattleTxt = "Victory!";
+                    MediaPlayer.Stop();
+                }
+                Partywaitingtime += 1;
+                if (Partywaitingtime == 80)
+                {
                     for (int i = 0; i < TurnOrder.Count; i++)
                     {
                         TurnOrder[i].myTurn = false;
@@ -1039,66 +1122,7 @@ namespace Burrow_Rune
                     isBattle = false;
                 }
             }
-            if (EnemyGroup.Count == 2)
-            {
-                if (EnemyGroup[0].Alive == false && EnemyGroup[1].Alive == false)
-                {
-                    WinSFX.CreateInstance().Play();
-                    for (int i = 0; i < TurnOrder.Count; i++)
-                    {
-                        TurnOrder[i].myTurn = false;
-                        TurnOrder[i].ATKframe = 0;
-                        TurnOrder[i].Atk = TurnOrder[i].Oatk;
-                        for (int n = 0; n < TurnOrder[i].Skill_list.Count; n++)
-                        {
-                            TurnOrder[i].Skill_list[n].Position = new Vector2(1000, 1000);
-                            TurnOrder[i].Skill_list[n].Pressed = false;
-                            TurnOrder[i].Skill_list[n].mouseHover = false;
-                        }
-                        for (int n = 0; n < TurnOrder[i].Item_list.Count; n++)
-                        {
-                            TurnOrder[i].Item_list[n].Position = new Vector2(1000, 1000);
-                            TurnOrder[i].Item_list[n].Pressed = false;
-                            TurnOrder[i].Item_list[n].mouseHover = false;
-                        }
-                    }
-                    MediaPlayer.Play(EventMapBGM);
-                    RandomNode();
-                    ResetCombat();
-                    isMap = true;
-                    isBattle = false;
-                }
-            }
-            if (EnemyGroup.Count == 1)
-            {
-                if (EnemyGroup[0].Alive == false)
-                {
-                    WinSFX.CreateInstance().Play();
-                    for (int i = 0; i < TurnOrder.Count; i++)
-                    {
-                        TurnOrder[i].myTurn = false;
-                        TurnOrder[i].ATKframe = 0;
-                        TurnOrder[i].Atk = TurnOrder[i].Oatk;
-                        for (int n = 0; n < TurnOrder[i].Skill_list.Count; n++)
-                        {
-                            TurnOrder[i].Skill_list[n].Position = new Vector2(1000, 1000);
-                            TurnOrder[i].Skill_list[n].Pressed = false;
-                            TurnOrder[i].Skill_list[n].mouseHover = false;
-                        }
-                        for (int n = 0; n < TurnOrder[i].Item_list.Count; n++)
-                        {
-                            TurnOrder[i].Item_list[n].Position = new Vector2(1000, 1000);
-                            TurnOrder[i].Item_list[n].Pressed = false;
-                            TurnOrder[i].Item_list[n].mouseHover = false;
-                        }
-                    }
-                    MediaPlayer.Play(EventMapBGM);
-                    RandomNode();
-                    ResetCombat();
-                    isMap = true;
-                    isBattle = false;
-                }
-            }
+            
 
             if (Party.Count == 3)
             {
@@ -1386,17 +1410,9 @@ namespace Burrow_Rune
                             int x = r.Next(0, Party.Count);
                             BattleSFX[0].CreateInstance().Play();
                             Party[x].HP -= 10;
+                            Return_B.Position = new Vector2(0, 500);
                         }
                         Partywaitingtime += 1;
-                        if (Partywaitingtime == 50)
-                        {
-                            EventTxt = "";
-                            isMap = true;
-                            isEvent = false;
-                            RandomNode();
-                            Yes = false;
-                            Partywaitingtime = 0;
-                        }
                     }
                     if (eventChance == 2 || eventChance == 3)
                     {
@@ -1405,17 +1421,9 @@ namespace Burrow_Rune
                             EventTxt = "You gain 150 gold!";
                             Gold += 150;
                             GainSFX.CreateInstance().Play();
+                            Return_B.Position = new Vector2(0, 500);
                         }
                         Partywaitingtime += 1;
-                        if (Partywaitingtime == 100)
-                        {
-                            EventTxt = "";
-                            isMap = true;
-                            isEvent = false;
-                            RandomNode();
-                            Yes = false;
-                            Partywaitingtime = 0;
-                        }
                     }
                 }
             }
@@ -1459,10 +1467,6 @@ namespace Burrow_Rune
                 if (Yes == false && No == false)
                 {
                     Rectangle buttonRectangle = new Rectangle((int)ButtoninEvent[i].Position.X, (int)ButtoninEvent[i].Position.Y, 160, 60);
-                    if (Yes == false && No == false)
-                    {
-
-                    }
                     if (buttonRectangle.Contains(mousePosition))
                     {
                         ButtoninEvent[i].mouseHover = true;
@@ -1495,13 +1499,37 @@ namespace Burrow_Rune
                     }
                 }
             }
-            if (No == true)
+            Rectangle RbuttonRectangle = new Rectangle((int)Return_B.Position.X, (int)Return_B.Position.Y, 160, 60);
+            if (RbuttonRectangle.Contains(mousePosition))
+            {
+                Return_B.mouseHover = true;
+            }
+            else
+            {
+                Return_B.mouseHover = false;
+            }
+            if (Return_B.mouseHover == true)
+            {
+                Return_B.State = Color.Gray;
+            }
+            if (Return_B.mouseHover == false && Return_B.Pressed == false)
+            {
+                Return_B.State = Color.White;
+            }
+            if (mouseState.LeftButton != ButtonState.Pressed && Return_B.mouseHover == true && Old_mouseState.LeftButton == ButtonState.Pressed)
+            {
+                Rreturn = true;
+            }
+            if (No == true || Rreturn == true)
             {
                 EventTxt = "";
                 isMap = true;
                 isEvent = false;
                 RandomNode();
                 No = false;
+                Yes = false;
+                Rreturn = false;
+                Partywaitingtime = 0;
             }
 
             Old_mouseState = mouseState;
@@ -1588,33 +1616,33 @@ namespace Burrow_Rune
         {
             var mouseState = Mouse.GetState();
             var mousePosition = new Point(mouseState.X, mouseState.Y);
-
-            for (int i = 0; i < ButtoninShop1.Count; i++)
+            Return_B.Position = new Vector2(0, 500);
+            for (int i = 0; i < ButtoninShop.Count; i++)
             {
-                Rectangle buttonRectangle = new Rectangle((int)ButtoninShop1[i].Position.X, (int)ButtoninShop1[i].Position.Y, 160, 60);
+                Rectangle buttonRectangle = new Rectangle((int)ButtoninShop[i].Position.X, (int)ButtoninShop[i].Position.Y, 160, 60);
                 if (i == 0)
                 {
-                    ButtoninShop1[i].Position = new Vector2(800, 200);
+                    ButtoninShop[i].Position = new Vector2(800, 200);
                 }
                 if (buttonRectangle.Contains(mousePosition))
                 {
-                    ButtoninShop1[i].mouseHover = true;
+                    ButtoninShop[i].mouseHover = true;
                 }
                 else
                 {
-                    ButtoninShop1[i].mouseHover = false;
+                    ButtoninShop[i].mouseHover = false;
                 }
-                if (ButtoninShop1[i].mouseHover == true)
+                if (ButtoninShop[i].mouseHover == true)
                 {
-                    ButtoninShop1[i].State = Color.Gray;
+                    ButtoninShop[i].State = Color.Gray;
                 }
-                if (ButtoninShop1[i].mouseHover == false && ButtoninShop1[i].Pressed == false)
+                if (ButtoninShop[i].mouseHover == false && ButtoninShop[i].Pressed == false)
                 {
-                    ButtoninShop1[i].State = Color.White;
+                    ButtoninShop[i].State = Color.White;
                 }
-                if (mouseState.LeftButton != ButtonState.Pressed && ButtoninShop1[i].mouseHover == true && Old_mouseState.LeftButton == ButtonState.Pressed)
+                if (mouseState.LeftButton != ButtonState.Pressed && ButtoninShop[i].mouseHover == true && Old_mouseState.LeftButton == ButtonState.Pressed)
                 {
-                    if (ButtoninShop1[i] == HeathPotion)
+                    if (ButtoninShop[i] == HeathPotion)
                     {
                         if (Gold >= 100)
                         {
@@ -1627,39 +1655,28 @@ namespace Burrow_Rune
                             ShopTxt = "Not enought gold";
                         }
                     }
+                    if (ButtoninShop[i] == Return_B)
+                    {
+                        Rreturn = true;
+                    }
                 }
             }
-            
-            Rectangle ReturnRectangle = new Rectangle((int)Return_B.Position.X, (int)Return_B.Position.Y, 160, 60);
-            if (ReturnRectangle.Contains(mousePosition))
+
+            if (Rreturn == true)
             {
-                Return_B.mouseHover = true;
-            }
-            else
-            {
-                Return_B.mouseHover = false;
-            }
-            if (Return_B.mouseHover == true)
-            {
-                Return_B.State = Color.Gray;
-            }
-            if (Return_B.mouseHover == false && Return_B.Pressed == false)
-            {
-                Return_B.State = Color.White;
-            }
-            if (mouseState.LeftButton != ButtonState.Pressed && Return_B.mouseHover == true && Old_mouseState.LeftButton == ButtonState.Pressed)
-            {
-                for (int i = 0; i < ButtoninShop1.Count; i++)
+                for (int i = 0; i < ButtoninShop.Count; i++)
                 {
-                    ButtoninShop1[i].Position = new Vector2(1000, 1000);
+                    ButtoninShop[i].Position = new Vector2(1000, 1000);
+                    ButtoninShop[i].Pressed = false;
+                    ButtoninShop[i].mouseHover = false;
                 }
                 isMap = true;
                 isShop = false;
+                Rreturn = false;
                 RandomNode();
                 CancleSFX.CreateInstance().Play();
             }
-
-                Old_mouseState = mouseState;
+            Old_mouseState = mouseState;
         }
 
         private void DrawBattale1()
@@ -1979,6 +1996,8 @@ namespace Burrow_Rune
             _spriteBatch.Draw(Skill_Texture, Wide_Slash.Position, Wide_Slash.State);
             _spriteBatch.Draw(Skill_Texture, Blood_Drain.Position, Blood_Drain.State);
             _spriteBatch.Draw(Skill_Texture, Power_Boost.Position, Power_Boost.State);
+            _spriteBatch.Draw(Skill_Texture, Ankle_Cut.Position, Ankle_Cut.State);
+            _spriteBatch.Draw(Skill_Texture, Blood_Curse.Position, Blood_Curse.State);
             _spriteBatch.Draw(Item_Texture, HeathPotion.Position, HeathPotion.State);
 
             string potiontxt = "" + PotionAmo;
@@ -2000,56 +2019,7 @@ namespace Burrow_Rune
             _spriteBatch.Draw(EventNode_Texture, Event_B1.Position, Event_B1.State);
             _spriteBatch.Draw(EventNode_Texture, Event_B2.Position, Event_B2.State);
             _spriteBatch.Draw(RestNode_Texture, Rest_B.Position, Rest_B.State);
-            for (int i = 0; i < Party.Count; i++)
-            {
-                if (Party[i] == Lurker)
-                {
-                    _spriteBatch.Draw(HPbar_Texture, Lurker.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, Lurker.HPbar_Location, new Rectangle(0, 0, Lurker.HP * (240 / Lurker.MaxHP), 30), Color.Red);
-                    _spriteBatch.Draw(Lurker_Small_Icon, Lurker.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
-                    _spriteBatch.DrawString(font, Lurker.HPtext, new Vector2(Lurker.HPMPbar_iconLocation.X + 120, Lurker.HPMPbar_iconLocation.Y), Color.Black);
-                }
-                if (Party[i] == inventor)
-                {
-                    _spriteBatch.Draw(HPbar_Texture, inventor.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, inventor.HPbar_Location, new Rectangle(0, 0, inventor.HP * (240 / inventor.MaxHP), 30), Color.Red);
-                    _spriteBatch.Draw(Inventor_Small_Icon, inventor.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
-                    _spriteBatch.DrawString(font, inventor.HPtext, new Vector2(inventor.HPMPbar_iconLocation.X + 120, inventor.HPMPbar_iconLocation.Y), Color.Black);
-                }
-                if (Party[i] == Blood_Maiden)
-                {
-                    _spriteBatch.Draw(HPbar_Texture, Blood_Maiden.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, Blood_Maiden.HPbar_Location, new Rectangle(0, 0, Blood_Maiden.HP * (240 / Blood_Maiden.MaxHP), 30), Color.Red);
-                    _spriteBatch.Draw(Blood_Maiden_Small_Icon, Blood_Maiden.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
-                    _spriteBatch.DrawString(font, Blood_Maiden.HPtext, new Vector2(Blood_Maiden.HPMPbar_iconLocation.X + 120, Blood_Maiden.HPMPbar_iconLocation.Y), Color.Black);
-                }
-                if (Party[i] == Dragonic_hunter)
-                {
-                    _spriteBatch.Draw(HPbar_Texture, Dragonic_hunter.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, Dragonic_hunter.HPbar_Location, new Rectangle(0, 0, Dragonic_hunter.HP * (240 / Dragonic_hunter.MaxHP), 30), Color.Red);
-                    _spriteBatch.Draw(Dragonic_Small_Icon, Dragonic_hunter.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
-                    _spriteBatch.DrawString(font, Dragonic_hunter.HPtext, new Vector2(Dragonic_hunter.HPMPbar_iconLocation.X + 120, Dragonic_hunter.HPMPbar_iconLocation.Y), Color.Black);
-                }
-                if (i == 0)
-                {
-                    Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X + 40, SetPO1.Y - 220);
-                    Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
-                    Party[i].HPicon_Location = new Vector2(SetPO1.X, SetPO1.Y - 240);
-                }
-                if (i == 1)
-                {
-                    Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X - 240, SetPO1.Y - 220);
-                    Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
-                    Party[i].HPicon_Location = new Vector2(SetPO1.X - 270, SetPO1.Y - 240);
-                }
-                if (i == 2)
-                {
-                    Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X - 520, SetPO1.Y - 220);
-                    Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
-                    Party[i].HPicon_Location = new Vector2(SetPO1.X - 540, SetPO1.Y - 240);
-                }
-               
-            }
+            PartyHPbar();
         }
 
         private void DrawTitle()
@@ -2069,56 +2039,8 @@ namespace Burrow_Rune
             _spriteBatch.Draw(No_Texture, No_B.Position, No_B.State);
             Yes_B.Position = new Vector2(800, 400);
             _spriteBatch.Draw(Yes_Texture, Yes_B.Position, Yes_B.State);
-            for (int i = 0; i < Party.Count; i++)
-            {
-                if (Party[i] == Lurker)
-                {
-                    _spriteBatch.Draw(HPbar_Texture, Lurker.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, Lurker.HPbar_Location, new Rectangle(0, 0, Lurker.HP * (240 / Lurker.MaxHP), 30), Color.Red);
-                    _spriteBatch.Draw(Lurker_Small_Icon, Lurker.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
-                    _spriteBatch.DrawString(font, Lurker.HPtext, new Vector2(Lurker.HPMPbar_iconLocation.X + 120, Lurker.HPMPbar_iconLocation.Y), Color.Black);
-                }
-                if (Party[i] == inventor)
-                {
-                    _spriteBatch.Draw(HPbar_Texture, inventor.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, inventor.HPbar_Location, new Rectangle(0, 0, inventor.HP * (240 / inventor.MaxHP), 30), Color.Red);
-                    _spriteBatch.Draw(Inventor_Small_Icon, inventor.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
-                    _spriteBatch.DrawString(font, inventor.HPtext, new Vector2(inventor.HPMPbar_iconLocation.X + 120, inventor.HPMPbar_iconLocation.Y), Color.Black);
-                }
-                if (Party[i] == Blood_Maiden)
-                {
-                    _spriteBatch.Draw(HPbar_Texture, Blood_Maiden.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, Blood_Maiden.HPbar_Location, new Rectangle(0, 0, Blood_Maiden.HP * (240 / Blood_Maiden.MaxHP), 30), Color.Red);
-                    _spriteBatch.Draw(Blood_Maiden_Small_Icon, Blood_Maiden.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
-                    _spriteBatch.DrawString(font, Blood_Maiden.HPtext, new Vector2(Blood_Maiden.HPMPbar_iconLocation.X + 120, Blood_Maiden.HPMPbar_iconLocation.Y), Color.Black);
-                }
-                if (Party[i] == Dragonic_hunter)
-                {
-                    _spriteBatch.Draw(HPbar_Texture, Dragonic_hunter.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
-                    _spriteBatch.Draw(HPbar_Texture, Dragonic_hunter.HPbar_Location, new Rectangle(0, 0, Dragonic_hunter.HP * (240 / Dragonic_hunter.MaxHP), 30), Color.Red);
-                    _spriteBatch.Draw(Dragonic_Small_Icon, Dragonic_hunter.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
-                    _spriteBatch.DrawString(font, Dragonic_hunter.HPtext, new Vector2(Dragonic_hunter.HPMPbar_iconLocation.X + 120, Dragonic_hunter.HPMPbar_iconLocation.Y), Color.Black);
-                }
-                if (i == 0)
-                {
-                    Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X + 40, SetPO1.Y - 220);
-                    Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
-                    Party[i].HPicon_Location = new Vector2(SetPO1.X, SetPO1.Y - 240);
-                }
-                if (i == 1)
-                {
-                    Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X - 240, SetPO1.Y - 220);
-                    Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
-                    Party[i].HPicon_Location = new Vector2(SetPO1.X - 270, SetPO1.Y - 240);
-                }
-                if (i == 2)
-                {
-                    Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X - 520, SetPO1.Y - 220);
-                    Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
-                    Party[i].HPicon_Location = new Vector2(SetPO1.X - 540, SetPO1.Y - 240);
-                }
-
-            }
+            _spriteBatch.Draw(Return_Texture, Return_B.Position, Return_B.State);
+            PartyHPbar();
         }
 
         private void DrawLose()
@@ -2135,6 +2057,7 @@ namespace Burrow_Rune
             _spriteBatch.DrawString(font, str, new Vector2(400, 200), Color.Red);
             String goldtxt = "Gold: " + Gold;
             _spriteBatch.DrawString(font, goldtxt, new Vector2(1300, 15), Color.Red);
+            PartyHPbar();
         }
 
         private void DrawCharactor()
@@ -2166,26 +2089,11 @@ namespace Burrow_Rune
             _spriteBatch.DrawString(font, potiontxt, new Vector2(HeathPotion.Position.X + 160, HeathPotion.Position.Y + 15), Color.White);
             _spriteBatch.Draw(Item_Texture, HeathPotion.Position, HeathPotion.State);
             Return_B.Position = new Vector2(0, 500);
-            _spriteBatch.Draw(Skill_Texture, Return_B.Position, Return_B.State);
+            _spriteBatch.Draw(Return_Texture, Return_B.Position, Return_B.State);
         }
 
         private void ResetCombat()
         {
-            for (int i = 0; i < EnemyGroup.Count; i++)
-            {
-                EnemyGroup[i].attacked = false;
-                EnemyGroup[i].HP = EnemyGroup[i].MaxHP;
-                EnemyGroup[i].Alive = true;
-                if (EnemyGroup[i] == Golem)
-                {
-                    Gold += 200;
-                }
-                else
-                {
-                    Gold += 50;
-                }
-                EnemyGroup.RemoveAt(i);
-            }
             for (int i = 0; i < ButtoninBattle.Count; i++)
             {
                 ButtoninBattle[i].Pressed = false;
@@ -2301,5 +2209,57 @@ namespace Burrow_Rune
             }
         }
 
+        private void PartyHPbar()
+        {
+            for (int i = 0; i < Party.Count; i++)
+            {
+                if (Party[i] == Lurker)
+                {
+                    _spriteBatch.Draw(HPbar_Texture, Lurker.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
+                    _spriteBatch.Draw(HPbar_Texture, Lurker.HPbar_Location, new Rectangle(0, 0, Lurker.HP * (240 / Lurker.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(Lurker_Small_Icon, Lurker.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
+                    _spriteBatch.DrawString(font, Lurker.HPtext, new Vector2(Lurker.HPMPbar_iconLocation.X + 120, Lurker.HPMPbar_iconLocation.Y), Color.Black);
+                }
+                if (Party[i] == inventor)
+                {
+                    _spriteBatch.Draw(HPbar_Texture, inventor.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
+                    _spriteBatch.Draw(HPbar_Texture, inventor.HPbar_Location, new Rectangle(0, 0, inventor.HP * (240 / inventor.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(Inventor_Small_Icon, inventor.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
+                    _spriteBatch.DrawString(font, inventor.HPtext, new Vector2(inventor.HPMPbar_iconLocation.X + 120, inventor.HPMPbar_iconLocation.Y), Color.Black);
+                }
+                if (Party[i] == Blood_Maiden)
+                {
+                    _spriteBatch.Draw(HPbar_Texture, Blood_Maiden.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
+                    _spriteBatch.Draw(HPbar_Texture, Blood_Maiden.HPbar_Location, new Rectangle(0, 0, Blood_Maiden.HP * (240 / Blood_Maiden.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(Blood_Maiden_Small_Icon, Blood_Maiden.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
+                    _spriteBatch.DrawString(font, Blood_Maiden.HPtext, new Vector2(Blood_Maiden.HPMPbar_iconLocation.X + 120, Blood_Maiden.HPMPbar_iconLocation.Y), Color.Black);
+                }
+                if (Party[i] == Dragonic_hunter)
+                {
+                    _spriteBatch.Draw(HPbar_Texture, Dragonic_hunter.HPMPbar_iconLocation, new Rectangle(0, 0, 230, 30), Color.White);
+                    _spriteBatch.Draw(HPbar_Texture, Dragonic_hunter.HPbar_Location, new Rectangle(0, 0, Dragonic_hunter.HP * (240 / Dragonic_hunter.MaxHP), 30), Color.Red);
+                    _spriteBatch.Draw(Dragonic_Small_Icon, Dragonic_hunter.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
+                    _spriteBatch.DrawString(font, Dragonic_hunter.HPtext, new Vector2(Dragonic_hunter.HPMPbar_iconLocation.X + 120, Dragonic_hunter.HPMPbar_iconLocation.Y), Color.Black);
+                }
+                if (i == 0)
+                {
+                    Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X + 40, SetPO1.Y - 220);
+                    Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
+                    Party[i].HPicon_Location = new Vector2(SetPO1.X, SetPO1.Y - 240);
+                }
+                if (i == 1)
+                {
+                    Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X - 240, SetPO1.Y - 220);
+                    Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
+                    Party[i].HPicon_Location = new Vector2(SetPO1.X - 270, SetPO1.Y - 240);
+                }
+                if (i == 2)
+                {
+                    Party[i].HPMPbar_iconLocation = new Vector2(SetPO1.X - 520, SetPO1.Y - 220);
+                    Party[i].HPbar_Location = Party[i].HPMPbar_iconLocation;
+                    Party[i].HPicon_Location = new Vector2(SetPO1.X - 540, SetPO1.Y - 240);
+                }
+            }
+        }
     }
 }

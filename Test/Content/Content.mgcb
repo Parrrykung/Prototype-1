@@ -229,6 +229,18 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/UI/button_no.png
 
+#begin ASSET 2D/UI/button_return.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/UI/button_return.png
+
 #begin ASSET 2D/UI/button_yes.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -571,4 +583,10 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:SFX/Ui_Click.wav
+
+#begin SFX/WoodMachine_Kill.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/WoodMachine_Kill.wav
 
