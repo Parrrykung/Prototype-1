@@ -211,7 +211,7 @@ namespace Burrow_Rune
             Yes_Texture = Content.Load<Texture2D>("Asset 2D/UI/button_yes");
             No_Texture = Content.Load<Texture2D>("Asset 2D/UI/button_no");
             Return_Texture = Content.Load<Texture2D>("Asset 2D/UI/button_return");
-            Logo_Texture = Content.Load<Texture2D>("Asset 2D/UI/item");
+            Logo_Texture = Content.Load<Texture2D>("Asset 2D/UI/logo");
             Taptostart_Texture = Content.Load<Texture2D>("Asset 2D/UI/tap to start");
 
             font = Content.Load<SpriteFont>("font");
@@ -2100,10 +2100,10 @@ namespace Burrow_Rune
             _spriteBatch.Draw(RestNode_Texture, Rest_B.Position, Rest_B.State);
             PartyHPbar();
         }
-
+    
         private void DrawTitle()
         {
-            _spriteBatch.Draw(Logo_Texture, Vector2.Zero, new Rectangle(unloop_frame * 1440, 0, 1440, 560),Color.White);
+            _spriteBatch.Draw(Logo_Texture, Vector2.Zero, new Rectangle(unloop_frame * 1050, 2700, 1080, 560), Color.White);
             _spriteBatch.Draw(Taptostart_Texture, new Vector2(500,450), Color.White);
         }
 
