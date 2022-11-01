@@ -43,6 +43,10 @@ namespace Burrow_Rune
         public List<Button> Item_list = new List<Button>();
         public string HPtext = "";
         public string MPtext = "";
+        public int IdleFrame = 0;
+        public int frame;
+        private float totalElapsed = 0;
+        private float timePerFrame = (float)1 / 3;
 
         public UnitClass()
         {
@@ -62,6 +66,16 @@ namespace Burrow_Rune
             this.AttackSFX = AttackSFX;
             this.MP = MP;
             MaxMP = MP;
+        }
+
+        public void UpdateFrame(float elapsed)
+        {
+            totalElapsed += elapsed;
+            if (totalElapsed > timePerFrame)
+            {
+                frame = (frame + 1) % 4;
+                totalElapsed -= timePerFrame;
+            }
         }
 
     }
