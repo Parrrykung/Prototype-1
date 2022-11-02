@@ -877,7 +877,7 @@ namespace Burrow_Rune
                                 }
                                 if (Iteming2 == true)
                                 {
-                                    Partywaitingtime += 1;
+                                    Enemywaitingtime += 1;
                                     for (int n = 0; n < Party.Count; n++)
                                     {
                                         if (Party[n].mouseHover == true)
@@ -888,7 +888,7 @@ namespace Burrow_Rune
                                         {
                                             Party[n].State = Color.White;
                                         }
-                                        if (Partywaitingtime > 5)
+                                        if (ATKcount == 0 && Enemywaitingtime > 5)
                                         {
                                             if (mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed && Party[n].mouseHover == true && Party[n].Alive == true)
                                             {
@@ -897,6 +897,7 @@ namespace Burrow_Rune
                                                     Party[n].healed = true;
                                                     Party[n].HP += 20;
                                                     HPPotionAmo -= 1;
+                                                    ATKcount += 1;
                                                     if (Party[n].HP > Party[n].MaxHP)
                                                     {
                                                         Party[n].HP = Party[n].MaxHP;
@@ -909,6 +910,7 @@ namespace Burrow_Rune
                                                     Party[n].healed = true;
                                                     Party[n].MP += 10;
                                                     MPPotionAmo -= 1;
+                                                    ATKcount += 1;
                                                     if (Party[n].MP > Party[n].MaxMP)
                                                     {
                                                         Party[n].MP = Party[n].MaxMP;
@@ -1510,6 +1512,10 @@ namespace Burrow_Rune
             {
                 Party[i].HPtext = "" + Party[i].HP;
                 Party[i].MPtext = "" + Party[i].MP;
+                if (Party[i].HP <= 0)
+                {
+                    Party[i].Alive = false;
+                }
             }
 
             if (eventNum == 1)
@@ -1654,9 +1660,8 @@ namespace Burrow_Rune
                 if (Party[0].Alive == false && Party[1].Alive == false && Party[2].Alive == false)
                 {
                     MediaPlayer.Play(TitleBGM);
-                    ResetCombat();
                     isLose = true;
-                    isBattle = false;
+                    isEvent = false;
                 }
             }
             if (Party.Count == 2)
@@ -1664,9 +1669,8 @@ namespace Burrow_Rune
                 if (Party[0].Alive == false && Party[1].Alive == false)
                 {
                     MediaPlayer.Play(TitleBGM);
-                    ResetCombat();
                     isLose = true;
-                    isBattle = false;
+                    isEvent = false;
                 }
             }
             if (Party.Count == 1)
@@ -1674,9 +1678,8 @@ namespace Burrow_Rune
                 if (Party[0].Alive == false)
                 {
                     MediaPlayer.Play(TitleBGM);
-                    ResetCombat();
                     isLose = true;
-                    isBattle = false;
+                    isEvent = false;
                 }
             }
 
