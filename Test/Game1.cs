@@ -36,6 +36,7 @@ namespace Burrow_Rune
         private string GoldNum = "";
         private int HPPotionAmo = 1;
         private int MPPotionAmo = 1;
+        private int BombAmo = 1;
         private int turn;
         private int iconOrder = 0;
         private string BattleTxt = "";
@@ -47,6 +48,8 @@ namespace Burrow_Rune
         private bool Yes = false;
         private bool No = false;
         private bool Rreturn = false;
+        private bool TargetAlly = false;
+        private bool TargetEnemy = false;
         bool isMap;
         bool isBattle;
         bool isTitle;
@@ -101,14 +104,14 @@ namespace Burrow_Rune
 
         public UnitClass Lurker = new UnitClass(true, 6, 30, 5, 0, 20);
         public UnitClass Golem = new UnitClass(false,4, 40, 5, 3, 0);
-        public UnitClass inventor = new UnitClass(true, 5, 30, 5, 1, 25);
+        public UnitClass inventor = new UnitClass(true, 5, 30, 5, 1, 20);
         public UnitClass Beetle1 = new UnitClass(false,5, 10, 5, 3, 0);
         public UnitClass Beetle2 = new UnitClass(false, 5, 10, 5, 3, 0);
         public UnitClass Beetle3 = new UnitClass(false, 5, 10, 5, 3, 0);
         public UnitClass Rocky1 = new UnitClass(false, 3, 10, 5, 3, 0);
         public UnitClass Rocky2 = new UnitClass(false, 3, 10, 5, 3, 0);
         public UnitClass Rocky3 = new UnitClass(false, 3, 10, 5, 3, 0);
-        public UnitClass Blood_Maiden = new UnitClass(true, 3, 30, 5, 2, 30);
+        public UnitClass Blood_Maiden = new UnitClass(true, 3, 30, 5, 2, 20);
         public UnitClass Dragonic_hunter = new UnitClass(true, 3, 30, 6, 0, 20);
         private UnitClass Nul = new UnitClass();
 
@@ -134,6 +137,7 @@ namespace Burrow_Rune
 
         private Button HeathPotion = new Button(new Vector2(1000, 1000));
         private Button ManaPotion = new Button(new Vector2(1000, 1000));
+        private Button Bomb = new Button(new Vector2(1000, 1000));
 
         private Vector2 Turn_Selector_Position;
         private Vector2 Turn_Order_Position = new Vector2(0, 360);
@@ -259,6 +263,7 @@ namespace Burrow_Rune
 
             ButtoninShop.Add(HeathPotion);
             ButtoninShop.Add(ManaPotion);
+            ButtoninShop.Add(Bomb);
             ButtoninShop.Add(Return_B);
 
             ButtoninEvent.Add(Yes_B);
@@ -288,6 +293,10 @@ namespace Burrow_Rune
             inventor.Item_list.Add(ManaPotion);
             Blood_Maiden.Item_list.Add(ManaPotion);
             Dragonic_hunter.Item_list.Add(ManaPotion);
+            Lurker.Item_list.Add(Bomb);
+            inventor.Item_list.Add(Bomb);
+            Blood_Maiden.Item_list.Add(Bomb);
+            Dragonic_hunter.Item_list.Add(Bomb);
         }
 
         protected override void Update(GameTime gameTime)
@@ -406,22 +415,27 @@ namespace Burrow_Rune
                 {
                     if (m == 0)
                     {
-                        TurnOrder[i].Skill_list[m].ShowPosition = new Vector2(TurnOrder[i].spriteLocation.X, TurnOrder[i].spriteLocation.Y + 100);
+                        TurnOrder[i].Skill_list[m].ShowPosition = new Vector2(TurnOrder[i].spriteLocation.X, TurnOrder[i].spriteLocation.Y - 60);
                     }
                     if (m == 1)
                     {
-                        TurnOrder[i].Skill_list[m].ShowPosition = new Vector2(TurnOrder[i].spriteLocation.X, TurnOrder[i].spriteLocation.Y + 160);
+                        TurnOrder[i].Skill_list[m].ShowPosition = new Vector2(TurnOrder[i].spriteLocation.X, TurnOrder[i].spriteLocation.Y - 120);
                     }
                 }
                 for (int m = 0; m < TurnOrder[i].Item_list.Count; m++)
                 {
                     if (m == 0)
                     {
-                        TurnOrder[i].Item_list[m].ShowPosition = new Vector2(TurnOrder[i].spriteLocation.X, TurnOrder[i].spriteLocation.Y + 100);
+                        TurnOrder[i].Item_list[m].ShowPosition = new Vector2(TurnOrder[i].spriteLocation.X, TurnOrder[i].spriteLocation.Y - 60);
                     }
                     if (m == 1)
                     {
-                        TurnOrder[i].Item_list[m].ShowPosition = new Vector2(TurnOrder[i].spriteLocation.X, TurnOrder[i].spriteLocation.Y + 160);
+                        TurnOrder[i].Item_list[m].ShowPosition = new Vector2(TurnOrder[i].spriteLocation.X, TurnOrder[i].spriteLocation.Y - 120);
+                    }
+
+                    if (m == 2)
+                    {
+                        TurnOrder[i].Item_list[m].ShowPosition = new Vector2(TurnOrder[i].spriteLocation.X, TurnOrder[i].spriteLocation.Y - 180);
                     }
                 }
                 if (unitRectangle.Contains(mousePosition))
@@ -472,9 +486,12 @@ namespace Burrow_Rune
                             Iteming = false;
                             Iteming2 = false;
                             Iteming3 = false;
+                            TargetAlly = false;
+                            TargetEnemy = false;
                             BattleTxt = "";
                             UseSkill = 0;
                             UseItem = 0;
+                            ATKcount = 0;
                             Partywaitingtime = 0;
                             for (int n = 0; n < TurnOrder[i].Skill_list.Count; n++)
                             {
@@ -598,13 +615,14 @@ namespace Burrow_Rune
                                 }
                                 if (mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed && TurnOrder[i].Skill_list[m].mouseHover == true)
                                 {
-                                    Skilling2 = true;
-                                    TurnOrder[i].Skill_list[m].Pressed = true;
                                     if (TurnOrder[i].Skill_list[m] == Double_Slash)
                                     {
                                         if (TurnOrder[i].MP >= 5)
                                         {
                                             UseSkill = 1;
+                                            Skilling2 = true;
+                                            TargetEnemy = true;
+                                            TurnOrder[i].Skill_list[m].Pressed = true;
                                             BattleTxt = "Attack one target twice";
                                         }
                                         else
@@ -617,6 +635,9 @@ namespace Burrow_Rune
                                         if (TurnOrder[i].MP >= 5)
                                         {
                                             UseSkill = 2;
+                                            Skilling2 = true;
+                                            TargetEnemy = true;
+                                            TurnOrder[i].Skill_list[m].Pressed = true;
                                             BattleTxt = "Attack all enemy once";
                                         }
                                         else
@@ -629,6 +650,9 @@ namespace Burrow_Rune
                                         if (TurnOrder[i].MP >= 5)
                                         {
                                             UseSkill = 3;
+                                            Skilling2 = true;
+                                            TargetEnemy = true;
+                                            TurnOrder[i].Skill_list[m].Pressed = true;
                                             BattleTxt = "Drain one enemy";
                                         }
                                         else
@@ -641,7 +665,10 @@ namespace Burrow_Rune
                                         if (TurnOrder[i].MP >= 5)
                                         {
                                             UseSkill = 4;
-                                            BattleTxt = "increse ally attack power by 2 for this battle";
+                                            Skilling2 = true;
+                                            TargetAlly = true;
+                                            TurnOrder[i].Skill_list[m].Pressed = true;
+                                            BattleTxt = "increse an ally attack power by 5 for this battle";
                                         }
                                         else
                                         {
@@ -653,6 +680,9 @@ namespace Burrow_Rune
                                         if (TurnOrder[i].MP >= 5)
                                         {
                                             UseSkill = 5;
+                                            Skilling2 = true;
+                                            TargetEnemy = true;
+                                            TurnOrder[i].Skill_list[m].Pressed = true;
                                             BattleTxt = "Attack and decrese enemy speed by 2";
                                         }
                                         else
@@ -665,6 +695,9 @@ namespace Burrow_Rune
                                         if (TurnOrder[i].MP >= 5)
                                         {
                                             UseSkill = 6;
+                                            Skilling2 = true;
+                                            TargetEnemy = true;
+                                            TurnOrder[i].Skill_list[m].Pressed = true;
                                             BattleTxt = "Decrese all enemy Attack by 2";
                                         }
                                         else
@@ -676,23 +709,50 @@ namespace Burrow_Rune
                                 
                                 if (Skilling2 == true)
                                 {
-                                    for (int n = 0; n < EnemyGroup.Count; n++)
+                                    Enemywaitingtime += 1;
+                                    if (TargetEnemy == true)
                                     {
-                                        if (EnemyGroup[n].mouseHover == true)
+                                        for (int n = 0; n < EnemyGroup.Count; n++)
                                         {
-                                            EnemyGroup[n].State = Color.Gray;
+                                            if (EnemyGroup[n].mouseHover == true)
+                                            {
+                                                EnemyGroup[n].State = Color.Gray;
+                                            }
+                                            else
+                                            {
+                                                EnemyGroup[n].State = Color.White;
+                                            }
+                                            if (mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed && EnemyGroup[n].mouseHover == true && EnemyGroup[n].Alive == true)
+                                            {
+                                                Skilling3 = true;
+                                                Skilling2 = false;
+                                                target = n;
+                                            }
                                         }
-                                        else
+                                    }
+                                    if (TargetAlly == true)
+                                    {
+                                        for (int n = 0; n < Party.Count; n++)
                                         {
-                                            EnemyGroup[n].State = Color.White;
+                                            if (Party[n].mouseHover == true)
+                                            {
+                                                Party[n].State = Color.Gray;
+                                            }
+                                            else
+                                            {
+                                                Party[n].State = Color.White;
+                                            }
+                                            if (ATKcount == 0 && Enemywaitingtime > 5)
+                                            {
+                                                if (mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed && Party[n].mouseHover == true && Party[n].Alive == true)
+                                                {
+                                                    Skilling3 = true;
+                                                    Skilling2 = false;
+                                                    target = n;
+                                                    ATKcount += 1;
+                                                }
+                                            }
                                         }
-                                        if (mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed && EnemyGroup[n].mouseHover == true && EnemyGroup[n].Alive == true)
-                                        {
-                                            Skilling3 = true;
-                                            Skilling2 = false;
-                                            target = n;
-                                        }
-                                        
                                     }
                                 }
                                 if (Skilling3 == true)
@@ -770,20 +830,14 @@ namespace Burrow_Rune
                                     {
                                         if (Partywaitingtime == 0)
                                         {
-                                            TurnOrder[i].MP -= 5;
+                                            TurnOrder[i].isAttacking = true;
+                                            TurnOrder[i].ATKframe = 1;
+                                            Party[target].healed = true;
+                                            Party[target].Atk += 5;
+                                            timeLoad = true;
+                                            BattleSFX[4].CreateInstance().Play();
                                         }
                                         Partywaitingtime += 1;
-                                        TurnOrder[i].isAttacking = true;
-                                        if (ATKcount < Party.Count)
-                                        {
-                                            Party[ATKcount].Atk += 2;
-                                            ATKcount += 1;
-                                            BattleSFX[6].CreateInstance().Play();
-                                        }
-                                        else
-                                        {
-                                            timeLoad = true;
-                                        }
                                     }
                                     if (UseSkill == 5)
                                     {
@@ -853,6 +907,7 @@ namespace Burrow_Rune
                                             Iteming2 = true;
                                             TurnOrder[i].Item_list[m].Pressed = true;
                                             UseItem = 1;
+                                            TargetAlly = true;
                                             BattleTxt = "Heal one ally 20 HP(" + HPPotionAmo + ")";
                                         }
                                         else
@@ -867,6 +922,7 @@ namespace Burrow_Rune
                                             Iteming2 = true;
                                             TurnOrder[i].Item_list[m].Pressed = true;
                                             UseItem = 2;
+                                            TargetAlly = true;
                                             BattleTxt = "Heal one ally 10 MP(" + MPPotionAmo + ")";
                                         }
                                         else
@@ -874,49 +930,95 @@ namespace Burrow_Rune
                                             BattleTxt = "No Potion left";
                                         }
                                     }
+                                    if (TurnOrder[i].Item_list[m] == Bomb)
+                                    {
+                                        if (BombAmo > 0)
+                                        {
+                                            Iteming2 = true;
+                                            TurnOrder[i].Item_list[m].Pressed = true;
+                                            UseItem = 3;
+                                            TargetEnemy = true;
+                                            BattleTxt = "Deal massive damage to an enemy(" + BombAmo + ")";
+                                        }
+                                        else
+                                        {
+                                            BattleTxt = "No Bomb left";
+                                        }
+                                    }
                                 }
                                 if (Iteming2 == true)
                                 {
                                     Enemywaitingtime += 1;
-                                    for (int n = 0; n < Party.Count; n++)
+                                    if (TargetAlly == true)
                                     {
-                                        if (Party[n].mouseHover == true)
+                                        for (int n = 0; n < Party.Count; n++)
                                         {
-                                            Party[n].State = Color.Gray;
-                                        }
-                                        else
-                                        {
-                                            Party[n].State = Color.White;
-                                        }
-                                        if (ATKcount == 0 && Enemywaitingtime > 5)
-                                        {
-                                            if (mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed && Party[n].mouseHover == true && Party[n].Alive == true)
+                                            if (Party[n].mouseHover == true)
                                             {
-                                                if (UseItem == 1)
+                                                Party[n].State = Color.Gray;
+                                            }
+                                            else
+                                            {
+                                                Party[n].State = Color.White;
+                                            }
+                                            if (ATKcount == 0 && Enemywaitingtime > 5)
+                                            {
+                                                if (mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed && Party[n].mouseHover == true && Party[n].Alive == true)
                                                 {
-                                                    Party[n].healed = true;
-                                                    Party[n].HP += 20;
-                                                    HPPotionAmo -= 1;
-                                                    ATKcount += 1;
-                                                    if (Party[n].HP > Party[n].MaxHP)
+                                                    if (UseItem == 1)
                                                     {
-                                                        Party[n].HP = Party[n].MaxHP;
+                                                        Party[n].healed = true;
+                                                        Party[n].HP += 20;
+                                                        HPPotionAmo -= 1;
+                                                        ATKcount += 1;
+                                                        if (Party[n].HP > Party[n].MaxHP)
+                                                        {
+                                                            Party[n].HP = Party[n].MaxHP;
+                                                        }
+                                                        BattleSFX[4].CreateInstance().Play();
+                                                        timeLoad = true;
                                                     }
-                                                    BattleSFX[4].CreateInstance().Play();
-                                                    timeLoad = true;
+                                                    if (UseItem == 2)
+                                                    {
+                                                        Party[n].healed = true;
+                                                        Party[n].MP += 10;
+                                                        MPPotionAmo -= 1;
+                                                        ATKcount += 1;
+                                                        if (Party[n].MP > Party[n].MaxMP)
+                                                        {
+                                                            Party[n].MP = Party[n].MaxMP;
+                                                        }
+                                                        BattleSFX[4].CreateInstance().Play();
+                                                        timeLoad = true;
+                                                    }
                                                 }
-                                                if (UseItem == 2)
+                                            }
+                                        }
+                                    }
+                                    if (TargetEnemy == true)
+                                    {
+                                        for (int n = 0; n < EnemyGroup.Count; n++)
+                                        {
+                                            if (EnemyGroup[n].mouseHover == true)
+                                            {
+                                                EnemyGroup[n].State = Color.Gray;
+                                            }
+                                            else
+                                            {
+                                                EnemyGroup[n].State = Color.White;
+                                            }
+                                            if (ATKcount == 0 && Enemywaitingtime > 5)
+                                            {
+                                                if (mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed && EnemyGroup[n].mouseHover == true)
                                                 {
-                                                    Party[n].healed = true;
-                                                    Party[n].MP += 10;
-                                                    MPPotionAmo -= 1;
-                                                    ATKcount += 1;
-                                                    if (Party[n].MP > Party[n].MaxMP)
+                                                    if (UseItem == 3)
                                                     {
-                                                        Party[n].MP = Party[n].MaxMP;
+                                                        EnemyGroup[n].attacked = true;
+                                                        EnemyGroup[n].HP -= 20;
+                                                        BombAmo -= 1;
+                                                        ATKcount += 1;
+                                                        timeLoad = true;
                                                     }
-                                                    BattleSFX[4].CreateInstance().Play();
-                                                    timeLoad = true;
                                                 }
                                             }
                                         }
@@ -1022,6 +1124,8 @@ namespace Burrow_Rune
                     ATKcount = 0;
                     iconOrder += 1;
                     UseSkill = 0;
+                    TargetAlly = false;
+                    TargetEnemy = false;
                     TurnOrder[i].Big_iconLocation = new Vector2(1000, 1000);
                 }
                 if (TurnOrder[i].targeted == true)
@@ -1178,14 +1282,15 @@ namespace Burrow_Rune
 
             if (EnemyGroup.Count == 0)
             {
-                if (Partywaitingtime == 1)
+                if (ATKcount == 0 && Enemywaitingtime == 0)
                 {
                     WinSFX.CreateInstance().Play();
                     BattleTxt = "Victory!";
                     MediaPlayer.Stop();
+                    ATKcount += 1;
                 }
-                Partywaitingtime += 1;
-                if (Partywaitingtime == 80)
+                Enemywaitingtime += 1;
+                if (Enemywaitingtime == 80)
                 {
                     for (int i = 0; i < TurnOrder.Count; i++)
                     {
@@ -1410,7 +1515,7 @@ namespace Burrow_Rune
                 int x = r.Next(1, 4);
                 if (x == 1 || x == 3)
                 {
-                    eventNum = r.Next(1, 3);
+                    eventNum = r.Next(1, 4);
                     isEvent = true;
                     ResetMap();
                     roomNum += 1;
@@ -1518,7 +1623,7 @@ namespace Burrow_Rune
                 }
             }
 
-            if (eventNum == 1)
+            if (eventNum == 1 || eventNum == 3)
             {
                 if (Yes == false)
                 {
@@ -1784,6 +1889,10 @@ namespace Burrow_Rune
                 {
                     ButtoninShop[i].Position = new Vector2(800, 280);
                 }
+                if (i == 2)
+                {
+                    ButtoninShop[i].Position = new Vector2(800, 360);
+                }
                 if (buttonRectangle.Contains(mousePosition))
                 {
                     ButtoninShop[i].mouseHover = true;
@@ -1804,9 +1913,9 @@ namespace Burrow_Rune
                 {
                     if (ButtoninShop[i] == HeathPotion)
                     {
-                        if (Gold >= 100)
+                        if (Gold >= 200)
                         {
-                            Gold -= 100;
+                            Gold -= 200;
                             HPPotionAmo += 1;
                             ClickSFX.CreateInstance().Play();
                         }
@@ -1817,10 +1926,23 @@ namespace Burrow_Rune
                     }
                     if (ButtoninShop[i] == ManaPotion)
                     {
-                        if (Gold >= 100)
+                        if (Gold >= 200)
                         {
-                            Gold -= 100;
+                            Gold -= 200;
                             MPPotionAmo += 1;
+                            ClickSFX.CreateInstance().Play();
+                        }
+                        else
+                        {
+                            ShopTxt = "Not enought gold";
+                        }
+                    }
+                    if (ButtoninShop[i] == ManaPotion)
+                    {
+                        if (Gold >= 300)
+                        {
+                            Gold -= 300;
+                            BombAmo += 1;
                             ClickSFX.CreateInstance().Play();
                         }
                         else
@@ -2165,11 +2287,14 @@ namespace Burrow_Rune
             _spriteBatch.Draw(Skill_Texture, Blood_Curse.Position, Blood_Curse.State);
             _spriteBatch.Draw(Item_Texture, HeathPotion.Position, HeathPotion.State);
             _spriteBatch.Draw(Item_Texture, ManaPotion.Position, ManaPotion.State);
+            _spriteBatch.Draw(Item_Texture, Bomb.Position, Bomb.State);
 
             string HPpotiontxt = "" + HPPotionAmo;
             _spriteBatch.DrawString(font, HPpotiontxt, new Vector2(HeathPotion.Position.X + 160, HeathPotion.Position.Y + 15), Color.White);
             string MPpotiontxt = "" + MPPotionAmo;
             _spriteBatch.DrawString(font, MPpotiontxt, new Vector2(ManaPotion.Position.X + 160, ManaPotion.Position.Y + 15), Color.White);
+            string Bombtxt = "" + BombAmo;
+            _spriteBatch.DrawString(font, Bombtxt, new Vector2(Bomb.Position.X + 160, Bomb.Position.Y + 15), Color.White);
             _spriteBatch.DrawString(font, BattleTxt, new Vector2(300, 520), Color.White);
             String goldtxt = "Gold: " + Gold;
             _spriteBatch.DrawString(font, goldtxt, new Vector2(1300, 15), Color.Red);
@@ -2250,15 +2375,20 @@ namespace Burrow_Rune
             String goldtxt = "Gold: " + Gold;
             _spriteBatch.DrawString(font, goldtxt, new Vector2(1300, 15), Color.Red);
             _spriteBatch.DrawString(font, ShopTxt, new Vector2(500, 15), Color.Red);
-            String PotionPrice = "-100";
+            String PotionPrice = "-200";
             _spriteBatch.DrawString(font, PotionPrice, new Vector2(HeathPotion.Position.X +20, HeathPotion.Position.Y + 50), Color.Red);
             _spriteBatch.DrawString(font, PotionPrice, new Vector2(ManaPotion.Position.X + 20, ManaPotion.Position.Y + 50), Color.Red);
+            String BombPrice = "-300";
+            _spriteBatch.DrawString(font, BombPrice, new Vector2(Bomb.Position.X + 20, Bomb.Position.Y + 50), Color.Red);
             string potiontxt = "" + HPPotionAmo;
             _spriteBatch.DrawString(font, potiontxt, new Vector2(HeathPotion.Position.X + 160, HeathPotion.Position.Y + 15), Color.White);
             string MPpotiontxt = "" + MPPotionAmo;
             _spriteBatch.DrawString(font, MPpotiontxt, new Vector2(ManaPotion.Position.X + 160, ManaPotion.Position.Y + 15), Color.White);
+            string Bombtxt = "" + BombAmo;
+            _spriteBatch.DrawString(font, Bombtxt, new Vector2(Bomb.Position.X + 160, Bomb.Position.Y + 15), Color.White);
             _spriteBatch.Draw(Item_Texture, HeathPotion.Position, HeathPotion.State);
             _spriteBatch.Draw(Item_Texture, ManaPotion.Position, ManaPotion.State);
+            _spriteBatch.Draw(Item_Texture, Bomb.Position, Bomb.State);
             Return_B.Position = new Vector2(0, 500);
             _spriteBatch.Draw(Return_Texture, Return_B.Position, Return_B.State);
         }
@@ -2284,6 +2414,8 @@ namespace Burrow_Rune
             UseItem = 0;
             ATKcount = 0;
             BattleTxt = "";
+            TargetAlly = false;
+            TargetEnemy = false;
         }
 
         private void RandomNode()
