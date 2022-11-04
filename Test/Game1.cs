@@ -2350,7 +2350,7 @@ namespace Burrow_Rune
                     _spriteBatch.Draw(HPMPbar_Texture, Golem.HPMPbar_iconLocation, new Rectangle(0, 0, 270, 30), Color.White);
                     _spriteBatch.Draw(HPMPbar_Texture, Golem.HPbar_Location, new Rectangle(0, 0, Golem.HP * (280 / Golem.MaxHP), 30), Color.Red);
                     _spriteBatch.Draw(Golem_Icon, Golem.Small_iconLocation, new Rectangle(35, 315, 90, 90), Golem.State);
-                    _spriteBatch.Draw(Golem_Texture, Golem.Big_iconLocation, new Rectangle(50, 70, 120, 140), Color.White);
+                    _spriteBatch.Draw(Golem_Texture, Golem.Big_iconLocation, new Rectangle(150, 70, 120, 140), Color.White);
                     _spriteBatch.DrawString(font, Golem.HPtext, new Vector2(Golem.HPMPbar_iconLocation.X + 120, Golem.HPMPbar_iconLocation.Y), Color.Black);
                 }
                 if (EnemyGroup[i] == Rocky1)
