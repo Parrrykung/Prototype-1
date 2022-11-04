@@ -25,6 +25,30 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Background/1st_floor_2.png
 
+#begin ASSET 2D/Background/Camp.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Background/Camp.png
+
+#begin ASSET 2D/Background/Chest.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Background/Chest.png
+
 #begin ASSET 2D/Background/GameOver_version5.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -36,6 +60,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Background/GameOver_version5.png
+
+#begin ASSET 2D/Background/Gold.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Background/Gold.png
+
+#begin ASSET 2D/Background/Hekp.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Background/Hekp.png
 
 #begin ASSET 2D/Background/Map_2.png
 /importer:TextureImporter
@@ -61,7 +109,7 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Background/map_3_.png
 
-#begin ASSET 2D/Sprite/Blood_maiden/Blood maiden Attack.png
+#begin ASSET 2D/Background/SHOP.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -71,7 +119,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/Sprite/Blood_maiden/Blood maiden Attack.png
+/build:ASSET 2D/Background/SHOP.png
+
+#begin ASSET 2D/Background/Trap.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Background/Trap.png
 
 #begin ASSET 2D/Sprite/Blood_maiden/Blood maiden sprite sheet-export.png
 /importer:TextureImporter
@@ -97,6 +157,18 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Sprite/Blood_maiden/Blood_maiden_sprite_sheet.png
 
+#begin ASSET 2D/Sprite/Blood_maiden/Blood-maiden-Attack.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Blood_maiden/Blood-maiden-Attack.png
+
 #begin ASSET 2D/Sprite/Blood_maiden/Blood-maiden-idel-Sheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -109,7 +181,7 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Sprite/Blood_maiden/Blood-maiden-idel-Sheet.png
 
-#begin ASSET 2D/Sprite/Dragonic_hunter/Dragonic attack.png
+#begin ASSET 2D/Sprite/Blood_maiden/BM_Face.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -119,7 +191,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/Sprite/Dragonic_hunter/Dragonic attack.png
+/build:ASSET 2D/Sprite/Blood_maiden/BM_Face.png
+
+#begin ASSET 2D/Sprite/Dragonic_hunter/Dra_Face.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Dragonic_hunter/Dra_Face.png
 
 #begin ASSET 2D/Sprite/Dragonic_hunter/Dragonic Sheet.png
 /importer:TextureImporter
@@ -132,6 +216,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Sprite/Dragonic_hunter/Dragonic Sheet.png
+
+#begin ASSET 2D/Sprite/Dragonic_hunter/Dragonic-attack.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Dragonic_hunter/Dragonic-attack.png
 
 #begin ASSET 2D/Sprite/Dragonic_hunter/Dragonic-Idel-Sheet.png
 /importer:TextureImporter
@@ -157,6 +253,18 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Sprite/Enemy/Beetle/Flying-Rock_Sheet.png
 
+#begin ASSET 2D/Sprite/Enemy/Beetle/Flying-Rock-Big-Icon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Enemy/Beetle/Flying-Rock-Big-Icon.png
+
 #begin ASSET 2D/Sprite/Enemy/Beetle/Flying-Rock-Icon.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -168,6 +276,42 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Sprite/Enemy/Beetle/Flying-Rock-Icon.png
+
+#begin ASSET 2D/Sprite/Enemy/Boss-Big-Icon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Enemy/Boss-Big-Icon.png
+
+#begin ASSET 2D/Sprite/Enemy/Boss-Icon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Enemy/Boss-Icon.png
+
+#begin ASSET 2D/Sprite/Enemy/Boss-Sheet2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Enemy/Boss-Sheet2.png
 
 #begin ASSET 2D/Sprite/Enemy/Golem/Golem_Sprite_sheet.png
 /importer:TextureImporter
@@ -181,6 +325,30 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Sprite/Enemy/Golem/Golem_Sprite_sheet.png
 
+#begin ASSET 2D/Sprite/Enemy/Golem/Golem-Big-Icon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Enemy/Golem/Golem-Big-Icon.png
+
+#begin ASSET 2D/Sprite/Enemy/Golem/Golem-Icon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Enemy/Golem/Golem-Icon.png
+
 #begin ASSET 2D/Sprite/Enemy/Golem/Golem-Sheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -192,6 +360,66 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Sprite/Enemy/Golem/Golem-Sheet.png
+
+#begin ASSET 2D/Sprite/Enemy/Ice Golem.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Enemy/Ice Golem.png
+
+#begin ASSET 2D/Sprite/Enemy/Ice-Golem-Big-Icon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Enemy/Ice-Golem-Big-Icon.png
+
+#begin ASSET 2D/Sprite/Enemy/Ice-Golem-Icon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Enemy/Ice-Golem-Icon.png
+
+#begin ASSET 2D/Sprite/Enemy/Ice-Golem-Sheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Enemy/Ice-Golem-Sheet.png
+
+#begin ASSET 2D/Sprite/Enemy/Rocky/Hermit-Rock-Big-Icon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Enemy/Rocky/Hermit-Rock-Big-Icon.png
 
 #begin ASSET 2D/Sprite/Enemy/Rocky/Hermit-Rock-Icon.png
 /importer:TextureImporter
@@ -217,7 +445,7 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Sprite/Enemy/Rocky/Hermit-Rock-Sheet.png
 
-#begin ASSET 2D/Sprite/Inventor/Inventor attack.png
+#begin ASSET 2D/Sprite/Inventor/INV_Face.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -227,7 +455,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/Sprite/Inventor/Inventor attack.png
+/build:ASSET 2D/Sprite/Inventor/INV_Face.png
 
 #begin ASSET 2D/Sprite/Inventor/Inventor Sprite Sheet-export.png
 /importer:TextureImporter
@@ -253,6 +481,18 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Sprite/Inventor/Inventor_Sprite_Sheet.png
 
+#begin ASSET 2D/Sprite/Inventor/Inventor-attack.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Inventor/Inventor-attack.png
+
 #begin ASSET 2D/Sprite/Inventor/Inventor-idel-sheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -265,7 +505,7 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Sprite/Inventor/Inventor-idel-sheet.png
 
-#begin ASSET 2D/Sprite/Lurker/Lurker attack.png
+#begin ASSET 2D/Sprite/Lurker/LU_Face.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -275,7 +515,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/Sprite/Lurker/Lurker attack.png
+/build:ASSET 2D/Sprite/Lurker/LU_Face.png
 
 #begin ASSET 2D/Sprite/Lurker/Lurker Sprite Sheet-export.png
 /importer:TextureImporter
@@ -300,6 +540,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Sprite/Lurker/Lurker_Sprite_Sheet.png
+
+#begin ASSET 2D/Sprite/Lurker/Lurker-attack.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Lurker/Lurker-attack.png
 
 #begin ASSET 2D/Sprite/Lurker/Lurker-idel-sheet.png
 /importer:TextureImporter
@@ -397,6 +649,18 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/UI/Blood Maiden Icon.png
 
+#begin ASSET 2D/UI/Bomb2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/UI/Bomb2.png
+
 #begin ASSET 2D/UI/button_no.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -445,7 +709,7 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/UI/Double slash.png
 
-#begin ASSET 2D/UI/Dragonic Icon.png
+#begin ASSET 2D/UI/Dragonic-Icon.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -455,7 +719,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:ASSET 2D/UI/Dragonic Icon.png
+/build:ASSET 2D/UI/Dragonic-Icon.png
 
 #begin ASSET 2D/UI/Event Node.png
 /importer:TextureImporter
@@ -505,6 +769,18 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/UI/HP_MP_Bar.png
 
+#begin ASSET 2D/UI/HP-Potion.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/UI/HP-Potion.png
+
 #begin ASSET 2D/UI/Inventor icon.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -552,6 +828,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/UI/Lurker Icon.png
+
+#begin ASSET 2D/UI/MP-Potion.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/UI/MP-Potion.png
 
 #begin ASSET 2D/UI/Power_boost.png
 /importer:TextureImporter
@@ -601,6 +889,18 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/UI/tap to start.png
 
+#begin ASSET 2D/UI/Turn Selector.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/UI/Turn Selector.png
+
 #begin ASSET 2D/UI/Turn-Order-Hub.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -612,18 +912,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/UI/Turn-Order-Hub.png
-
-#begin ASSET 2D/UI/Turn-Selector.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:ASSET 2D/UI/Turn-Selector.png
 
 #begin ASSET 2D/UI/Wide slash.png
 /importer:TextureImporter
@@ -788,6 +1076,12 @@
 /processorParam:Quality=Best
 /build:SFX/Greed_Stab.wav
 
+#begin SFX/MatchGirl_Explosion.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/MatchGirl_Explosion.wav
+
 #begin SFX/Philip_Hit.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -805,6 +1099,12 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:SFX/Result_WaveLose.wav
+
+#begin SFX/SnowQueen_Atk.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/SnowQueen_Atk.wav
 
 #begin SFX/Story_ClothCatch.wav
 /importer:WavImporter
