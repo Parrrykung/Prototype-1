@@ -25,6 +25,42 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Background/1st_floor_2.png
 
+#begin ASSET 2D/Background/GameOver_version5.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Background/GameOver_version5.png
+
+#begin ASSET 2D/Background/Map_2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Background/Map_2.png
+
+#begin ASSET 2D/Background/map_3_.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Background/map_3_.png
+
 #begin ASSET 2D/Sprite/Blood_maiden/Blood maiden sprite sheet-export.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -49,6 +85,18 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Sprite/Blood_maiden/Blood_maiden_sprite_sheet.png
 
+#begin ASSET 2D/Sprite/Blood_maiden/Blood-maiden-idel-Sheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Blood_maiden/Blood-maiden-idel-Sheet.png
+
 #begin ASSET 2D/Sprite/Dragonic_hunter/Dragonic Sheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -60,6 +108,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Sprite/Dragonic_hunter/Dragonic Sheet.png
+
+#begin ASSET 2D/Sprite/Dragonic_hunter/Dragonic-Idel-Sheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Dragonic_hunter/Dragonic-Idel-Sheet.png
 
 #begin ASSET 2D/Sprite/Enemy/Beetle/Flying-Rock_Sheet.png
 /importer:TextureImporter
@@ -157,6 +217,18 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Sprite/Inventor/Inventor_Sprite_Sheet.png
 
+#begin ASSET 2D/Sprite/Inventor/Inventor-idel-sheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Inventor/Inventor-idel-sheet.png
+
 #begin ASSET 2D/Sprite/Lurker/Lurker Sprite Sheet-export.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -181,6 +253,42 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Sprite/Lurker/Lurker_Sprite_Sheet.png
 
+#begin ASSET 2D/Sprite/Lurker/Lurker-idel-sheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Lurker/Lurker-idel-sheet.png
+
+#begin ASSET 2D/UI/Aid.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/UI/Aid.png
+
+#begin ASSET 2D/UI/Ankle slash.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/UI/Ankle slash.png
+
 #begin ASSET 2D/UI/Arrow.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -204,6 +312,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/UI/Attack.png
+
+#begin ASSET 2D/UI/Blood curse.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/UI/Blood curse.png
+
+#begin ASSET 2D/UI/Blood drain.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/UI/Blood drain.png
 
 #begin ASSET 2D/UI/Blood Maiden Icon.png
 /importer:TextureImporter
@@ -253,6 +385,18 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/UI/button_yes.png
 
+#begin ASSET 2D/UI/Double slash.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/UI/Double slash.png
+
 #begin ASSET 2D/UI/Dragonic Icon.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -288,6 +432,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/UI/Fight Node.png
+
+#begin ASSET 2D/UI/Hit-Effect.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/UI/Hit-Effect.png
 
 #begin ASSET 2D/UI/HP_MP_Bar.png
 /importer:TextureImporter
@@ -349,6 +505,18 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/UI/Lurker Icon.png
 
+#begin ASSET 2D/UI/Power_boost.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/UI/Power_boost.png
+
 #begin ASSET 2D/UI/Rest Node.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -408,6 +576,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/UI/Turn-Selector.png
+
+#begin ASSET 2D/UI/Wide slash.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/UI/Wide slash.png
 
 #begin BGM/a-beautiful-step-99284.mp3
 /importer:Mp3Importer
@@ -481,12 +661,6 @@
 /processorParam:Quality=Best
 /build:BGM/human-14050.mp3
 
-#begin BGM/it39s-going-to-snow-today-12135.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:BGM/it39s-going-to-snow-today-12135.mp3
-
 #begin BGM/light-15800.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
@@ -498,6 +672,12 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:BGM/monster-forest-114171.mp3
+
+#begin BGM/on-a-snowy-night-9435.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:BGM/on-a-snowy-night-9435.mp3
 
 #begin BGM/to-a-beautiful-flower-with-no-name-20871.mp3
 /importer:Mp3Importer

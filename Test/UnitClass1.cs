@@ -30,6 +30,8 @@ namespace Burrow_Rune
         public bool healed = false;
         public bool Alive = true;
         public Texture2D Unit_Sprite;
+        public Texture2D Idle_Sprite;
+        public Texture2D ATK_Sprite;
         public bool mouseHover = false;
         public int iconOrder;
         public Vector2 Big_iconLocation = new Vector2(1000, 1000);
@@ -46,7 +48,7 @@ namespace Burrow_Rune
         public int IdleFrame = 0;
         public int frame;
         private float totalElapsed = 0;
-        private float timePerFrame = (float)1 / 3;
+        private float timePerFrame = (float)1 / 4;
 
         public UnitClass()
         {

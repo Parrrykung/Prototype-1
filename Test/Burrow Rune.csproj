@@ -14,6 +14,7 @@
     <None Remove="Content\ASSET 2D\1st_floor_2.png" />
     <None Remove="Content\ASSET 2D\Arrow.png" />
     <None Remove="Content\ASSET 2D\Attack.png" />
+    <None Remove="Content\ASSET 2D\Background\map_3.png" />
     <None Remove="Content\ASSET 2D\Blood_maiden_sprite_sheet.png" />
     <None Remove="Content\ASSET 2D\Char01.png" />
     <None Remove="Content\ASSET 2D\Flying-Rock-Icon.png" />
@@ -26,12 +27,17 @@
     <None Remove="Content\ASSET 2D\Item.png" />
     <None Remove="Content\ASSET 2D\Lurker_Sprite_Sheet.png" />
     <None Remove="Content\ASSET 2D\Skill.png" />
+    <None Remove="Content\ASSET 2D\Sprite\Blood_maiden\Blood maiden idel Sheet.png" />
+    <None Remove="Content\ASSET 2D\Sprite\Dragonic_hunter\Dragonic Idel Sheet.png" />
+    <None Remove="Content\ASSET 2D\Sprite\Inventor\Inventor idel sheet.png" />
+    <None Remove="Content\ASSET 2D\Sprite\Lurker\Lurker idel sheet.png" />
     <None Remove="Content\ASSET 2D\Turn-Order-Hub.png" />
     <None Remove="Content\ASSET 2D\Turn-Selector.png" />
     <None Remove="Content\ASSET 2D\UI\Blood Maiden Icon.png" />
     <None Remove="Content\ASSET 2D\UI\HP bar.png" />
     <None Remove="Content\ASSET 2D\UI\Inventor icon.png" />
     <None Remove="Content\ASSET 2D\UI\Lurker Icon.png" />
+    <None Remove="Content\BGM\it39s-going-to-snow-today-12135.mp3" />
     <None Remove="Content\File.spritefont" />
     <None Remove="Content\ZoodHarit4Bit-thai.ttf" />
   </ItemGroup>

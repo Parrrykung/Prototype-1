@@ -68,23 +68,22 @@ namespace Burrow_Rune
         private int UseSkill = 0;
         private int UseItem = 0;
 
-        private Texture2D first_floor_Background;
+        private Texture2D Background_Texture;
+        private Texture2D Background_Texture_1;
+        private Texture2D Background_Texture_2;
+        private Texture2D Background_Texture_3;
         private Texture2D Beetle_Text;
         private Texture2D Rocky_Text;
         private Texture2D Beetle_Icon;
         private Texture2D Rocky_Icon;
         private Texture2D Golem_Texture;
         private Texture2D Golem_Icon;
-        private Texture2D Lurker_Texture;
         private Texture2D Lurker_Small_Icon;
         private Texture2D Lurker_Big_Icon;
-        private Texture2D Inventor_Texture;
         private Texture2D Inventor_Small_Icon;
         private Texture2D Inventor_Big_Icon;
-        private Texture2D Blood_Maiden_Texture;
         private Texture2D Blood_Maiden_Small_Icon;
         private Texture2D Blood_Maiden_Big_Icon;
-        private Texture2D Dragonic_Texture;
         private Texture2D Dragonic_Small_Icon;
         private Texture2D Arrow_Texture;
         private Texture2D Attack_Texture;
@@ -101,6 +100,16 @@ namespace Burrow_Rune
         private Texture2D Return_Texture;
         private Texture2D Logo_Texture;
         private Texture2D Taptostart_Texture;
+        private Texture2D Gameover_Texture;
+        private Texture2D HitEffect_Texture;
+        private Texture2D Double_Slash_Texture;
+        private Texture2D Wide_Slash_Texture;
+        private Texture2D Blood_Drain_Texture;
+        private Texture2D Ankle_Cut_Texture;
+        private Texture2D Blood_Curse_Texture;
+        private Texture2D Power_Boost_Texture;
+        private Texture2D Aid_Texture;
+
 
         public UnitClass Lurker = new UnitClass(true, 6, 30, 5, 0, 20);
         public UnitClass Golem = new UnitClass(false,4, 40, 5, 3, 0);
@@ -134,6 +143,7 @@ namespace Burrow_Rune
         private Button Power_Boost = new Button(new Vector2(1000, 1000));
         private Button Ankle_Cut = new Button(new Vector2(1000, 1000));
         private Button Blood_Curse = new Button(new Vector2(1000, 1000));
+        private Button Aid = new Button(new Vector2(1000, 1000));
 
         private Button HeathPotion = new Button(new Vector2(1000, 1000));
         private Button ManaPotion = new Button(new Vector2(1000, 1000));
@@ -142,6 +152,7 @@ namespace Burrow_Rune
         private Vector2 Turn_Selector_Position;
         private Vector2 Turn_Order_Position = new Vector2(0, 360);
         private Vector2 Arrow_Position = new Vector2(1000, 1000);
+        private Vector2 HitEffect_Position = new Vector2(1000, 1000);
 
         private List<UnitClass> Party = new List<UnitClass>();
         private List<UnitClass> EnemyGroup = new List<UnitClass>();
@@ -153,11 +164,23 @@ namespace Burrow_Rune
         private List<SoundEffect> BattleSFX = new List<SoundEffect>();
 
         private Song TitleBGM;
+        private Song LoseBGM;
         private Song EventMapBGM;
+        private Song EventMapBGM_Grass;
+        private Song EventMapBGM_Cave;
+        private Song EventMapBGM_Ice;
         private Song BattleBGM_1;
         private Song BattleBGM_2;
         private Song BossBGM;
-        private Song ShopBGM;
+        private Song BattleBGM_1_Grass;
+        private Song BattleBGM_2_Grass;
+        private Song BossBGM_Grass;
+        private Song BattleBGM_1_Cave;
+        private Song BattleBGM_2_Cave;
+        private Song BossBGM_Cave;
+        private Song BattleBGM_1_Ice;
+        private Song BattleBGM_2_Ice;
+        private Song BossBGM_Ice;
         private SoundEffect ClickSFX;
         private SoundEffect WinSFX;
         private SoundEffect CancleSFX;
@@ -188,19 +211,25 @@ namespace Burrow_Rune
             Beetle_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Enemy/Beetle/Flying-Rock-Icon");
             Rocky_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Enemy/Rocky/Hermit-Rock-Icon");
             Golem_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Enemy/Golem/Golem_Sprite_sheet");
-            Dragonic_Texture = Content.Load<Texture2D>("Asset 2D/Sprite/Dragonic_hunter/Dragonic Sheet");
+            Dragonic_hunter.ATK_Sprite = Content.Load<Texture2D>("Asset 2D/Sprite/Dragonic_hunter/Dragonic Sheet");
+            Dragonic_hunter.Idle_Sprite = Content.Load<Texture2D>("Asset 2D/Sprite/Dragonic_hunter/Dragonic-Idel-Sheet");
             Dragonic_Small_Icon = Content.Load<Texture2D>("Asset 2D/UI/Dragonic Icon");
-            Blood_Maiden_Texture = Content.Load<Texture2D>("Asset 2D/Sprite/Blood_maiden/Blood maiden sprite sheet-export");
+            Blood_Maiden.ATK_Sprite = Content.Load<Texture2D>("Asset 2D/Sprite/Blood_maiden/Blood maiden sprite sheet-export");
+            Blood_Maiden.Idle_Sprite = Content.Load<Texture2D>("Asset 2D/Sprite/Blood_maiden/Blood-maiden-idel-Sheet");
             Blood_Maiden_Small_Icon = Content.Load<Texture2D>("Asset 2D/UI/Blood Maiden Icon");
             Blood_Maiden_Big_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Blood_maiden/Blood_maiden_sprite_sheet");
             Golem_Texture = Content.Load<Texture2D>("Asset 2D/Sprite/Enemy/Golem/Golem-Sheet");
-            Inventor_Texture = Content.Load<Texture2D>("Asset 2D/Sprite/Inventor/Inventor Sprite Sheet-export");
+            inventor.ATK_Sprite = Content.Load<Texture2D>("Asset 2D/Sprite/Inventor/Inventor Sprite Sheet-export");
+            inventor.Idle_Sprite = Content.Load<Texture2D>("Asset 2D/Sprite/Inventor/Inventor-idel-sheet");
             Inventor_Small_Icon = Content.Load<Texture2D>("Asset 2D/UI/Inventor Icon");
             Inventor_Big_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Inventor/Inventor_Sprite_Sheet");
-            Lurker_Texture = Content.Load<Texture2D>("Asset 2D/Sprite/Lurker/Lurker Sprite Sheet-export");
+            Lurker.ATK_Sprite = Content.Load<Texture2D>("Asset 2D/Sprite/Lurker/Lurker Sprite Sheet-export");
+            Lurker.Idle_Sprite = Content.Load<Texture2D>("Asset 2D/Sprite/Lurker/Lurker-idel-sheet");
             Lurker_Small_Icon = Content.Load<Texture2D>("Asset 2D/UI/Lurker Icon");
             Lurker_Big_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Lurker/Lurker_Sprite_Sheet");
-            first_floor_Background = Content.Load<Texture2D>("Asset 2D/Background/1st_floor_2");
+            Background_Texture_1 = Content.Load<Texture2D>("Asset 2D/Background/Map_2");
+            Background_Texture_2 = Content.Load<Texture2D>("Asset 2D/Background/1st_floor_2");
+            Background_Texture_3 = Content.Load<Texture2D>("Asset 2D/Background/map_3_");
             Arrow_Texture = Content.Load<Texture2D>("Asset 2D/UI/Arrow");
             Attack_Texture = Content.Load<Texture2D>("Asset 2D/UI/Attack");
             Item_Texture = Content.Load<Texture2D>("Asset 2D/UI/Item");
@@ -216,15 +245,33 @@ namespace Burrow_Rune
             Return_Texture = Content.Load<Texture2D>("Asset 2D/UI/button_return");
             Logo_Texture = Content.Load<Texture2D>("Asset 2D/UI/logo");
             Taptostart_Texture = Content.Load<Texture2D>("Asset 2D/UI/tap to start");
+            HitEffect_Texture = Content.Load<Texture2D>("Asset 2D/UI/Hit-Effect");
+            Gameover_Texture = Content.Load<Texture2D>("Asset 2D/Background/GameOver_version5");
+            Double_Slash_Texture = Content.Load<Texture2D>("Asset 2D/UI/Double slash");
+            Wide_Slash_Texture = Content.Load<Texture2D>("Asset 2D/UI/Wide slash");
+            Blood_Drain_Texture = Content.Load<Texture2D>("Asset 2D/UI/Blood drain");
+            Blood_Curse_Texture = Content.Load<Texture2D>("Asset 2D/UI/Blood curse");
+            Power_Boost_Texture = Content.Load<Texture2D>("Asset 2D/UI/Power_boost");
+            Ankle_Cut_Texture = Content.Load<Texture2D>("Asset 2D/UI/Ankle slash");
+            Aid_Texture = Content.Load<Texture2D>("Asset 2D/UI/Aid");
+
 
             font = Content.Load<SpriteFont>("font");
 
             TitleBGM = Content.Load<Song>("BGM/at-the-bottom-of-the-sea-where-the-sun-never-reaches-112916");
-            EventMapBGM = Content.Load<Song>("BGM/a-beautiful-step-99284");
-            BattleBGM_1 = Content.Load<Song>("BGM/light-15800");
-            BattleBGM_2 = Content.Load<Song>("BGM/epic-recovery-9797");
-            BossBGM = Content.Load<Song>("BGM/go-back-to-the-heavens-49981");
-            ShopBGM = Content.Load<Song>("BGM/fruit-9530");
+            EventMapBGM_Grass = Content.Load<Song>("BGM/monster-forest-114171");
+            EventMapBGM_Cave = Content.Load<Song>("BGM/a-beautiful-step-99284");
+            EventMapBGM_Ice = Content.Load<Song>("BGM/cold-snow-116417");
+            BattleBGM_1_Grass = Content.Load<Song>("BGM/grasslands-9611");
+            BattleBGM_2_Grass = Content.Load<Song>("BGM/warped-love-9260");
+            BossBGM_Grass = Content.Load<Song>("BGM/human-14050");
+            BattleBGM_1_Cave = Content.Load<Song>("BGM/light-15800");
+            BattleBGM_2_Cave = Content.Load<Song>("BGM/epic-recovery-9797");
+            BossBGM_Cave = Content.Load<Song>("BGM/go-back-to-the-heavens-49981");
+            BattleBGM_1_Ice = Content.Load<Song>("BGM/on-a-snowy-night-9435");
+            BattleBGM_2_Ice = Content.Load<Song>("BGM/eternal-loop-121064");
+            BossBGM_Ice = Content.Load<Song>("BGM/cracked-40857");
+            LoseBGM = Content.Load<Song>("BGM/to-a-beautiful-flower-with-no-name-20871");
             ClickSFX = Content.Load<SoundEffect>("SFX/Ui_Click");
             WinSFX = Content.Load<SoundEffect>("SFX/Result_EndWin");
             CancleSFX = Content.Load<SoundEffect>("SFX/Ui_Cancel");
@@ -282,6 +329,7 @@ namespace Burrow_Rune
             Dragonic_hunter.Skill_list.Add(Double_Slash);
             Dragonic_hunter.Skill_list.Add(Wide_Slash);
             inventor.Skill_list.Add(Power_Boost);
+            inventor.Skill_list.Add(Aid);
             Blood_Maiden.Skill_list.Add(Blood_Drain);
             Blood_Maiden.Skill_list.Add(Blood_Curse);
 
@@ -336,6 +384,31 @@ namespace Burrow_Rune
             if (isShop == true)
             {
                 UpdateShop();
+            }
+
+            if (roomNum >= 0 && roomNum < 20)
+            {
+                Background_Texture = Background_Texture_1;
+                EventMapBGM = EventMapBGM_Grass;
+                BattleBGM_1 = BattleBGM_1_Grass;
+                BattleBGM_2 = BattleBGM_2_Grass;
+                BossBGM = BossBGM_Grass;
+            }
+            if (roomNum >= 20 && roomNum < 40)
+            {
+                Background_Texture = Background_Texture_2;
+                EventMapBGM = EventMapBGM_Cave;
+                BattleBGM_1 = BattleBGM_1_Cave;
+                BattleBGM_2 = BattleBGM_2_Cave;
+                BossBGM = BossBGM_Cave;
+            }
+            if (roomNum >= 40)
+            {
+                Background_Texture = Background_Texture_3;
+                EventMapBGM = EventMapBGM_Ice;
+                BattleBGM_1 = BattleBGM_1_Ice;
+                BattleBGM_2 = BattleBGM_2_Ice;
+                BossBGM = BossBGM_Ice;
             }
 
             Old_keyboardState = _keyboardState;
@@ -419,7 +492,7 @@ namespace Burrow_Rune
                     }
                     if (m == 1)
                     {
-                        TurnOrder[i].Skill_list[m].ShowPosition = new Vector2(TurnOrder[i].spriteLocation.X, TurnOrder[i].spriteLocation.Y - 120);
+                        TurnOrder[i].Skill_list[m].ShowPosition = new Vector2(TurnOrder[i].spriteLocation.X + 60, TurnOrder[i].spriteLocation.Y - 60);
                     }
                 }
                 for (int m = 0; m < TurnOrder[i].Item_list.Count; m++)
@@ -462,10 +535,12 @@ namespace Burrow_Rune
                 }
                 if (TurnOrder[i].isAttacking == true)
                 {
-
+                    TurnOrder[i].Unit_Sprite = TurnOrder[i].ATK_Sprite;
+                    TurnOrder[i].frame = 0;
                 }
                 else
                 {
+                    TurnOrder[i].Unit_Sprite = TurnOrder[i].Idle_Sprite;
                     TurnOrder[i].UpdateFrame((float)gameTime.ElapsedGameTime.TotalSeconds);
                 }
 
@@ -586,6 +661,7 @@ namespace Burrow_Rune
                                     EnemyGroup[m].HP -= TurnOrder[i].Atk;
                                     EnemyGroup[m].spriteLocation2 = EnemyGroup[m].spriteLocation;
                                     EnemyGroup[m].spriteLocation.X += 20;
+                                    HitEffect_Position = EnemyGroup[m].spriteLocation;
                                     TurnOrder[i].ATKframe = 1;
                                     BattleSFX[TurnOrder[i].AttackSFX].CreateInstance().Play();
                                 }
@@ -596,7 +672,7 @@ namespace Burrow_Rune
                             for (int m = 0; m < TurnOrder[i].Skill_list.Count; m++)
                             {
                                 TurnOrder[i].Skill_list[m].Position = TurnOrder[i].Skill_list[m].ShowPosition;
-                                Rectangle buttonRectangle = new Rectangle((int)TurnOrder[i].Skill_list[m].Position.X, (int)TurnOrder[i].Skill_list[m].Position.Y, 160, 50);
+                                Rectangle buttonRectangle = new Rectangle((int)TurnOrder[i].Skill_list[m].Position.X, (int)TurnOrder[i].Skill_list[m].Position.Y, 50, 50);
                                 if (buttonRectangle.Contains(mousePosition))
                                 {
                                     TurnOrder[i].Skill_list[m].mouseHover = true;
@@ -761,17 +837,18 @@ namespace Burrow_Rune
                                     {
                                         if (Partywaitingtime == 0)
                                         {
+                                            TurnOrder[i].isAttacking = true;
                                             EnemyGroup[target].attacked = true;
                                             EnemyGroup[target].HP -= TurnOrder[i].Atk;
                                             EnemyGroup[target].spriteLocation2 = EnemyGroup[target].spriteLocation;
                                             EnemyGroup[target].spriteLocation.X += 20;
                                             TurnOrder[i].ATKframe = 1;
+                                            HitEffect_Position = EnemyGroup[target].spriteLocation;
                                             BattleSFX[TurnOrder[i].AttackSFX].CreateInstance().Play();
                                         }
                                         Partywaitingtime += 1;
                                         if (Partywaitingtime == 20)
                                         {
-                                            TurnOrder[i].isAttacking = true;
                                             timeLoad = true;
                                             TurnOrder[i].MP -= 5;
                                             EnemyGroup[target].attacked = true;
@@ -779,6 +856,7 @@ namespace Burrow_Rune
                                             EnemyGroup[target].spriteLocation2 = EnemyGroup[target].spriteLocation;
                                             EnemyGroup[target].spriteLocation.X += 20;
                                             TurnOrder[i].ATKframe = 1;
+                                            HitEffect_Position = EnemyGroup[target].spriteLocation;
                                             BattleSFX[TurnOrder[i].AttackSFX].CreateInstance().Play();
                                         }
                                     }
@@ -798,6 +876,7 @@ namespace Burrow_Rune
                                             EnemyGroup[ATKcount].spriteLocation2 = EnemyGroup[ATKcount].spriteLocation;
                                             EnemyGroup[ATKcount].spriteLocation.X += 20;
                                             ATKcount += 1;
+                                            HitEffect_Position = EnemyGroup[target].spriteLocation;
                                             BattleSFX[TurnOrder[i].AttackSFX].CreateInstance().Play();
                                         }
                                         else
@@ -822,6 +901,7 @@ namespace Burrow_Rune
                                             }
                                             timeLoad = true;
                                             TurnOrder[i].MP -= 5;
+                                            HitEffect_Position = EnemyGroup[target].spriteLocation;
                                             BattleSFX[5].CreateInstance().Play();
                                         }
                                         Partywaitingtime += 1;
@@ -850,6 +930,7 @@ namespace Burrow_Rune
                                             EnemyGroup[target].spriteLocation2 = EnemyGroup[ATKcount].spriteLocation;
                                             EnemyGroup[target].spriteLocation.X += 20;
                                             EnemyGroup[target].speed -= 2;
+                                            HitEffect_Position = EnemyGroup[target].spriteLocation;
                                             timeLoad = true;
                                             BattleSFX[TurnOrder[i].AttackSFX].CreateInstance().Play();
                                         }
@@ -1062,6 +1143,7 @@ namespace Burrow_Rune
                             Party[target].HP -= TurnOrder[i].Atk;
                             Party[target].spriteLocation2 = Party[target].spriteLocation;
                             Party[target].spriteLocation.X -= 20;
+                            HitEffect_Position = Party[target].spriteLocation;
                             BattleSFX[TurnOrder[i].AttackSFX].CreateInstance().Play();
                         }
                     }
@@ -1126,6 +1208,7 @@ namespace Burrow_Rune
                     UseSkill = 0;
                     TargetAlly = false;
                     TargetEnemy = false;
+                    HitEffect_Position = new Vector2(1000, 1000);
                     TurnOrder[i].Big_iconLocation = new Vector2(1000, 1000);
                 }
                 if (TurnOrder[i].targeted == true)
@@ -1323,7 +1406,7 @@ namespace Burrow_Rune
             {
                 if (Party[0].Alive == false && Party[1].Alive == false && Party[2].Alive == false)
                 {
-                    MediaPlayer.Play(TitleBGM);
+                    MediaPlayer.Play(LoseBGM);
                     for (int i = 0; i < TurnOrder.Count; i++)
                     {
                         TurnOrder[i].myTurn = false;
@@ -1350,7 +1433,7 @@ namespace Burrow_Rune
             {
                 if (Party[0].Alive == false && Party[1].Alive == false)
                 {
-                    MediaPlayer.Play(TitleBGM);
+                    MediaPlayer.Play(LoseBGM);
                     for (int i = 0; i < TurnOrder.Count; i++)
                     {
                         TurnOrder[i].myTurn = false;
@@ -1377,7 +1460,7 @@ namespace Burrow_Rune
             {
                 if (Party[0].Alive == false)
                 {
-                    MediaPlayer.Play(TitleBGM);
+                    MediaPlayer.Play(LoseBGM);
                     for (int i = 0; i < TurnOrder.Count; i++)
                     {
                         TurnOrder[i].myTurn = false;
@@ -1764,7 +1847,7 @@ namespace Burrow_Rune
             {
                 if (Party[0].Alive == false && Party[1].Alive == false && Party[2].Alive == false)
                 {
-                    MediaPlayer.Play(TitleBGM);
+                    MediaPlayer.Play(LoseBGM);
                     isLose = true;
                     isEvent = false;
                 }
@@ -1773,7 +1856,7 @@ namespace Burrow_Rune
             {
                 if (Party[0].Alive == false && Party[1].Alive == false)
                 {
-                    MediaPlayer.Play(TitleBGM);
+                    MediaPlayer.Play(LoseBGM);
                     isLose = true;
                     isEvent = false;
                 }
@@ -1782,7 +1865,7 @@ namespace Burrow_Rune
             {
                 if (Party[0].Alive == false)
                 {
-                    MediaPlayer.Play(TitleBGM);
+                    MediaPlayer.Play(LoseBGM);
                     isLose = true;
                     isEvent = false;
                 }
@@ -1799,6 +1882,42 @@ namespace Burrow_Rune
                 isTitle = true;
                 isLose = false;
                 MediaPlayer.Play(TitleBGM);
+                unloop_frame_1 = 0;
+                unloop_frame_2 = 0;
+                Partywaitingtime = 0;
+                roomNum = 1;
+                Gold = 0;
+                HPPotionAmo = 1;
+                MPPotionAmo = 1;
+                BombAmo = 1;
+                ResetCombat();
+                for (int i = 0; i < AllplayAble.Count; i++)
+                {
+                    AllplayAble[i].Alive = true;
+                    for (int m = 0; m < Party.Count; m++)
+                    {
+                        if (AllplayAble[i] == Party[m])
+                        {
+                            Party[m].attacked = false;
+                            Party[m].HP = Party[m].MaxHP;
+                            Party[m].Alive = true;
+                            Party[m].speed = Party[m].Ospeed;
+                            Party[m].Atk = Party[m].Oatk;
+                            Party[m].MP = Party[m].MaxMP;
+                            Party[m].State = Color.White;
+                            Party.RemoveAt(m);
+                        }
+                    }
+                }
+                for (int m = 0; m < EnemyGroup.Count; m++)
+                {
+                    EnemyGroup[m].attacked = false;
+                    EnemyGroup[m].HP = EnemyGroup[m].MaxHP;
+                    EnemyGroup[m].Alive = true;
+                    EnemyGroup[m].speed = EnemyGroup[m].Ospeed;
+                    EnemyGroup[m].Atk = EnemyGroup[m].Oatk;
+                    EnemyGroup.RemoveAt(m);
+                }
             }
             Old_mouseState = mouseState;
         }
@@ -1830,7 +1949,11 @@ namespace Burrow_Rune
             Rectangle InventorRectangle = new Rectangle((int)inventor.spriteLocation.X, (int)inventor.spriteLocation.Y, 215, 215);
             Rectangle BloodRectangle = new Rectangle((int)Blood_Maiden.spriteLocation.X, (int)Blood_Maiden.spriteLocation.Y, 215, 215);
             Rectangle DragonicRectangle = new Rectangle((int)Dragonic_hunter.spriteLocation.X, (int)Dragonic_hunter.spriteLocation.Y, 215, 215);
-
+            for (int i = 0; i < AllplayAble.Count; i++)
+            {
+                AllplayAble[i].Unit_Sprite = AllplayAble[i].Idle_Sprite;
+                AllplayAble[i].UpdateFrame((float)gameTime.ElapsedGameTime.TotalSeconds);
+            }
 
             if (LurkerRectangle.Contains(mousePosition) && mouseState.LeftButton != ButtonState.Pressed && Old_mouseState.LeftButton == ButtonState.Pressed)
             {
@@ -1937,7 +2060,7 @@ namespace Burrow_Rune
                             ShopTxt = "Not enought gold";
                         }
                     }
-                    if (ButtoninShop[i] == ManaPotion)
+                    if (ButtoninShop[i] == Bomb)
                     {
                         if (Gold >= 300)
                         {
@@ -1976,26 +2099,26 @@ namespace Burrow_Rune
 
         private void DrawBattale1()
         {
-            _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
+            _spriteBatch.Draw(Background_Texture, Vector2.Zero, Color.White);
             _spriteBatch.Draw(Turn_Selector_Texture, Turn_Selector_Position, Color.White);
             
             for (int i = 0; i < Party.Count; i++)
             {
                 if (Party[i] == Lurker)
                 {
-                    _spriteBatch.Draw(Lurker_Texture, Lurker.spriteLocation, new Rectangle(0, Lurker.ATKframe * 240, 270, 230), Lurker.State);
+                    _spriteBatch.Draw(Lurker.Unit_Sprite, Lurker.spriteLocation, new Rectangle(Lurker.frame * 150, Lurker.ATKframe * 240, 150, 240), Lurker.State);
                 }
                 if (Party[i] == inventor)
                 {
-                    _spriteBatch.Draw(Inventor_Texture, inventor.spriteLocation, new Rectangle(0, inventor.ATKframe * 240, 270, 230), inventor.State);
+                    _spriteBatch.Draw(inventor.Unit_Sprite, inventor.spriteLocation, new Rectangle(inventor.frame * 150, inventor.ATKframe * 240, 150, 240), inventor.State);
                 }
                 if (Party[i] == Blood_Maiden)
                 {
-                    _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.spriteLocation, new Rectangle(0, Blood_Maiden.ATKframe * 240, 270, 230), Blood_Maiden.State);
+                    _spriteBatch.Draw(Blood_Maiden.Unit_Sprite, Blood_Maiden.spriteLocation, new Rectangle(Blood_Maiden.frame * 180, Blood_Maiden.ATKframe * 240, 180, 240), Blood_Maiden.State);
                 }
                 if (Party[i] == Dragonic_hunter)
                 {
-                    _spriteBatch.Draw(Dragonic_Texture, Dragonic_hunter.spriteLocation, new Rectangle(0, Dragonic_hunter.ATKframe * 240, 270, 230), Dragonic_hunter.State);
+                    _spriteBatch.Draw(Dragonic_hunter.Unit_Sprite, Dragonic_hunter.spriteLocation, new Rectangle(Dragonic_hunter.frame * 188, Dragonic_hunter.ATKframe * 261, 188, 261), Dragonic_hunter.State);
                 }
                 if (i == 0)
                 {
@@ -2190,6 +2313,7 @@ namespace Burrow_Rune
             _spriteBatch.Draw(Item_Texture, Item_B.Position, Item_B.State);
             _spriteBatch.Draw(Arrow_Texture, Arrow_Position, Color.White);
             _spriteBatch.Draw(Turn_Order_Texture, Turn_Order_Position, Color.White);
+            _spriteBatch.Draw(HitEffect_Texture, HitEffect_Position, new Rectangle((frameInCombat / 3) * 150, 0, 150, 150) , Color.White);
 
             PartyHPbar();
             for (int i = 0; i < Party.Count; i++)
@@ -2215,7 +2339,7 @@ namespace Burrow_Rune
                 if (Party[i] == Dragonic_hunter)
                 {
                     _spriteBatch.Draw(Dragonic_Small_Icon, Dragonic_hunter.Small_iconLocation, new Rectangle(0, 0, 126, 126), Dragonic_hunter.State);
-                    _spriteBatch.Draw(Dragonic_Texture, Dragonic_hunter.Big_iconLocation, new Rectangle(0, 480, 200, 140), Color.White);
+                    _spriteBatch.Draw(Dragonic_hunter.Unit_Sprite, Dragonic_hunter.Big_iconLocation, new Rectangle(0, 480, 200, 140), Color.White);
                     _spriteBatch.Draw(Dragonic_Small_Icon, Dragonic_hunter.HPicon_Location, new Rectangle(0, 0, 126, 126), Color.White);
                 }
             }
@@ -2279,12 +2403,13 @@ namespace Burrow_Rune
                 }
 
             }
-            _spriteBatch.Draw(Skill_Texture, Double_Slash.Position, Double_Slash.State);
-            _spriteBatch.Draw(Skill_Texture, Wide_Slash.Position, Wide_Slash.State);
-            _spriteBatch.Draw(Skill_Texture, Blood_Drain.Position, Blood_Drain.State);
-            _spriteBatch.Draw(Skill_Texture, Power_Boost.Position, Power_Boost.State);
-            _spriteBatch.Draw(Skill_Texture, Ankle_Cut.Position, Ankle_Cut.State);
-            _spriteBatch.Draw(Skill_Texture, Blood_Curse.Position, Blood_Curse.State);
+            _spriteBatch.Draw(Double_Slash_Texture, Double_Slash.Position, Double_Slash.State);
+            _spriteBatch.Draw(Wide_Slash_Texture, Wide_Slash.Position, Wide_Slash.State);
+            _spriteBatch.Draw(Blood_Drain_Texture, Blood_Drain.Position, Blood_Drain.State);
+            _spriteBatch.Draw(Power_Boost_Texture, Power_Boost.Position, Power_Boost.State);
+            _spriteBatch.Draw(Ankle_Cut_Texture, Ankle_Cut.Position, Ankle_Cut.State);
+            _spriteBatch.Draw(Blood_Curse_Texture, Blood_Curse.Position, Blood_Curse.State);
+            _spriteBatch.Draw(Aid_Texture, Aid.Position, Aid.State);
             _spriteBatch.Draw(Item_Texture, HeathPotion.Position, HeathPotion.State);
             _spriteBatch.Draw(Item_Texture, ManaPotion.Position, ManaPotion.State);
             _spriteBatch.Draw(Item_Texture, Bomb.Position, Bomb.State);
@@ -2302,7 +2427,7 @@ namespace Burrow_Rune
 
         private void DrawEventMap()
         {
-            _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
+            _spriteBatch.Draw(Background_Texture, Vector2.Zero, Color.White);
             String room = "room: " + roomNum;
             _spriteBatch.DrawString(font, room, new Vector2(200, 300), Color.Red);
             String goldtxt = "Gold: " + Gold;
@@ -2323,7 +2448,7 @@ namespace Burrow_Rune
 
         private void DrawEvent()
         {
-            _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
+            _spriteBatch.Draw(Background_Texture, Vector2.Zero, Color.White);
             _spriteBatch.DrawString(font, EventTxt, new Vector2(400, 200), Color.Red);
             String goldtxt = "Gold: " + Gold;
             _spriteBatch.DrawString(font, goldtxt, new Vector2(1300, 15), Color.Red);
@@ -2337,14 +2462,12 @@ namespace Burrow_Rune
 
         private void DrawLose()
         {
-            _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
-            String str = "You Lose";
-            _spriteBatch.DrawString(font, str, new Vector2(400, 200), Color.Red);
+            _spriteBatch.Draw(Gameover_Texture, Vector2.Zero, Color.White);
         }
 
         private void DrawRest()
         {
-            _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
+            _spriteBatch.Draw(Background_Texture, Vector2.Zero, Color.White);
             String str = "Your party is healed YAY :) \n Click anywhere to continue";
             _spriteBatch.DrawString(font, str, new Vector2(400, 200), Color.Red);
             String goldtxt = "Gold: " + Gold;
@@ -2354,22 +2477,22 @@ namespace Burrow_Rune
 
         private void DrawCharactor()
         {
-            _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
+            _spriteBatch.Draw(Background_Texture, Vector2.Zero, Color.White);
             String str = "Select Charactor";
             _spriteBatch.DrawString(font, str, new Vector2(400, 200), Color.Red);
             Lurker.spriteLocation = new Vector2(100, 300);
             inventor.spriteLocation = new Vector2(400, 300);
             Blood_Maiden.spriteLocation = new Vector2(700, 300);
             Dragonic_hunter.spriteLocation = new Vector2(1000, 300);
-            _spriteBatch.Draw(Lurker_Texture, Lurker.spriteLocation, new Rectangle(0, Lurker.ATKframe * 240, 270, 230), Lurker.State);
-            _spriteBatch.Draw(Inventor_Texture, inventor.spriteLocation, new Rectangle(0, inventor.ATKframe * 240, 270, 230), inventor.State);
-            _spriteBatch.Draw(Blood_Maiden_Texture, Blood_Maiden.spriteLocation, new Rectangle(0, Blood_Maiden.ATKframe * 240, 270, 230), Blood_Maiden.State);
-            _spriteBatch.Draw(Dragonic_Texture, Dragonic_hunter.spriteLocation, new Rectangle(0, Dragonic_hunter.ATKframe * 240, 270, 230), Dragonic_hunter.State);
+            _spriteBatch.Draw(Lurker.Unit_Sprite, Lurker.spriteLocation, new Rectangle(Lurker.frame * 150, Lurker.ATKframe * 210, 150, 210), Lurker.State);
+            _spriteBatch.Draw(inventor.Unit_Sprite, inventor.spriteLocation, new Rectangle(inventor.frame * 150, inventor.ATKframe * 210, 150, 210), inventor.State);
+            _spriteBatch.Draw(Blood_Maiden.Unit_Sprite, Blood_Maiden.spriteLocation, new Rectangle(Blood_Maiden.frame * 180, Blood_Maiden.ATKframe * 216, 180, 216), Blood_Maiden.State);
+            _spriteBatch.Draw(Dragonic_hunter.Unit_Sprite, Dragonic_hunter.spriteLocation, new Rectangle(Dragonic_hunter.frame * 188, Dragonic_hunter.ATKframe * 261, 188, 261), Dragonic_hunter.State);
         }
 
         private void DrawShop()
         {
-            _spriteBatch.Draw(first_floor_Background, Vector2.Zero, Color.White);
+            _spriteBatch.Draw(Background_Texture, Vector2.Zero, Color.White);
             String str = "Shop";
             _spriteBatch.DrawString(font, str, new Vector2(400, 200), Color.Red);
             String goldtxt = "Gold: " + Gold;
@@ -2400,6 +2523,10 @@ namespace Burrow_Rune
                 ButtoninBattle[i].Pressed = false;
                 ButtoninBattle[i].mouseHover = false;
             }
+            for (int i = 0; i < Party.Count; i++)
+            {
+                Party[i].isAttacking = false;
+            }
             turn = 0;
             timeLoad = false;
             frameInCombat = 0;
@@ -2416,6 +2543,7 @@ namespace Burrow_Rune
             BattleTxt = "";
             TargetAlly = false;
             TargetEnemy = false;
+            HitEffect_Position = new Vector2(1000, 1000);
         }
 
         private void RandomNode()
