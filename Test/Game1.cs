@@ -211,19 +211,19 @@ namespace Burrow_Rune
             Beetle_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Enemy/Beetle/Flying-Rock-Icon");
             Rocky_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Enemy/Rocky/Hermit-Rock-Icon");
             Golem_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Enemy/Golem/Golem_Sprite_sheet");
-            Dragonic_hunter.ATK_Sprite = Content.Load<Texture2D>("Asset 2D/Sprite/Dragonic_hunter/Dragonic Sheet");
+            Dragonic_hunter.ATK_Sprite = Content.Load<Texture2D>("Asset 2D/Sprite/Dragonic_hunter/Dragonic attack");
             Dragonic_hunter.Idle_Sprite = Content.Load<Texture2D>("Asset 2D/Sprite/Dragonic_hunter/Dragonic-Idel-Sheet");
             Dragonic_Small_Icon = Content.Load<Texture2D>("Asset 2D/UI/Dragonic Icon");
-            Blood_Maiden.ATK_Sprite = Content.Load<Texture2D>("Asset 2D/Sprite/Blood_maiden/Blood maiden sprite sheet-export");
+            Blood_Maiden.ATK_Sprite = Content.Load<Texture2D>("Asset 2D/Sprite/Blood_maiden/Blood maiden Attack");
             Blood_Maiden.Idle_Sprite = Content.Load<Texture2D>("Asset 2D/Sprite/Blood_maiden/Blood-maiden-idel-Sheet");
             Blood_Maiden_Small_Icon = Content.Load<Texture2D>("Asset 2D/UI/Blood Maiden Icon");
             Blood_Maiden_Big_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Blood_maiden/Blood_maiden_sprite_sheet");
             Golem_Texture = Content.Load<Texture2D>("Asset 2D/Sprite/Enemy/Golem/Golem-Sheet");
-            inventor.ATK_Sprite = Content.Load<Texture2D>("Asset 2D/Sprite/Inventor/Inventor Sprite Sheet-export");
+            inventor.ATK_Sprite = Content.Load<Texture2D>("Asset 2D/Sprite/Inventor/Inventor attack");
             inventor.Idle_Sprite = Content.Load<Texture2D>("Asset 2D/Sprite/Inventor/Inventor-idel-sheet");
             Inventor_Small_Icon = Content.Load<Texture2D>("Asset 2D/UI/Inventor Icon");
             Inventor_Big_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Inventor/Inventor_Sprite_Sheet");
-            Lurker.ATK_Sprite = Content.Load<Texture2D>("Asset 2D/Sprite/Lurker/Lurker Sprite Sheet-export");
+            Lurker.ATK_Sprite = Content.Load<Texture2D>("Asset 2D/Sprite/Lurker/Lurker attack");
             Lurker.Idle_Sprite = Content.Load<Texture2D>("Asset 2D/Sprite/Lurker/Lurker-idel-sheet");
             Lurker_Small_Icon = Content.Load<Texture2D>("Asset 2D/UI/Lurker Icon");
             Lurker_Big_Icon = Content.Load<Texture2D>("Asset 2D/Sprite/Lurker/Lurker_Sprite_Sheet");
@@ -2106,19 +2106,19 @@ namespace Burrow_Rune
             {
                 if (Party[i] == Lurker)
                 {
-                    _spriteBatch.Draw(Lurker.Unit_Sprite, Lurker.spriteLocation, new Rectangle(Lurker.frame * 150, Lurker.ATKframe * 240, 150, 240), Lurker.State);
+                    _spriteBatch.Draw(Lurker.Unit_Sprite, Lurker.spriteLocation, new Rectangle(Lurker.frame * 150, 0, 150, 210), Lurker.State);
                 }
                 if (Party[i] == inventor)
                 {
-                    _spriteBatch.Draw(inventor.Unit_Sprite, inventor.spriteLocation, new Rectangle(inventor.frame * 150, inventor.ATKframe * 240, 150, 240), inventor.State);
+                    _spriteBatch.Draw(inventor.Unit_Sprite, inventor.spriteLocation, new Rectangle(inventor.frame * 150, 0, 150, 210), inventor.State);
                 }
                 if (Party[i] == Blood_Maiden)
                 {
-                    _spriteBatch.Draw(Blood_Maiden.Unit_Sprite, Blood_Maiden.spriteLocation, new Rectangle(Blood_Maiden.frame * 180, Blood_Maiden.ATKframe * 240, 180, 240), Blood_Maiden.State);
+                    _spriteBatch.Draw(Blood_Maiden.Unit_Sprite, Blood_Maiden.spriteLocation, new Rectangle(Blood_Maiden.frame * 180, 0, 180, 210), Blood_Maiden.State);
                 }
                 if (Party[i] == Dragonic_hunter)
                 {
-                    _spriteBatch.Draw(Dragonic_hunter.Unit_Sprite, Dragonic_hunter.spriteLocation, new Rectangle(Dragonic_hunter.frame * 188, Dragonic_hunter.ATKframe * 261, 188, 261), Dragonic_hunter.State);
+                    _spriteBatch.Draw(Dragonic_hunter.Unit_Sprite, Dragonic_hunter.spriteLocation, new Rectangle(Dragonic_hunter.frame * 188, 0, 188, 261), Dragonic_hunter.State);
                 }
                 if (i == 0)
                 {
@@ -2484,10 +2484,10 @@ namespace Burrow_Rune
             inventor.spriteLocation = new Vector2(400, 300);
             Blood_Maiden.spriteLocation = new Vector2(700, 300);
             Dragonic_hunter.spriteLocation = new Vector2(1000, 300);
-            _spriteBatch.Draw(Lurker.Unit_Sprite, Lurker.spriteLocation, new Rectangle(Lurker.frame * 150, Lurker.ATKframe * 210, 150, 210), Lurker.State);
-            _spriteBatch.Draw(inventor.Unit_Sprite, inventor.spriteLocation, new Rectangle(inventor.frame * 150, inventor.ATKframe * 210, 150, 210), inventor.State);
-            _spriteBatch.Draw(Blood_Maiden.Unit_Sprite, Blood_Maiden.spriteLocation, new Rectangle(Blood_Maiden.frame * 180, Blood_Maiden.ATKframe * 216, 180, 216), Blood_Maiden.State);
-            _spriteBatch.Draw(Dragonic_hunter.Unit_Sprite, Dragonic_hunter.spriteLocation, new Rectangle(Dragonic_hunter.frame * 188, Dragonic_hunter.ATKframe * 261, 188, 261), Dragonic_hunter.State);
+            _spriteBatch.Draw(Lurker.Unit_Sprite, Lurker.spriteLocation, new Rectangle(Lurker.frame * 150, 0, 150, 210), Lurker.State);
+            _spriteBatch.Draw(inventor.Unit_Sprite, inventor.spriteLocation, new Rectangle(inventor.frame * 150, 0, 150, 210), inventor.State);
+            _spriteBatch.Draw(Blood_Maiden.Unit_Sprite, Blood_Maiden.spriteLocation, new Rectangle(Blood_Maiden.frame * 180, 0, 180, 216), Blood_Maiden.State);
+            _spriteBatch.Draw(Dragonic_hunter.Unit_Sprite, Dragonic_hunter.spriteLocation, new Rectangle(Dragonic_hunter.frame * 188, 0, 188, 261), Dragonic_hunter.State);
         }
 
         private void DrawShop()

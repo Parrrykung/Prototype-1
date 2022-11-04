@@ -61,6 +61,18 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Background/map_3_.png
 
+#begin ASSET 2D/Sprite/Blood_maiden/Blood maiden Attack.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Blood_maiden/Blood maiden Attack.png
+
 #begin ASSET 2D/Sprite/Blood_maiden/Blood maiden sprite sheet-export.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -96,6 +108,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Sprite/Blood_maiden/Blood-maiden-idel-Sheet.png
+
+#begin ASSET 2D/Sprite/Dragonic_hunter/Dragonic attack.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Dragonic_hunter/Dragonic attack.png
 
 #begin ASSET 2D/Sprite/Dragonic_hunter/Dragonic Sheet.png
 /importer:TextureImporter
@@ -193,6 +217,18 @@
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Sprite/Enemy/Rocky/Hermit-Rock-Sheet.png
 
+#begin ASSET 2D/Sprite/Inventor/Inventor attack.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Inventor/Inventor attack.png
+
 #begin ASSET 2D/Sprite/Inventor/Inventor Sprite Sheet-export.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -228,6 +264,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ASSET 2D/Sprite/Inventor/Inventor-idel-sheet.png
+
+#begin ASSET 2D/Sprite/Lurker/Lurker attack.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ASSET 2D/Sprite/Lurker/Lurker attack.png
 
 #begin ASSET 2D/Sprite/Lurker/Lurker Sprite Sheet-export.png
 /importer:TextureImporter
