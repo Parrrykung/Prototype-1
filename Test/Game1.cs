@@ -2487,7 +2487,7 @@ namespace Burrow_Rune
             _spriteBatch.Draw(Lurker.Unit_Sprite, Lurker.spriteLocation, new Rectangle(Lurker.frame * 150, 0, 150, 210), Lurker.State);
             _spriteBatch.Draw(inventor.Unit_Sprite, inventor.spriteLocation, new Rectangle(inventor.frame * 150, 0, 150, 210), inventor.State);
             _spriteBatch.Draw(Blood_Maiden.Unit_Sprite, Blood_Maiden.spriteLocation, new Rectangle(Blood_Maiden.frame * 180, 0, 180, 216), Blood_Maiden.State);
-            _spriteBatch.Draw(Dragonic_hunter.Unit_Sprite, Dragonic_hunter.spriteLocation, new Rectangle(Dragonic_hunter.frame * 188, 0, 188, 261), Dragonic_hunter.State);
+            _spriteBatch.Draw(Dragonic_hunter.Unit_Sprite, Dragonic_hunter.spriteLocation, new Rectangle(Dragonic_hunter.frame * 152, 0, 152, 210), Dragonic_hunter.State);
         }
 
         private void DrawShop()
